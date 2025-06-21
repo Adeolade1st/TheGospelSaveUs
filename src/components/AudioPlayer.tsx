@@ -102,7 +102,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           onClick={handleProgressClick}
         >
           <div 
-            className="h-full bg-gradient-to-r from-blue-500 to-amber-500 rounded-full transition-all duration-100"
+            className="h-full bg-gradient-to-r from-red-500 to-amber-500 rounded-full transition-all duration-100"
             style={{ width: `${audioRef.current ? (currentTime / (audioRef.current.duration || 1)) * 100 : 0}%` }}
           />
         </div>
@@ -117,14 +117,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <button
           onClick={onPrevious}
           disabled={!onPrevious}
-          className="text-gray-600 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className="text-gray-600 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
           <SkipBack size={24} />
         </button>
 
         <button
           onClick={togglePlay}
-          className="w-14 h-14 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full flex items-center justify-center hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+          className="w-14 h-14 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full flex items-center justify-center hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
         >
           {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
         </button>
@@ -132,7 +132,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <button
           onClick={onNext}
           disabled={!onNext}
-          className="text-gray-600 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className="text-gray-600 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
           <SkipForward size={24} />
         </button>
@@ -140,7 +140,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
       {/* Volume Control */}
       <div className="flex items-center space-x-3">
-        <button onClick={toggleMute} className="text-gray-600 hover:text-blue-600 transition-colors duration-200">
+        <button onClick={toggleMute} className="text-gray-600 hover:text-red-600 transition-colors duration-200">
           {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </button>
         <input

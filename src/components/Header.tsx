@@ -25,7 +25,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-amber-500 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-amber-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">G</span>
             </div>
             <div className="hidden sm:block">
@@ -39,7 +39,7 @@ const Header: React.FC = () => {
               <a
                 key={item.key}
                 href={item.href}
-                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+                className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
               >
                 {t[item.key as keyof typeof t]}
               </a>
@@ -52,7 +52,7 @@ const Header: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200"
               >
                 <Globe size={20} />
                 <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
                           setIsLanguageDropdownOpen(false);
                         }}
                         className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-200 ${
-                          currentLanguage.code === language.code ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                          currentLanguage.code === language.code ? 'bg-red-50 text-red-600' : 'text-gray-700'
                         }`}
                       >
                         <span className="font-medium">{language.nativeName}</span>
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
             {/* Donate Button */}
             <a
               href="#donate"
-              className="hidden sm:inline-flex bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-full font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105"
+              className="hidden sm:inline-flex bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
             >
               {t.donateNow}
             </a>
@@ -97,7 +97,7 @@ const Header: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-700 hover:text-blue-600 transition-colors duration-200"
+              className="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -113,7 +113,7 @@ const Header: React.FC = () => {
                   key={item.key}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
+                  className="block px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
                 >
                   {t[item.key as keyof typeof t]}
                 </a>
@@ -121,7 +121,7 @@ const Header: React.FC = () => {
               <a
                 href="#donate"
                 onClick={() => setIsMenuOpen(false)}
-                className="block w-full text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 rounded-md font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 mt-4"
+                className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-md font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 mt-4"
               >
                 {t.donateNow}
               </a>

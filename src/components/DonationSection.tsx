@@ -16,14 +16,14 @@ const DonationSection: React.FC = () => {
   ];
 
   return (
-    <section id="donate" className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-amber-900">
+    <section id="donate" className="py-20 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {t.donationTitle}
           </h2>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+          <p className="text-xl text-red-100 max-w-3xl mx-auto">
             {t.donationSubtitle}
           </p>
         </div>
@@ -34,7 +34,7 @@ const DonationSection: React.FC = () => {
             <div key={index} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
               <stat.icon className="w-12 h-12 text-amber-400 mx-auto mb-4" />
               <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-              <div className="text-blue-200 font-medium">{stat.label}</div>
+              <div className="text-red-200 font-medium">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -92,7 +92,7 @@ const DonationSection: React.FC = () => {
               <button className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 ${
                 index === 1 
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700' 
-                  : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800'
+                  : 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800'
               }`}>
                 Support This Tier
               </button>
@@ -105,18 +105,18 @@ const DonationSection: React.FC = () => {
           <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="text-center">
-              <p className="text-blue-100 mb-4 italic">
+              <p className="text-red-100 mb-4 italic">
                 "Supporting this ministry has been one of the most fulfilling decisions of my life. Seeing lives transformed through God's word in our native languages is incredible."
               </p>
               <div className="text-white font-semibold">- Sister Mary O.</div>
-              <div className="text-blue-200 text-sm">Lagos, Nigeria</div>
+              <div className="text-red-200 text-sm">Lagos, Nigeria</div>
             </div>
             <div className="text-center">
-              <p className="text-blue-100 mb-4 italic">
+              <p className="text-red-100 mb-4 italic">
                 "The monthly updates showing how many souls are reached gives me so much joy. My contribution is making a real difference in spreading God's love."
               </p>
               <div className="text-white font-semibold">- Brother John A.</div>
-              <div className="text-blue-200 text-sm">Abuja, Nigeria</div>
+              <div className="text-red-200 text-sm">Abuja, Nigeria</div>
             </div>
           </div>
         </div>
@@ -124,7 +124,7 @@ const DonationSection: React.FC = () => {
         {/* One-time Donation */}
         <div className="text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Prefer a One-time Gift?</h3>
-          <p className="text-blue-200 mb-8">Every contribution helps us reach more souls with God's transforming word</p>
+          <p className="text-red-200 mb-8">Every contribution helps us reach more souls with God's transforming word</p>
           <div className="flex flex-wrap justify-center gap-4">
             {[25, 50, 100, 250, 500].map((amount) => (
               <button

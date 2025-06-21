@@ -51,18 +51,18 @@ const ContentSection: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {mockSpokenWordContent.map((content) => (
             <div key={content.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="relative bg-gradient-to-br from-blue-600 to-amber-600 h-48 flex items-center justify-center">
+              <div className="relative bg-gradient-to-br from-red-600 to-amber-600 h-48 flex items-center justify-center">
                 <button
                   onClick={() => setSelectedContent(content.id)}
                   className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-opacity-100 transition-all duration-200 transform hover:scale-110"
                 >
-                  <Play className="text-blue-600 ml-1" size={24} />
+                  <Play className="text-red-600 ml-1" size={24} />
                 </button>
               </div>
 
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
                     {content.language.toUpperCase()}
                   </span>
                   <div className="flex items-center text-gray-500 text-sm">
@@ -95,7 +95,7 @@ const ContentSection: React.FC = () => {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105">
+          <button className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105">
             {t.viewAll}
           </button>
         </div>

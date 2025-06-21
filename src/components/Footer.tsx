@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
           {/* Logo & Description */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-amber-500 rounded-xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-amber-500 rounded-xl flex items-center justify-center">
                 <span className="text-white font-bold text-2xl">G</span>
               </div>
               <div>
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
                 <a
                   key={index}
                   href={social.href}
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
                   aria-label={social.label}
                 >
                   <social.icon size={20} />

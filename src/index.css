@@ -42,7 +42,7 @@ html {
 
 /* Custom slider styles */
 .slider {
-  background: linear-gradient(to right, #3b82f6 0%, #3b82f6 50%, #e5e7eb 50%, #e5e7eb 100%);
+  background: linear-gradient(to right, #ff3131 0%, #ff3131 50%, #e5e7eb 50%, #e5e7eb 100%);
 }
 
 .slider::-webkit-slider-thumb {
@@ -50,7 +50,7 @@ html {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #ff3131;
   cursor: pointer;
   border: 2px solid #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -60,7 +60,7 @@ html {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #ff3131;
   cursor: pointer;
   border: 2px solid #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -87,7 +87,7 @@ button:focus,
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid #ff3131;
   outline-offset: 2px;
 }
 
@@ -104,12 +104,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Custom gradient backgrounds */
-.gradient-blue-amber {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 35%, #f59e0b 100%);
+.gradient-red-amber {
+  background: linear-gradient(135deg, #7F1D1D 0%, #EF4444 35%, #f59e0b 100%);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #1e40af 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #7F1D1D 0%, #f59e0b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

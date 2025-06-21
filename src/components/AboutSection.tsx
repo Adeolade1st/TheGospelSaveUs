@@ -22,9 +22,9 @@ const AboutSection: React.FC = () => {
 
         {/* Mission & Vision */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8">
+          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-8">
             <div className="flex items-center mb-6">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center mr-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-2xl flex items-center justify-center mr-4">
                 <Target className="text-white" size={24} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900">{t.missionTitle}</h3>
