@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Play, Clock, BookOpen } from 'lucide-react';
+import { Play, Clock, BookOpen } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import { mockSpokenWordContent } from '../data/mockData';
@@ -9,23 +9,6 @@ const ContentSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
   const [selectedContent, setSelectedContent] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLanguageFilter, setSelectedLanguageFilter] = useState('all');
-  const [selectedThemeFilter, setSelectedThemeFilter] = useState('all');
-
-  const themes = ['hope', 'healing', 'purpose', 'faith', 'love', 'victory'];
-  const languageOptions = ['all', 'en', 'yo', 'ig', 'ha'];
-
-  const filteredContent = mockSpokenWordContent.filter(content => {
-    const matchesSearch = content.title[currentLanguage.code].toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         content.description[currentLanguage.code].toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         content.scriptureRef.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesLanguage = selectedLanguageFilter === 'all' || content.language === selectedLanguageFilter;
-    const matchesTheme = selectedThemeFilter === 'all' || content.theme === selectedThemeFilter;
-
-    return matchesSearch && matchesLanguage && matchesTheme;
-  });
 
   return (
     <section id="content" className="py-20 bg-gray-50">
@@ -38,58 +21,6 @@ const ContentSection: React.FC = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Experience transformative spoken word content in your native language
           </p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-12">
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Search Bar */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder={t.searchPlaceholder}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center space-x-2">
-                <Filter size={20} className="text-gray-500" />
-                <span className="text-sm font-medium text-gray-700">{t.filterBy}:</span>
-              </div>
-              
-              <select
-                value={selectedLanguageFilter}
-                onChange={(e) => setSelectedLanguageFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">{t.allLanguages}</option>
-                <option value="en">English</option>
-                <option value="yo">Yorùbá</option>
-                <option value="ig">Igbo</option>
-                <option value="ha">Hausa</option>
-              </select>
-
-              <select
-                value={selectedThemeFilter}
-                onChange={(e) => setSelectedThemeFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Themes</option>
-                {themes.map(theme => (
-                  <option key={theme} value={theme}>
-                    {t[theme as keyof typeof t] || theme}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
         </div>
 
         {/* Audio Player Modal */}
@@ -118,7 +49,7 @@ const ContentSection: React.FC = () => {
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredContent.map((content) => (
+          {mockSpokenWordContent.map((content) => (
             <div key={content.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="relative bg-gradient-to-br from-blue-600 to-amber-600 h-48 flex items-center justify-center">
                 <button
@@ -161,12 +92,6 @@ const ContentSection: React.FC = () => {
             </div>
           ))}
         </div>
-
-        {filteredContent.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-xl text-gray-500">No content found matching your criteria.</p>
-          </div>
-        )}
 
         {/* View All Button */}
         <div className="text-center mt-12">
