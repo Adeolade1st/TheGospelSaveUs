@@ -20,10 +20,10 @@ const Newsletter: React.FC = () => {
 
   return (
     <>
-      {/* Contact & Prayer Request Sections */}
+      {/* Contact Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="max-w-2xl mx-auto">
             {/* Contact Info */}
             <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-3xl p-8 text-white">
               <h3 className="text-2xl font-bold mb-6">{t.contact}</h3>
@@ -32,56 +32,31 @@ const Newsletter: React.FC = () => {
                   <Mail className="mr-4 text-red-300" size={24} />
                   <div>
                     <p className="font-semibold">Email</p>
-                    <p className="text-red-200">info@godwouldprovide.org</p>
+                    <p className="text-red-200">Jones8874@bellsouth.net</p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <Phone className="mr-4 text-red-300" size={24} />
                   <div>
                     <p className="font-semibold">Phone</p>
-                    <p className="text-red-200">+234 (0) 800 GOD WORD</p>
+                    <p className="text-red-200">404-709-9620</p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="mr-4 text-red-300" size={24} />
                   <div>
                     <p className="font-semibold">Address</p>
-                    <p className="text-red-200">Lagos, Nigeria</p>
+                    <p className="text-red-200">Atlanta, Georgia</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="mr-4 text-red-300" size={24} />
+                  <div>
+                    <p className="font-semibold">Mailing Address</p>
+                    <p className="text-red-200">P.O. Box 213, Fairburn, GA 30213</p>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Prayer Request Form */}
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-3xl p-8">
-              <div className="flex items-center mb-6">
-                <Heart className="mr-4 text-amber-600" size={24} />
-                <h3 className="text-2xl font-bold text-gray-900">{t.prayerTitle}</h3>
-              </div>
-              <p className="text-gray-600 mb-6">{t.prayerDescription}</p>
-              <form className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                />
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                />
-                <textarea
-                  rows={4}
-                  placeholder="Your Prayer Request"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105"
-                >
-                  {t.submitPrayer}
-                </button>
-              </form>
             </div>
           </div>
         </div>
