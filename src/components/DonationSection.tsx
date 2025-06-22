@@ -3,16 +3,16 @@ import { Heart, Users, Globe, TrendingUp, Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import { donationTiers } from '../data/mockData';
+import AnimatedCounter from './AnimatedCounter';
 
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
 
   const impactStats = [
-    { icon: Users, value: '50,000+', label: t.soulsReached },
-    { icon: Globe, value: '127', label: t.contentCreated },
-    { icon: TrendingUp, value: '4', label: t.languagesServed },
-    { icon: Heart, value: '2,500+', label: t.monthlySupporters }
+    { icon: Users, value: 50000, label: t.soulsReached, suffix: '+' },
+    { icon: TrendingUp, value: 4, label: t.languagesServed },
+    { icon: Heart, value: 2500, label: t.monthlySupporters, suffix: '+' }
   ];
 
   return (
@@ -28,13 +28,17 @@ const DonationSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Impact Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        {/* Impact Stats with Animated Counters */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {impactStats.map((stat, index) => (
-            <div key={index} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
+            <div key={index} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300">
               <stat.icon className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-              <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-              <div className="text-red-200 font-medium">{stat.label}</div>
+              <AnimatedCounter 
+                end={stat.value} 
+                suffix={stat.suffix || ''} 
+                duration={2500 + (index * 500)}
+              />
+              <div className="text-red-200 font-medium mt-2">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -109,14 +113,14 @@ const DonationSection: React.FC = () => {
                 "Supporting this ministry has been one of the most fulfilling decisions of my life. Seeing lives transformed through God's word in our native languages is incredible."
               </p>
               <div className="text-white font-semibold">- Sister Mary O.</div>
-              <div className="text-red-200 text-sm">Lagos, Nigeria</div>
+              <div className="text-red-200 text-sm">Atlanta, Georgia</div>
             </div>
             <div className="text-center">
               <p className="text-red-100 mb-4 italic">
                 "The monthly updates showing how many souls are reached gives me so much joy. My contribution is making a real difference in spreading God's love."
               </p>
               <div className="text-white font-semibold">- Brother John A.</div>
-              <div className="text-red-200 text-sm">Abuja, Nigeria</div>
+              <div className="text-red-200 text-sm">Atlanta, Georgia</div>
             </div>
           </div>
         </div>

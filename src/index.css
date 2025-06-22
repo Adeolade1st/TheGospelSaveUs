@@ -66,6 +66,32 @@ html {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+/* White slider for audio players */
+.slider-white {
+  background: linear-gradient(to right, #ffffff 0%, #ffffff 50%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 100%);
+}
+
+.slider-white::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.slider-white::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {
@@ -80,6 +106,22 @@ html {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out;
+}
+
+/* Counter animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-count-up {
+  animation: countUp 0.8s ease-out;
 }
 
 /* Focus styles for accessibility */
@@ -140,4 +182,18 @@ h1, h2, h3, h4, h5, h6 {
   100% {
     transform: scale(1);
   }
+}
+
+/* Audio player specific animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }

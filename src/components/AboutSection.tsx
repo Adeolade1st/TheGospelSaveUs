@@ -16,7 +16,7 @@ const AboutSection: React.FC = () => {
             {t.aboutTitle}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Learn about our heart, vision, and the team God has assembled to reach souls across Nigeria
+            Learn about our heart, vision, and the team God has assembled to reach souls across Nigeria and beyond
           </p>
         </div>
 
@@ -29,8 +29,11 @@ const AboutSection: React.FC = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900">{t.missionTitle}</h3>
             </div>
-            <p className="text-gray-700 leading-relaxed text-lg">
+            <p className="text-gray-700 leading-relaxed text-lg mb-4">
               {t.missionText}
+            </p>
+            <p className="text-gray-700 leading-relaxed text-lg">
+              We make the gospel in spoken word available internationally using Radio Airplay Platform on Jango.com
             </p>
           </div>
 
