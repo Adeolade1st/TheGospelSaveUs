@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
 
           {/* Main Title */}
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            {t.heroTitle}
+            The Gospel Save Us-Nigeria
           </h1>
 
           {/* Subtitle */}
