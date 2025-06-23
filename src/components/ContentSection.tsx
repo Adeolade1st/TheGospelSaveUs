@@ -9,28 +9,28 @@ const ContentSection: React.FC = () => {
 
   const audioContent = [
     {
-      title: 'Walking in Divine Purpose',
+      title: '',
       language: 'Yorùbá',
-      description: 'Discover God\'s unique plan for your life and step into your destiny',
-      audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Demo audio
+      description: '',
+      audioUrl: 'https://drive.google.com/uc?export=download&id=1iYwJ7HAJPTiP8TojyEdSPeP7RpkBZOha',
       duration: '15:32',
       gradientColors: 'bg-gradient-to-br from-red-600 via-red-700 to-red-800',
       textColor: 'text-white'
     },
     {
-      title: 'Healing for the Broken Heart',
+      title: '',
       language: 'Igbo',
-      description: 'God\'s comfort and restoration for those experiencing pain and loss',
-      audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Demo audio
+      description: '',
+      audioUrl: 'https://drive.google.com/uc?export=download&id=10j9KSXjS75LpXpnrM8yqYkeY3KGddg_f',
       duration: '18:45',
       gradientColors: 'bg-gradient-to-br from-amber-600 via-amber-700 to-orange-700',
       textColor: 'text-white'
     },
     {
-      title: 'Victory Over Fear',
+      title: '',
       language: 'Hausa',
-      description: 'Breaking free from the chains of fear and anxiety through faith',
-      audioUrl: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Demo audio
+      description: '',
+      audioUrl: 'https://drive.google.com/uc?export=download&id=1UB_rUsfb4vVr4GnNNcN-4Wv5VNOSsNX6',
       duration: '12:20',
       gradientColors: 'bg-gradient-to-br from-green-600 via-green-700 to-emerald-700',
       textColor: 'text-white'
