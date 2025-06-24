@@ -20,6 +20,13 @@ const AboutSection: React.FC = () => {
           </p>
         </div>
 
+        {/* Ministry Description */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <p className="text-lg text-gray-700 leading-relaxed text-center">
+            Through Pure Gold Gospel Singers, Evangelist Jones shares the gospel through spoken word recordings, reaching international audiences via Jango.com's radio AirPlay Platform. Your generous donations support our airtime costs, enabling us to spread God's message alongside secular music streams. By partnering with us, you help ensure the gospel reaches listeners worldwide, fulfilling our mission to actively share God's Word (Proverbs 11:30). Support our outreach ministry with your 'seed of love' donation today.
+          </p>
+        </div>
+
         {/* Mission & Vision */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-8 text-center">
