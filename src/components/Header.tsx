@@ -48,9 +48,10 @@ const Header: React.FC = () => {
             {/* Logo - Flush Left */}
             <div className="flex items-center flex-shrink-0">
               <img 
-                src="/the gospel save us logo.jpg" 
+                src="/the gospel save us logo reseized.jpg" 
                 alt="The Gospel Save Us" 
                 className="h-12 w-auto"
+                style={{ backgroundColor: 'transparent' }}
               />
             </div>
 
