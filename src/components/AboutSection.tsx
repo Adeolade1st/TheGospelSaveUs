@@ -20,7 +20,7 @@ const AboutSection: React.FC = () => {
         {/* Ministry Description */}
         <div className="max-w-4xl mx-auto mb-16">
           <p className="text-lg text-gray-700 leading-relaxed text-center">
-            Through Pure Gold Gospel Singers, Evangelist Jones shares the gospel through spoken word recordings, reaching international audiences via Jango.com's radio AirPlay Platform. Your generous donations support our airtime costs, enabling us to spread God's message alongside secular music streams. By partnering with us, you help ensure the gospel reaches listeners worldwide, fulfilling our mission to actively share God's Word (Proverbs 11:30). Support our outreach ministry with your 'seed of love' donation today.
+            Evangelist Birdie Jones leads Pure Gold Gospel Singers in sharing the transformative power of the gospel through compelling spoken word recordings. Our message reaches international audiences through Jango.com's radio AirPlay Platform, strategically placing God's Word alongside secular music streams. Your generous donations directly support our airtime costs, enabling continuous broadcasting to seekers worldwide. As Proverbs 11:30 reminds us, "The fruit of the righteous is a tree of life, and the one who is wise saves lives." By partnering with us through your 'seed of love' donation, you become an integral part of our mission to spread hope, faith, and salvation to listeners across the globe. Together, we can ensure God's message continues to touch hearts and transform lives through this innovative digital ministry.
           </p>
         </div>
 
@@ -33,11 +33,8 @@ const AboutSection: React.FC = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900">{t.missionTitle}</h3>
             </div>
-            <p className="text-gray-700 leading-relaxed text-lg mb-4">
-              {t.missionText}
-            </p>
             <p className="text-gray-700 leading-relaxed text-lg">
-              We make the gospel in spoken word available internationally using Radio Airplay Platform on Jango.com
+              To reach every heart in Nigeria and beyond with the transforming power of God's word through culturally relevant spoken word ministry in native languages. We make the gospel in spoken word available internationally using Radio Airplay Platform on Jango.com.
             </p>
           </div>
 

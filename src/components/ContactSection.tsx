@@ -8,12 +8,26 @@ const ContactSection: React.FC = () => {
   const t = translations[currentLanguage.code];
 
   return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Contact Info */}
-          <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-3xl p-8 text-white">
-            <h3 className="text-3xl font-bold mb-8">{t.contact}</h3>
+    <section id="contact" className="py-20 relative overflow-hidden">
+      {/* Background Image with Blur */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: 'url(https://images.pexels.com/photos/3178798/pexels-photo-3178798.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop)',
+          filter: 'blur(8px)',
+          transform: 'scale(1.1)'
+        }}
+      />
+      
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/50" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center items-center min-h-[400px]">
+          {/* Contact Card */}
+          <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-3xl p-8 text-white shadow-2xl backdrop-blur-sm border border-white/10 max-w-md w-full">
+            <h3 className="text-3xl font-bold mb-8 text-center">{t.contact}</h3>
             <div className="space-y-6">
               <div className="flex items-center">
                 <Mail className="mr-4 text-red-300" size={24} />
@@ -43,18 +57,6 @@ const ContactSection: React.FC = () => {
                   <p className="text-red-200">P.O. Box 213, Fairburn, GA 30213</p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Complementary Photo */}
-          <div className="flex justify-center">
-            <div className="relative">
-              <img
-                src="https://images.pexels.com/photos/3178798/pexels-photo-3178798.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop"
-                alt="People in prayer and worship"
-                className="rounded-3xl shadow-2xl w-full max-w-md h-96 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
             </div>
           </div>
         </div>
