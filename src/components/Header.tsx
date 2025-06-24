@@ -162,7 +162,7 @@ const Header: React.FC = () => {
                 <div className="hidden sm:flex items-center space-x-3">
                   <button
                     onClick={() => handleAuthClick('login')}
-                    className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
+                    className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200 border-2 border-solid border-black rounded px-4 py-2"
                   >
                     Sign In
                   </button>
@@ -215,7 +215,7 @@ const Header: React.FC = () => {
                         handleAuthClick('login');
                         setIsMenuOpen(false);
                       }}
-                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
+                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200 border-2 border-solid border-black rounded"
                     >
                       Sign In
                     </button>
