@@ -19,31 +19,20 @@ const DonationSection: React.FC = () => {
       amount: 12,
       title: 'Intro',
       description: 'Help us create one new spoken word piece monthly',
-      impact: 'Reaches approximately 200 souls monthly',
-      stripeLink: 'https://buy.stripe.com/test_intro_12'
+      impact: 'Reaches approximately 200 souls monthly'
     },
     {
       amount: 100,
       title: 'Platinum',
       description: 'Sponsor content in all three native languages',
-      impact: 'Reaches approximately 1800 souls monthly',
-      stripeLink: 'https://buy.stripe.com/test_platinum_100'
+      impact: 'Reaches approximately 1800 souls monthly'
     },
     {
       amount: 250,
       title: 'Multi-Platinum',
       description: 'Full support for content creation and outreach',
-      impact: 'Reaches approximately 5,000 souls monthly',
-      stripeLink: 'https://buy.stripe.com/test_multi_platinum_250'
+      impact: 'Reaches approximately 5,000 souls monthly'
     }
-  ];
-
-  const oneTimeDonations = [
-    { amount: 25, stripeLink: 'https://buy.stripe.com/test_onetime_25' },
-    { amount: 50, stripeLink: 'https://buy.stripe.com/test_onetime_50' },
-    { amount: 100, stripeLink: 'https://buy.stripe.com/test_onetime_100' },
-    { amount: 250, stripeLink: 'https://buy.stripe.com/test_onetime_250' },
-    { amount: 500, stripeLink: 'https://buy.stripe.com/test_onetime_500' }
   ];
 
   const testimonials = [
@@ -73,17 +62,6 @@ const DonationSection: React.FC = () => {
       location: "Miami, Florida"
     }
   ];
-
-  const handleStripeRedirect = (stripeLink: string) => {
-    // In production, replace with actual Stripe checkout URLs
-    window.open(stripeLink, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleCustomDonation = () => {
-    // In production, implement custom amount Stripe checkout
-    const customStripeLink = 'https://buy.stripe.com/test_custom_amount';
-    window.open(customStripeLink, '_blank', 'noopener,noreferrer');
-  };
 
   return (
     <section id="donate" className="py-16 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
@@ -137,10 +115,7 @@ const DonationSection: React.FC = () => {
                 </div>
               </div>
 
-              <button 
-                onClick={() => handleStripeRedirect(tier.stripeLink)}
-                className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-              >
+              <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800">
                 Support This Tier
               </button>
             </div>
@@ -152,19 +127,15 @@ const DonationSection: React.FC = () => {
           <h3 className="text-2xl font-bold text-white mb-4">Prefer a One-time Gift?</h3>
           <p className="text-red-200 mb-8">Every contribution helps us reach more souls with God's transforming word</p>
           <div className="flex flex-wrap justify-center gap-4">
-            {oneTimeDonations.map((donation) => (
+            {[25, 50, 100, 250, 500].map((amount) => (
               <button
-                key={donation.amount}
-                onClick={() => handleStripeRedirect(donation.stripeLink)}
-                className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-800"
+                key={amount}
+                className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105"
               >
-                ${donation.amount}
+                ${amount}
               </button>
             ))}
-            <button 
-              onClick={handleCustomDonation}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-red-800"
-            >
+            <button className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105">
               Custom Amount
             </button>
           </div>

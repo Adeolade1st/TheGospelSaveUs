@@ -16,23 +16,6 @@ const Hero: React.FC = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
-          {/* Logo */}
-          <div className="mb-8">
-            <img 
-              src="/the_gospel_save_us_logo-removebg-preview copy.png" 
-              alt="The Gospel Save Us" 
-              className="h-32 w-auto mx-auto"
-              style={{ backgroundColor: 'transparent' }}
-            />
-          </div>
-
-          {/* Tagline */}
-          <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              The Gospel Saves Us
-            </h2>
-          </div>
-
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-8">
             <Heart className="text-amber-400" size={16} />
