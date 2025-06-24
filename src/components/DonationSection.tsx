@@ -2,7 +2,6 @@ import React from 'react';
 import { Heart, Users, Globe, TrendingUp, Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import { donationTiers } from '../data/mockData';
 import AnimatedCounter from './AnimatedCounter';
 
 const DonationSection: React.FC = () => {
@@ -10,9 +9,30 @@ const DonationSection: React.FC = () => {
   const t = translations[currentLanguage.code];
 
   const impactStats = [
-    { icon: Users, value: 50000, label: t.soulsReached, suffix: '+' },
+    { icon: Users, value: 1, label: t.soulsReached, suffix: ' m+' },
     { icon: TrendingUp, value: 4, label: t.languagesServed },
     { icon: Heart, value: 2500, label: t.monthlySupporters, suffix: '+' }
+  ];
+
+  const donationTiers = [
+    {
+      amount: 12,
+      title: 'Intro',
+      description: 'Help us create one new spoken word piece monthly',
+      impact: 'Reaches approximately 200 souls monthly'
+    },
+    {
+      amount: 100,
+      title: 'Platinum',
+      description: 'Sponsor content in all three native languages',
+      impact: 'Reaches approximately 1800 souls monthly'
+    },
+    {
+      amount: 250,
+      title: 'Multi-Platinum',
+      description: 'Full support for content creation and outreach',
+      impact: 'Reaches approximately 5,000 souls monthly'
+    }
   ];
 
   return (
@@ -46,58 +66,28 @@ const DonationSection: React.FC = () => {
         {/* Donation Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {donationTiers.map((tier, index) => (
-            <div key={index} className={`relative bg-white rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300 ${index === 1 ? 'ring-4 ring-amber-400' : ''}`}>
-              {index === 1 && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-amber-400 text-amber-900 px-6 py-2 rounded-full font-bold text-sm">
-                  Most Popular
-                </div>
-              )}
-              
+            <div key={index} className="relative bg-white rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
               <div className="text-center mb-8">
                 <div className="text-5xl font-bold text-gray-900 mb-2">
                   ${tier.amount}
                   <span className="text-lg text-gray-500 font-normal">/month</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  {tier.title[currentLanguage.code]}
+                  {tier.title}
                 </h3>
                 <p className="text-gray-600">
-                  {tier.description[currentLanguage.code]}
+                  {tier.description}
                 </p>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
                   <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-gray-700">{tier.impact[currentLanguage.code]}</span>
+                  <span className="text-gray-700">{tier.impact}</span>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-gray-700">Monthly ministry updates</span>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-gray-700">Early access to new content</span>
-                </div>
-                {index >= 1 && (
-                  <div className="flex items-start space-x-3">
-                    <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                    <span className="text-gray-700">Personal prayer support</span>
-                  </div>
-                )}
-                {index === 2 && (
-                  <div className="flex items-start space-x-3">
-                    <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                    <span className="text-gray-700">Ministry partnership recognition</span>
-                  </div>
-                )}
               </div>
 
-              <button className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 ${
-                index === 1 
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700' 
-                  : 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800'
-              }`}>
+              <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800">
                 Support This Tier
               </button>
             </div>

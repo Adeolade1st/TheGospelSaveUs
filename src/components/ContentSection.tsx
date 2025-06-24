@@ -43,7 +43,7 @@ const ContentSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {t.latestContent}
+            The Spoken Word
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Experience transformative spoken word content in your native language
