@@ -92,6 +92,24 @@ html {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Testimonials Carousel Animation - Updated for 3 seconds per slide */
+@keyframes scroll-carousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-scroll-carousel {
+  animation: scroll-carousel 15s linear infinite;
+}
+
+.animate-scroll-carousel:hover {
+  animation-play-state: paused;
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {
@@ -122,24 +140,6 @@ html {
 
 .animate-count-up {
   animation: countUp 0.8s ease-out;
-}
-
-/* Testimonials Carousel Animation */
-@keyframes scroll-carousel {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-33.333%);
-  }
-}
-
-.animate-scroll-carousel {
-  animation: scroll-carousel 30s linear infinite;
-}
-
-.animate-scroll-carousel:hover {
-  animation-play-state: paused;
 }
 
 /* Focus styles for accessibility */

@@ -44,20 +44,8 @@ const Header: React.FC = () => {
     <>
       <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Logo and Tagline Section */}
-          <div className="flex flex-col items-center py-4">
-            <img 
-              src="/the_gospel_save_us_logo-removebg-preview.png" 
-              alt="The Gospel Save Us" 
-              className="h-24 w-auto mb-5"
-              style={{ backgroundColor: 'transparent' }}
-            />
-            <p className="text-lg font-semibold text-gray-700">The Gospel Saves Us</p>
-          </div>
-
-          {/* Navigation and Controls Section */}
-          <div className="flex justify-center items-center h-16 border-t border-gray-200">
-            {/* Desktop Navigation - Centered */}
+          <div className="flex justify-between items-center h-16">
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <a
@@ -71,7 +59,7 @@ const Header: React.FC = () => {
             </nav>
 
             {/* Right Side Controls */}
-            <div className="absolute right-4 flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
               {/* Language Dropdown */}
               <div className="relative">
                 <button
