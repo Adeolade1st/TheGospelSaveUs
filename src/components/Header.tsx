@@ -29,7 +29,7 @@ const Header: React.FC = () => {
               <span className="text-white font-bold text-xl">G</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-gray-900">The Gospel Save Us-Nigeria</h1>
+              <h1 className="text-xl font-bold text-gray-900">God Would Provide Outreach</h1>
             </div>
           </div>
 

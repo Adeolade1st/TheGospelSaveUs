@@ -8,13 +8,13 @@ export const translations = {
     contact: 'Contact',
     
     // Hero Section
-    heroTitle: 'God Would Provide',
-    heroSubtitle: 'Transforming Hearts Through Powerful Spoken Word Ministry',
+    heroTitle: 'God Would Provide Outreach',
+    heroSubtitle: 'Transforming Hearts Through Powerful Spoken Word',
     heroDescription: 'Experience life-changing spoken word content in Yoruba, Igbo, and Hausa languages. Join thousands who have found hope, healing, and purpose through God\'s word.',
     listenNow: 'Listen Now',
     
     // Content Sections
-    latestContent: 'Latest Spoken Word',
+    latestContent: 'The Spoken Word',
     allLanguages: 'All Languages',
     searchPlaceholder: 'Search by topic, language, or scripture...',
     filterBy: 'Filter by',
@@ -103,7 +103,7 @@ export const translations = {
     contact: 'Kan Si Wa',
     
     // Hero Section
-    heroTitle: 'Ọlọrun Yoo Pese',
+    heroTitle: 'Ọlọrun Yoo Pese Iṣẹ-ọrọ',
     heroSubtitle: 'Yiyipada Ọkan Nipa Ọrọ Agbara Ti A Sọ',
     heroDescription: 'Ni iriri ọrọ ti o le yi aye pada ni ede Yoruba, Igbo, ati Hausa. Darapọ mọ ẹgbẹẹgbẹrun ti o ti wa ireti, iwosan, ati idi-ede nipa ọrọ Ọlọrun.',
     listenNow: 'Gbọ Bayi',
@@ -138,7 +138,7 @@ export const translations = {
     contact: 'Kpọtụrụ Anyị',
     
     // Hero Section
-    heroTitle: 'Chineke Ga-enye',
+    heroTitle: 'Chineke Ga-enye Ọrụ',
     heroSubtitle: 'Na-agbanwe Obi Site na Ike Okwu A Na-ekwu',
     heroDescription: 'Nweta ahụmịhe okwu pụrụ ịgbanwe ndụ n\'asụsụ Yoruba, Igbo, na Hausa. Sonye ọtụtụ puku ndị chọtara olileanya, ọgwụgwọ, na ebumnuche site n\'okwu Chineke.',
     listenNow: 'Gee Ugbu a',
@@ -173,7 +173,7 @@ export const translations = {
     contact: 'Tuntube Mu',
     
     // Hero Section
-    heroTitle: 'Allah Zai Samar',
+    heroTitle: 'Allah Zai Samar Aikin Wa\'azi',
     heroSubtitle: 'Canza Zukata Ta Hanyar Maganar Da Aka Faɗa Mai Ƙarfi',
     heroDescription: 'Samu gogewar kalmomin da za su canza rayuwa a harsunan Yoruba, Igbo, da Hausa. Shiga dubban da suka sami bege, warkarwa, da manufa ta hanyar kalmar Allah.',
     listenNow: 'Saurara Yanzu',

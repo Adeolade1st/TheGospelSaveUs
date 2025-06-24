@@ -5,7 +5,7 @@ import Hero from './components/Hero';
 import AboutSection from './components/AboutSection';
 import ContentSection from './components/ContentSection';
 import DonationSection from './components/DonationSection';
-import Newsletter from './components/Newsletter';
+import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           <AboutSection />
           <ContentSection />
           <DonationSection />
-          <Newsletter />
+          <ContactSection />
         </main>
         <Footer />
       </div>

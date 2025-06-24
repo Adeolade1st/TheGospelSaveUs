@@ -45,9 +45,16 @@ const ContentSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             The Spoken Word
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
             Experience transformative spoken word content in your native language
           </p>
+          
+          {/* Additional Content Text */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Evangelist Jones, through Pure Gold Gospel Singers, makes the gospel CD in spoken word available internationally using radio AirPlay Platform on Jango.com. We ask for donations to help support the cost of the airtime. 'Your seed of love' in the form of donations would help us get as much airplay as possible. When the listeners stream their various secular Artists' Radio, they may just hear the Gospel in spoken Word playing too. We're taking the gospel to the world and not waiting for it to come to us. Join us as we partner with God on this mission. Proverbs 11:30.
+            </p>
+          </div>
         </div>
 
         {/* Audio Player Cards */}

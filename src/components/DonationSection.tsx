@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Users, Globe, TrendingUp, Check } from 'lucide-react';
+import { Heart, Users, Globe, TrendingUp, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import AnimatedCounter from './AnimatedCounter';
@@ -32,6 +32,34 @@ const DonationSection: React.FC = () => {
       title: 'Multi-Platinum',
       description: 'Full support for content creation and outreach',
       impact: 'Reaches approximately 5,000 souls monthly'
+    }
+  ];
+
+  const testimonials = [
+    {
+      quote: "Supporting this ministry has been one of the most fulfilling decisions of my life. Seeing lives transformed through God's word in our native languages is incredible.",
+      name: "Sister Mary O.",
+      location: "Atlanta, Georgia"
+    },
+    {
+      quote: "The monthly updates showing how many souls are reached gives me so much joy. My contribution is making a real difference in spreading God's love.",
+      name: "Brother John A.",
+      location: "Atlanta, Georgia"
+    },
+    {
+      quote: "I love how this ministry reaches people in their heart language. The spoken word format is so powerful and accessible to everyone.",
+      name: "Pastor David K.",
+      location: "Houston, Texas"
+    },
+    {
+      quote: "Being part of this mission to take the gospel worldwide through radio airplay is amazing. Every donation truly counts.",
+      name: "Sister Grace M.",
+      location: "Chicago, Illinois"
+    },
+    {
+      quote: "The impact reports show real results. It's encouraging to see how God is using our small contributions for His glory.",
+      name: "Brother Samuel T.",
+      location: "Miami, Florida"
     }
   ];
 
@@ -94,23 +122,20 @@ const DonationSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Testimonials */}
+        {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
           <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="text-center">
-              <p className="text-red-100 mb-4 italic">
-                "Supporting this ministry has been one of the most fulfilling decisions of my life. Seeing lives transformed through God's word in our native languages is incredible."
-              </p>
-              <div className="text-white font-semibold">- Sister Mary O.</div>
-              <div className="text-red-200 text-sm">Atlanta, Georgia</div>
-            </div>
-            <div className="text-center">
-              <p className="text-red-100 mb-4 italic">
-                "The monthly updates showing how many souls are reached gives me so much joy. My contribution is making a real difference in spreading God's love."
-              </p>
-              <div className="text-white font-semibold">- Brother John A.</div>
-              <div className="text-red-200 text-sm">Atlanta, Georgia</div>
+          <div className="relative">
+            <div className="flex overflow-x-auto scrollbar-hide gap-8 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="flex-shrink-0 w-80 text-center">
+                  <p className="text-red-100 mb-4 italic text-sm leading-relaxed">
+                    "{testimonial.quote}"
+                  </p>
+                  <div className="text-white font-semibold">- {testimonial.name}</div>
+                  <div className="text-red-200 text-sm">{testimonial.location}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

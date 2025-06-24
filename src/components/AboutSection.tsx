@@ -22,8 +22,8 @@ const AboutSection: React.FC = () => {
 
         {/* Mission & Vision */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-8">
-            <div className="flex items-center mb-6">
+          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-8 text-center">
+            <div className="flex items-center justify-center mb-6">
               <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-2xl flex items-center justify-center mr-4">
                 <Target className="text-white" size={24} />
               </div>
@@ -37,8 +37,8 @@ const AboutSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-3xl p-8">
-            <div className="flex items-center mb-6">
+          <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-3xl p-8 text-center">
+            <div className="flex items-center justify-center mb-6">
               <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mr-4">
                 <Eye className="text-white" size={24} />
               </div>
