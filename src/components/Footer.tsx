@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
               <img 
                 src="/the_gospel_save_us_logo-removebg-preview.png" 
                 alt="The Gospel Save Us" 
-                className="h-16 w-auto"
+                className="h-12 w-auto"
                 style={{ backgroundColor: 'transparent' }}
               />
             </div>
