@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Users, Globe, TrendingUp, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Users, Globe, TrendingUp, Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import AnimatedCounter from './AnimatedCounter';
@@ -64,7 +64,7 @@ const DonationSection: React.FC = () => {
   ];
 
   return (
-    <section id="donate" className="py-20 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
+    <section id="donate" className="py-16 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -144,15 +144,16 @@ const DonationSection: React.FC = () => {
         {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
           <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
-          <div className="relative">
-            <div className="flex overflow-x-auto scrollbar-hide gap-8 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="flex-shrink-0 w-80 text-center">
-                  <p className="text-red-100 mb-4 italic text-sm leading-relaxed">
+          <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
+            <div className="flex flex-nowrap animate-scroll-carousel">
+              {/* Triple the testimonials for infinite scroll effect */}
+              {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
+                <div key={index} className="flex-shrink-0 w-80 mx-2 p-6 bg-[#F8F9FA] rounded-lg shadow-md">
+                  <p className="text-gray-700 mb-4 italic text-sm leading-relaxed">
                     "{testimonial.quote}"
                   </p>
-                  <div className="text-white font-semibold">- {testimonial.name}</div>
-                  <div className="text-red-200 text-sm">{testimonial.location}</div>
+                  <div className="text-gray-900 font-semibold">- {testimonial.name}</div>
+                  <div className="text-gray-600 text-sm">{testimonial.location}</div>
                 </div>
               ))}
             </div>

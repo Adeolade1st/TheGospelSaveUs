@@ -44,39 +44,39 @@ const Header: React.FC = () => {
     <>
       <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo - Flush Left */}
-            <div className="flex items-center flex-shrink-0">
-              <img 
-                src="/the gospel save us logo reseized.jpg" 
-                alt="The Gospel Save Us" 
-                className="h-12 w-auto"
-                style={{ backgroundColor: 'transparent' }}
-              />
-            </div>
+          {/* Logo and Tagline Section */}
+          <div className="flex flex-col items-center py-4">
+            <img 
+              src="/the_gospel_save_us_logo-removebg-preview.png" 
+              alt="The Gospel Save Us" 
+              className="h-24 w-auto mb-5"
+              style={{ backgroundColor: 'transparent' }}
+            />
+            <p className="text-lg font-semibold text-gray-700">The Gospel Saves Us</p>
+          </div>
 
+          {/* Navigation and Controls Section */}
+          <div className="flex justify-center items-center h-16 border-t border-gray-200">
             {/* Desktop Navigation - Centered */}
-            <nav className="hidden md:flex items-center justify-center flex-1 mx-8">
-              <div className="flex items-center space-x-8">
-                {navItems.map((item) => (
-                  <a
-                    key={item.key}
-                    href={item.href}
-                    className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
-                  >
-                    {t[item.key as keyof typeof t]}
-                  </a>
-                ))}
-              </div>
+            <nav className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
+                <a
+                  key={item.key}
+                  href={item.href}
+                  className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
+                >
+                  {t[item.key as keyof typeof t]}
+                </a>
+              ))}
             </nav>
 
-            {/* Right Side Controls - Flush Right */}
-            <div className="flex items-center space-x-4 flex-shrink-0">
+            {/* Right Side Controls */}
+            <div className="absolute right-4 flex items-center space-x-4">
               {/* Language Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200 px-3 py-2 rounded-full border border-gray-300 hover:border-red-600"
+                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200"
                 >
                   <Globe size={20} />
                   <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
                       className="fixed inset-0 z-10"
                       onClick={() => setIsLanguageDropdownOpen(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-20 border border-gray-200">
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-20">
                       {languages.map((language) => (
                         <button
                           key={language.code}
@@ -115,9 +115,9 @@ const Header: React.FC = () => {
                 <div className="relative">
                   <button
                     onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200 px-3 py-2 rounded-full border border-gray-300 hover:border-red-600"
+                    className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-amber-500 rounded-full flex items-center justify-center">
                       <User className="text-white" size={16} />
                     </div>
                     <span className="hidden sm:inline font-medium">
@@ -132,7 +132,7 @@ const Header: React.FC = () => {
                         className="fixed inset-0 z-10"
                         onClick={() => setIsUserDropdownOpen(false)}
                       />
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-20 border border-gray-200">
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-20">
                         <div className="px-4 py-2 border-b border-gray-100">
                           <p className="text-sm font-medium text-gray-900">
                             {user.user_metadata?.full_name || 'User'}
@@ -164,7 +164,7 @@ const Header: React.FC = () => {
                 <div className="hidden sm:flex items-center space-x-3">
                   <button
                     onClick={() => handleAuthClick('login')}
-                    className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200 border-2 border-red-600 rounded-full px-4 py-2 hover:bg-red-50"
+                    className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
                   >
                     Sign In
                   </button>
@@ -180,7 +180,7 @@ const Header: React.FC = () => {
               {/* Donate Button */}
               <a
                 href="#donate"
-                className="hidden lg:inline-flex bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
+                className="hidden sm:inline-flex bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
               >
                 {t.donateNow}
               </a>
@@ -188,7 +188,7 @@ const Header: React.FC = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 p-2 rounded-full border border-gray-300 hover:border-red-600"
+                className="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200"
               >
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -198,13 +198,13 @@ const Header: React.FC = () => {
           {/* Mobile Navigation */}
           {isMenuOpen && (
             <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
                 {navItems.map((item) => (
                   <a
                     key={item.key}
                     href={item.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
                   >
                     {t[item.key as keyof typeof t]}
                   </a>
@@ -217,7 +217,7 @@ const Header: React.FC = () => {
                         handleAuthClick('login');
                         setIsMenuOpen(false);
                       }}
-                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors duration-200 border-2 border-red-600 rounded-full"
+                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
                     >
                       Sign In
                     </button>
@@ -226,7 +226,7 @@ const Header: React.FC = () => {
                         handleAuthClick('register');
                         setIsMenuOpen(false);
                       }}
-                      className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200"
+                      className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-md font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200"
                     >
                       Sign Up
                     </button>
@@ -236,7 +236,7 @@ const Header: React.FC = () => {
                 <a
                   href="#donate"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 mt-4"
+                  className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-md font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 mt-4"
                 >
                   {t.donateNow}
                 </a>

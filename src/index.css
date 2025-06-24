@@ -124,6 +124,24 @@ html {
   animation: countUp 0.8s ease-out;
 }
 
+/* Testimonials Carousel Animation */
+@keyframes scroll-carousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-scroll-carousel {
+  animation: scroll-carousel 30s linear infinite;
+}
+
+.animate-scroll-carousel:hover {
+  animation-play-state: paused;
+}
+
 /* Focus styles for accessibility */
 button:focus,
 input:focus,

@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
               <img 
-                src="/the gospel save us logo reseized.jpg" 
+                src="/the_gospel_save_us_logo-removebg-preview.png" 
                 alt="The Gospel Save Us" 
                 className="h-16 w-auto"
                 style={{ backgroundColor: 'transparent' }}
