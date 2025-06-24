@@ -15,9 +15,6 @@ const AboutSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             {t.aboutTitle}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Learn about our heart, vision, and the team God has assembled to reach souls across Nigeria and beyond
-          </p>
         </div>
 
         {/* Ministry Description */}
