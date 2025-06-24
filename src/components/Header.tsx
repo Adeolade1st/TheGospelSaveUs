@@ -46,13 +46,12 @@ const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo - Flush Left */}
-            <div className="flex items-center space-x-2 flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">G</span>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-xl font-bold text-gray-900">God Would Provide Outreach</h1>
-              </div>
+            <div className="flex items-center flex-shrink-0">
+              <img 
+                src="/the gospel save us logo.jpg" 
+                alt="The Gospel Save Us" 
+                className="h-12 w-auto"
+              />
             </div>
 
             {/* Desktop Navigation - Centered */}
