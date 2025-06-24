@@ -215,3 +215,19 @@ h1, h2, h3, h4, h5, h6 {
 .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+/* Logo optimization for crisp rendering */
+img[alt*="Gospel"] {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* Ensure logos maintain quality at exact dimensions */
+.logo-70px {
+  width: 70px !important;
+  height: 70px !important;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+}
