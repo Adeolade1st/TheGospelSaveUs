@@ -1,24 +1,11 @@
 import React from 'react';
-import { Play, Music } from 'lucide-react';
+import { Music } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import AudioPlayerCard from './AudioPlayerCard';
 
 const ContentSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
-
-  const audioContent = [
-    {
-      title: '',
-      language: 'Igbo',
-      description: '',
-      audioUrl: 'https://drive.google.com/uc?export=download&id=10j9KSXjS75LpXpnrM8yqYkeY3KGddg_f',
-      duration: '18:45',
-      gradientColors: 'bg-gradient-to-br from-amber-600 via-amber-700 to-orange-700',
-      textColor: 'text-white'
-    }
-  ];
 
   return (
     <section id="content" className="py-20 bg-gray-50">
@@ -81,22 +68,11 @@ const ContentSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Audio Player Cards */}
-        <div className="flex justify-center">
-          <div className="w-full max-w-md">
-            {audioContent.map((content, index) => (
-              <AudioPlayerCard
-                key={index}
-                title={content.title}
-                language={content.language}
-                description={content.description}
-                audioUrl={content.audioUrl}
-                duration={content.duration}
-                gradientColors={content.gradientColors}
-                textColor={content.textColor}
-              />
-            ))}
-          </div>
+        {/* Additional Content Text */}
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-lg text-gray-700 leading-relaxed">
+            Evangelist Jones, through Pure Gold Gospel Singers, makes the gospel CD in spoken word available internationally using radio AirPlay Platform on Jango.com. We ask for donations to help support the cost of the airtime. 'Your seed of love' in the form of donations would help us get as much airplay as possible. When the listeners stream their various secular Artists' Radio, they may just hear the Gospel in spoken Word playing too. We're taking the gospel to the world and not waiting for it to come to us. Join us as we partner with God on this mission. Proverbs 11:30.
+          </p>
         </div>
       </div>
     </section>
