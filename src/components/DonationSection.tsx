@@ -2,17 +2,10 @@ import React from 'react';
 import { Heart, Users, Globe, TrendingUp, Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import AnimatedCounter from './AnimatedCounter';
 
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
-
-  const impactStats = [
-    { icon: Users, value: 1, label: t.soulsReached, suffix: ' m+' },
-    { icon: TrendingUp, value: 4, label: t.languagesServed },
-    { icon: Heart, value: 2500, label: t.monthlyDonors, suffix: '+' }
-  ];
 
   const donationTiers = [
     {
@@ -71,7 +64,7 @@ const DonationSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {t.donationTitle}
           </h2>
-          <p className="text-xl text-red-100 max-w-3xl mx-auto">
+          <p className="text-2xl text-red-100 max-w-3xl mx-auto leading-relaxed">
             {t.donationSubtitle}
           </p>
         </div>
@@ -88,7 +81,7 @@ const DonationSection: React.FC = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   {tier.title}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-lg leading-relaxed">
                   {tier.description}
                 </p>
               </div>
@@ -96,42 +89,21 @@ const DonationSection: React.FC = () => {
               <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
                   <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-gray-700">{tier.impact}</span>
+                  <span className="text-gray-700 text-lg">{tier.impact}</span>
                 </div>
               </div>
 
               <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800">
                 Support This Tier
               </button>
-
-              {/* Impact Stats moved beneath each tier button */}
-              {index === 1 && (
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <div className="grid grid-cols-1 gap-4">
-                    {impactStats.map((stat, statIndex) => (
-                      <div key={statIndex} className="text-center">
-                        <stat.icon className="w-6 h-6 text-red-600 mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-gray-900">
-                          <AnimatedCounter 
-                            end={stat.value} 
-                            suffix={stat.suffix || ''} 
-                            duration={2500 + (statIndex * 500)}
-                          />
-                        </div>
-                        <div className="text-gray-600 text-sm font-medium">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </div>
 
-        {/* One-time Donation - Moved directly under subscription cards */}
+        {/* One-time Donation */}
         <div className="text-center mb-16">
           <h3 className="text-2xl font-bold text-white mb-4">Prefer a One-time Gift?</h3>
-          <p className="text-red-200 mb-8">Every contribution helps us reach more souls with God's transforming word</p>
+          <p className="text-red-200 mb-8 text-lg leading-relaxed">Every contribution helps us reach more souls with God's transforming word</p>
           <div className="flex flex-wrap justify-center gap-4">
             {[25, 50, 100, 250, 500].map((amount) => (
               <button
@@ -147,7 +119,7 @@ const DonationSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Jango Chart Section - Inserted above carousel */}
+        {/* Jango Chart Section */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Jango Airplay Packages</h3>
           <div className="bg-white rounded-2xl p-6 overflow-x-auto">
@@ -159,7 +131,7 @@ const DonationSection: React.FC = () => {
             />
           </div>
           <div className="text-center mt-6">
-            <p className="text-red-100 text-sm mb-4">
+            <p className="text-red-100 text-lg mb-4 leading-relaxed">
               Choose the package that best fits your support level and help us reach more souls through Jango's radio platform.
             </p>
             <a
@@ -178,10 +150,9 @@ const DonationSection: React.FC = () => {
           <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
             <div className="flex flex-nowrap animate-scroll-carousel">
-              {/* Triple the testimonials for infinite scroll effect */}
               {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
                 <div key={index} className="flex-shrink-0 w-80 mx-2 p-6 bg-[#F8F9FA] rounded-lg shadow-md">
-                  <p className="text-gray-700 mb-4 italic text-sm leading-relaxed">
+                  <p className="text-gray-700 mb-4 italic text-lg leading-relaxed">
                     "{testimonial.quote}"
                   </p>
                   <div className="text-gray-900 font-semibold">- {testimonial.name}</div>
