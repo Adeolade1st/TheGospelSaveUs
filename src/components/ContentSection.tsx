@@ -48,7 +48,7 @@ const ContentSection: React.FC = () => {
         </div>
 
         {/* Jango Music Player Section */}
-        <div className="text-center mb-16">
+        <div className="text-center">
           <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border-2 border-purple-300">
             <h3 className="text-2xl font-bold text-white mb-4">
               Listen on Jango Radio
@@ -66,13 +66,6 @@ const ContentSection: React.FC = () => {
               Play on Jango
             </a>
           </div>
-        </div>
-
-        {/* Additional Content Text */}
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-lg text-gray-700 leading-relaxed">
-            Evangelist Jones, through Pure Gold Gospel Singers, makes the gospel CD in spoken word available internationally using radio AirPlay Platform on Jango.com. We ask for donations to help support the cost of the airtime. 'Your seed of love' in the form of donations would help us get as much airplay as possible. When the listeners stream their various secular Artists' Radio, they may just hear the Gospel in spoken Word playing too. We're taking the gospel to the world and not waiting for it to come to us. Join us as we partner with God on this mission. Proverbs 11:30.
-          </p>
         </div>
       </div>
     </section>
