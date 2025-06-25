@@ -9,12 +9,12 @@ const ContentSection: React.FC = () => {
 
   const languageCards = [
     {
-      name: 'Hausa',
-      nativeName: 'Hausa',
-      description: 'Northern Nigeria\'s lingua franca',
-      image: 'https://images.pexels.com/photos/3807755/pexels-photo-3807755.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      gradient: 'from-red-600 to-red-700'
+      name: 'Yoruba',
+      nativeName: 'Yorùbá',
+      description: 'Language of the Southwest',
+      image: 'https://images.pexels.com/photos/3808904/pexels-photo-3808904.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
+      gradient: 'from-red-600 via-red-700 to-red-800'
     },
     {
       name: 'Igbo',
@@ -22,22 +22,22 @@ const ContentSection: React.FC = () => {
       description: 'Language of the Southeast',
       image: 'https://images.pexels.com/photos/3807758/pexels-photo-3807758.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
-      gradient: 'from-red-600 to-red-700'
+      gradient: 'from-amber-600 via-amber-700 to-orange-700'
     },
     {
-      name: 'Yoruba',
-      nativeName: 'Yorùbá',
-      description: 'Language of the Southwest',
-      image: 'https://images.pexels.com/photos/3807760/pexels-photo-3807760.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      gradient: 'from-red-600 to-red-700'
+      name: 'Hausa',
+      nativeName: 'Hausa',
+      description: 'Northern Nigeria\'s lingua franca',
+      image: 'https://images.pexels.com/photos/3808004/pexels-photo-3808004.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
+      gradient: 'from-green-600 via-green-700 to-emerald-700'
     }
   ];
 
   return (
     <section id="content" className="py-15 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header - Reduced by 4px */}
+        {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             The Spoken Word
@@ -51,90 +51,148 @@ const ContentSection: React.FC = () => {
         <div className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {languageCards.map((language, index) => (
-              <a
+              <div
                 key={index}
-                href={language.jangoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-3xl shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                className={`relative overflow-hidden rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-br ${language.gradient}`}
               >
                 {/* Background Image */}
                 <div className="relative h-64">
                   <img
                     src={language.image}
                     alt={`${language.name} cultural imagery`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-30"
                   />
                   {/* Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-t ${language.gradient} opacity-80 group-hover:opacity-90 transition-opacity duration-300`} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
                 
                 {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                  <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-2xl font-bold mb-2">{language.nativeName}</h3>
-                    <p className="text-white/90 text-lg mb-3">{language.description}</p>
-                    <div className="flex items-center space-x-2 text-white/80 group-hover:text-white transition-colors duration-300">
-                      <Globe size={16} />
-                      <span className="text-sm font-medium">Listen on Jango</span>
-                    </div>
+                <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
+                  <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-4 self-start">
+                    <span className="text-sm font-bold uppercase tracking-wider">{language.name}</span>
                   </div>
+                  <h3 className="text-2xl font-bold mb-2">{language.nativeName}</h3>
+                  <p className="text-white/80 text-sm mb-6">{language.description}</p>
+                  
+                  <a
+                    href={language.jangoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-2 bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-white/90 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  >
+                    <Music size={16} />
+                    <span>Listen Now</span>
+                  </a>
                 </div>
-
-                {/* Hover Effect Indicator */}
-                <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Music className="text-white" size={16} />
-                </div>
-              </a>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Amazon Support Section */}
-        <div className="text-center mb-12">
-          <div className="bg-red-600 rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border-2 border-red-300">
-            <h3 className="text-2xl font-bold text-white mb-4">
+        {/* Platform Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {/* Amazon Support Section */}
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl shadow-xl p-8 text-white transform hover:scale-105 transition-all duration-300">
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                <svg 
+                  className="w-8 h-8 text-white" 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                >
+                  <path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 8.16 3.17 12.758 3.17 2.916 0 6.6-.68 9.73-2.205.185-.09.279-.058.279.09 0 .148-.279.337-.558.427-3.644 1.524-7.515 2.205-11.386 2.205-4.25 0-8.73-1.08-11.17-3.665zm-.837-2.205c.09-.18.27-.18.54-.045 4.597 2.655 10.312 3.665 15.367 3.665 3.096 0 6.6-.68 9.73-2.205.18-.09.27-.045.27.09 0 .18-.18.315-.45.405-3.644 1.524-7.515 2.205-11.386 2.205-5.055 0-10.77-1.08-13.97-4.115zm1.17-2.25c.18-.225.45-.18.81-.045 4.327 2.52 9.73 3.53 14.785 3.53 2.916 0 6.33-.68 9.19-2.07.18-.09.36-.045.36.135 0 .18-.18.315-.45.405-3.374 1.389-6.93 2.07-10.755 2.07-5.055 0-10.77-1.08-13.94-4.025z"/>
+                </svg>
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-center mb-4">
               Buy Downloadable MP3 on Amazon
             </h3>
-            <p className="text-xl text-red-100 mb-6 leading-relaxed">
-              Support by purchasing the audio on Amazon
+            <p className="text-orange-100 text-center mb-6 leading-relaxed">
+              Support our ministry by purchasing high-quality audio downloads
             </p>
-            <a
-              href="https://amazon.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-red-700 to-red-800 text-white font-bold text-lg rounded-full hover:from-red-800 hover:to-red-900 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              <svg 
-                className="w-6 h-6 mr-3" 
-                viewBox="0 0 24 24" 
-                fill="white"
+            <div className="text-center">
+              <a
+                href="https://amazon.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-orange-600 font-bold text-lg rounded-full hover:bg-orange-50 transform hover:scale-105 transition-all duration-300 shadow-lg"
               >
-                <path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 8.16 3.17 12.758 3.17 2.916 0 6.6-.68 9.73-2.205.185-.09.279-.058.279.09 0 .148-.279.337-.558.427-3.644 1.524-7.515 2.205-11.386 2.205-4.25 0-8.73-1.08-11.17-3.665zm-.837-2.205c.09-.18.27-.18.54-.045 4.597 2.655 10.312 3.665 15.367 3.665 3.096 0 6.6-.68 9.73-2.205.18-.09.27-.045.27.09 0 .18-.18.315-.45.405-3.644 1.524-7.515 2.205-11.386 2.205-5.055 0-10.77-1.08-13.97-4.115zm1.17-2.25c.18-.225.45-.18.81-.045 4.327 2.52 9.73 3.53 14.785 3.53 2.916 0 6.33-.68 9.19-2.07.18-.09.36-.045.36.135 0 .18-.18.315-.45.405-3.374 1.389-6.93 2.07-10.755 2.07-5.055 0-10.77-1.08-13.94-4.025z"/>
-              </svg>
-              Shop on Amazon
-            </a>
+                Shop on Amazon
+              </a>
+            </div>
+          </div>
+
+          {/* Jango Music Player Section */}
+          <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-3xl shadow-xl p-8 text-white transform hover:scale-105 transition-all duration-300">
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                <Music className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-center mb-4">
+              Listen on Jango Radio
+            </h3>
+            <p className="text-purple-100 text-center mb-6 leading-relaxed">
+              Stream Pure Gold Gospel Singers on Jango's radio platform
+            </p>
+            <div className="text-center">
+              <a
+                href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-bold text-lg rounded-full hover:bg-purple-50 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                <Music className="w-5 h-5 mr-2" />
+                Play on Jango
+              </a>
+            </div>
           </div>
         </div>
 
-        {/* Jango Music Player Section */}
-        <div className="text-center">
-          <div className="bg-red-600 rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border-2 border-red-300">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Listen on Jango Radio
+        {/* Support Our Ministry Section */}
+        <div className="bg-gradient-to-br from-red-900 via-red-800 to-amber-900 rounded-3xl shadow-2xl p-12 text-center">
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Support Our Ministry
             </h3>
-            <p className="text-xl text-red-100 mb-6 leading-relaxed">
-              Stream Pure Gold Gospel Singers on Jango's radio platform
+            <p className="text-xl text-red-100 mb-8 leading-relaxed">
+              Evangelist Jones, through Pure Gold Gospel Singers, makes the gospel CD in spoken word available internationally using radio AirPlay Platform on Jango.com. We ask for donations to help support the cost of the airtime. 'Your seed of love' in the form of donations would help us get as much airplay as possible. When the listeners stream their various secular Artists' Radio, they may just hear the Gospel in spoken Word playing too. We're taking the gospel to the world and not waiting for it to come to us. Join us as we partner with God on this mission. Proverbs 11:30.
             </p>
-            <a
-              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white text-red-700 font-bold text-lg rounded-full hover:bg-red-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              <Music className="w-6 h-6 mr-3" />
-              Play on Jango
-            </a>
+            
+            {/* Jango Chart Section */}
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 mb-8">
+              <h4 className="text-2xl font-bold text-white mb-6">Jango Airplay Packages</h4>
+              <div className="bg-white rounded-xl p-4 overflow-x-auto">
+                <img 
+                  src="/src/assets/jango chart.png" 
+                  alt="Jango Airplay Package Pricing Chart" 
+                  className="w-full h-auto max-w-none"
+                  style={{ minWidth: '600px' }}
+                />
+              </div>
+              <p className="text-red-100 mt-4 leading-relaxed">
+                Choose the package that best fits your support level and help us reach more souls through Jango's radio platform.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <a
+                href="#donate"
+                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-lg rounded-full hover:from-amber-600 hover:to-amber-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                Donate Now
+              </a>
+              
+              <a
+                href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white font-bold text-lg rounded-full hover:bg-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                <Globe className="w-5 h-5 mr-2" />
+                Visit Jango Page
+              </a>
+            </div>
           </div>
         </div>
       </div>
