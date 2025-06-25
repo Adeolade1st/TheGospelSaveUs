@@ -22,8 +22,7 @@ const Header: React.FC = () => {
     { key: 'home', href: '#home' },
     { key: 'about', href: '#about' },
     { key: 'content', href: '#content' },
-    { key: 'donate', href: '#donate' },
-    { key: 'contact', href: '#contact' }
+    { key: 'donate', href: '#donate' }
   ];
 
   const handleAuthClick = (mode: 'login' | 'register') => {

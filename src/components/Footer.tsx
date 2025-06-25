@@ -18,15 +18,13 @@ const Footer: React.FC = () => {
     { key: 'home', href: '#home' },
     { key: 'content', href: '#content' },
     { key: 'about', href: '#about' },
-    { key: 'donate', href: '#donate' },
-    { key: 'prayerRequest', href: '#prayer' },
-    { key: 'partnership', href: '#partnership' }
+    { key: 'donate', href: '#donate' }
   ];
 
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Logo & Description */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
@@ -72,25 +70,6 @@ const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-xl font-bold mb-6">{t.connectWithUs}</h4>
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <Mail className="mr-3 text-gray-400" size={18} />
-                <span className="text-gray-300">Jones8874@bellsouth.net</span>
-              </div>
-              <div className="flex items-center">
-                <Phone className="mr-3 text-gray-400" size={18} />
-                <span className="text-gray-300">(404) 709-9620</span>
-              </div>
-              <div className="flex items-center">
-                <MapPin className="mr-3 text-gray-400" size={18} />
-                <span className="text-gray-300">Atlanta, Georgia, United States</span>
-              </div>
-            </div>
           </div>
         </div>
 

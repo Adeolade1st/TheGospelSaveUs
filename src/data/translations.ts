@@ -5,7 +5,6 @@ export const translations = {
     content: 'Content',
     donate: 'Donate',
     about: 'About',
-    contact: 'Contact',
     
     // Hero Section
     heroTitle: 'The Gospel Save Us',
@@ -75,7 +74,6 @@ export const translations = {
     
     // Footer
     quickLinks: 'Quick Links',
-    connectWithUs: 'Connect With Us',
     prayerRequest: 'Prayer Request',
     partnership: 'Partnership',
     allRightsReserved: 'All rights reserved.',
@@ -100,7 +98,6 @@ export const translations = {
     content: 'Awọn Akoonu',
     donate: 'Funni',
     about: 'Nipa Wa',
-    contact: 'Kan Si Wa',
     
     // Hero Section
     heroTitle: 'Ihinrere Gba Wa La',
@@ -136,7 +133,6 @@ export const translations = {
     content: 'Ọdịnaya',
     donate: 'Nye',
     about: 'Maka Anyị',
-    contact: 'Kpọtụrụ Anyị',
     
     // Hero Section
     heroTitle: 'Oziọma Zọpụta Anyị',
@@ -172,7 +168,6 @@ export const translations = {
     content: 'Abun Ciki',
     donate: 'Ba da Gudummawa',
     about: 'Game da Mu',
-    contact: 'Tuntube Mu',
     
     // Hero Section
     heroTitle: 'Bishara Ta Cece Mu',
@@ -197,7 +192,7 @@ export const translations = {
     
     // Newsletter
     newsletterTitle: 'Kasance Mai Haɗi',
-    newsletterDescription: 'Sami sabbin abubuwan kalmar da aka faɗa da sabuntawar aikin wa\'azi',
+    newsletlerDescription: 'Sami sabbin abubuwan kalmar da aka faɗa da sabuntawar aikin wa\'azi',
     emailPlaceholder: 'Shigar da adireshin imel ɗin ku',
     subscribe: 'Yi Rajista'
   }
