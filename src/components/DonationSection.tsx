@@ -11,7 +11,7 @@ const DonationSection: React.FC = () => {
   const impactStats = [
     { icon: Users, value: 1, label: t.soulsReached, suffix: ' m+' },
     { icon: TrendingUp, value: 4, label: t.languagesServed },
-    { icon: Heart, value: 2500, label: t.monthlySupporters, suffix: '+' }
+    { icon: Heart, value: 2500, label: t.monthlyDonors, suffix: '+' }
   ];
 
   const donationTiers = [
@@ -143,7 +143,7 @@ const DonationSection: React.FC = () => {
 
         {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
-          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
+          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
             <div className="flex flex-nowrap animate-scroll-carousel">
               {/* Triple the testimonials for infinite scroll effect */}
