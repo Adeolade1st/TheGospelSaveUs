@@ -72,24 +72,24 @@ const DonationSection: React.FC = () => {
         {/* Donation Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {donationTiers.map((tier, index) => (
-            <div key={index} className="relative bg-red-600 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
+            <div key={index} className="relative bg-white rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
               <div className="text-center mb-8">
-                <div className="text-5xl font-bold text-white mb-2">
+                <div className="text-5xl font-bold text-gray-900 mb-2">
                   ${tier.amount}
-                  <span className="text-lg text-red-100 font-normal">/month</span>
+                  <span className="text-lg text-gray-600 font-normal">/month</span>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   {tier.title}
                 </h3>
-                <p className="text-red-100 text-lg leading-relaxed">
+                <p className="text-gray-700 text-lg leading-relaxed">
                   {tier.description}
                 </p>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
-                  <Check className="text-white mt-1 flex-shrink-0" size={20} />
-                  <span className="text-red-100 text-lg">{tier.impact}</span>
+                  <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
+                  <span className="text-gray-700 text-lg">{tier.impact}</span>
                 </div>
               </div>
 
