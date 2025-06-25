@@ -120,7 +120,7 @@ const DonationSection: React.FC = () => {
         </div>
 
         {/* Jango Chart Section */}
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16 jango-airplay-package">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Jango Airplay Packages</h3>
           <div className="bg-white rounded-2xl p-6 overflow-x-auto">
             <img 
@@ -138,7 +138,7 @@ const DonationSection: React.FC = () => {
               href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center justify-center px-6 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-50 transform hover:scale-105 transition-all duration-300"
             >
               Visit Jango Page
             </a>

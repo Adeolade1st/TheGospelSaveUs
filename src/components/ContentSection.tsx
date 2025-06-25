@@ -148,53 +148,6 @@ const ContentSection: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Support Our Ministry Section */}
-        <div className="bg-gradient-to-br from-red-900 via-red-800 to-amber-900 rounded-3xl shadow-2xl p-12 text-center">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Support Our Ministry
-            </h3>
-            <p className="text-xl text-red-100 mb-8 leading-relaxed">
-              Evangelist Jones, through Pure Gold Gospel Singers, makes the gospel CD in spoken word available internationally using radio AirPlay Platform on Jango.com. We ask for donations to help support the cost of the airtime. 'Your seed of love' in the form of donations would help us get as much airplay as possible. When the listeners stream their various secular Artists' Radio, they may just hear the Gospel in spoken Word playing too. We're taking the gospel to the world and not waiting for it to come to us. Join us as we partner with God on this mission. Proverbs 11:30.
-            </p>
-            
-            {/* Jango Chart Section */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 mb-8">
-              <h4 className="text-2xl font-bold text-white mb-6">Jango Airplay Packages</h4>
-              <div className="bg-white rounded-xl p-4 overflow-x-auto">
-                <img 
-                  src="/src/assets/jango chart.png" 
-                  alt="Jango Airplay Package Pricing Chart" 
-                  className="w-full h-auto max-w-none"
-                  style={{ minWidth: '600px' }}
-                />
-              </div>
-              <p className="text-red-100 mt-4 leading-relaxed">
-                Choose the package that best fits your support level and help us reach more souls through Jango's radio platform.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <a
-                href="#donate"
-                className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-lg rounded-full hover:from-amber-600 hover:to-amber-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
-              >
-                Donate Now
-              </a>
-              
-              <a
-                href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white font-bold text-lg rounded-full hover:bg-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg"
-              >
-                <Globe className="w-5 h-5 mr-2" />
-                Visit Jango Page
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
