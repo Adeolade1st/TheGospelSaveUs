@@ -9,7 +9,7 @@ interface AnimatedCounterProps {
 
 const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ 
   end, 
-  duration = 2000, 
+  duration = 2500, 
   suffix = '', 
   prefix = '' 
 }) => {
@@ -44,9 +44,12 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       
-      // Easing function for smooth animation
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(easeOutQuart * end));
+      // Updated easing function: easeInOutCubic
+      const easeInOutCubic = progress < 0.5 
+        ? 4 * progress * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      
+      setCount(Math.floor(easeInOutCubic * end));
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);

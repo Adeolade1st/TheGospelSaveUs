@@ -57,7 +57,7 @@ const DonationSection: React.FC = () => {
   ];
 
   return (
-    <section id="donate" className="py-16 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
+    <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Reduced by 4px */}
         <div className="text-center mb-16">
@@ -72,28 +72,28 @@ const DonationSection: React.FC = () => {
         {/* Donation Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {donationTiers.map((tier, index) => (
-            <div key={index} className="relative bg-white rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
+            <div key={index} className="relative bg-red-600 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
               <div className="text-center mb-8">
-                <div className="text-5xl font-bold text-gray-900 mb-2">
+                <div className="text-5xl font-bold text-white mb-2">
                   ${tier.amount}
-                  <span className="text-lg text-gray-500 font-normal">/month</span>
+                  <span className="text-lg text-red-100 font-normal">/month</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                <h3 className="text-2xl font-bold text-white mb-4">
                   {tier.title}
                 </h3>
-                <p className="text-gray-600 text-lg leading-relaxed">
+                <p className="text-red-100 text-lg leading-relaxed">
                   {tier.description}
                 </p>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
-                  <Check className="text-green-500 mt-1 flex-shrink-0" size={20} />
-                  <span className="text-gray-700 text-lg">{tier.impact}</span>
+                  <Check className="text-white mt-1 flex-shrink-0" size={20} />
+                  <span className="text-red-100 text-lg">{tier.impact}</span>
                 </div>
               </div>
 
-              <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800">
+              <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900">
                 Support This Tier
               </button>
             </div>

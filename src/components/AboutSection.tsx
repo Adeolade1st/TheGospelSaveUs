@@ -7,7 +7,7 @@ const AboutSection: React.FC = () => {
   const t = translations[currentLanguage.code];
 
   return (
-    <section id="ministry-section" className="py-20 bg-white">
+    <section id="ministry-section" className="py-15 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Reduced by 4px */}
         <div className="text-center mb-16">
