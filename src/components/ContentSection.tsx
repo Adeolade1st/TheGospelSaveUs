@@ -1,4 +1,5 @@
 import React from 'react';
+import { Play, Music } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import AudioPlayerCard from './AudioPlayerCard';
@@ -10,29 +11,11 @@ const ContentSection: React.FC = () => {
   const audioContent = [
     {
       title: '',
-      language: 'Yorùbá',
-      description: '',
-      audioUrl: 'https://drive.google.com/uc?export=download&id=16b1nRqvQFc5pdIFO8KNljI9agzVufa6N',
-      duration: '15:32',
-      gradientColors: 'bg-gradient-to-br from-red-600 via-red-700 to-red-800',
-      textColor: 'text-white'
-    },
-    {
-      title: '',
       language: 'Igbo',
       description: '',
       audioUrl: 'https://drive.google.com/uc?export=download&id=10j9KSXjS75LpXpnrM8yqYkeY3KGddg_f',
       duration: '18:45',
       gradientColors: 'bg-gradient-to-br from-amber-600 via-amber-700 to-orange-700',
-      textColor: 'text-white'
-    },
-    {
-      title: '',
-      language: 'Hausa',
-      description: '',
-      audioUrl: 'https://drive.google.com/uc?export=download&id=1UB_rUsfb4vVr4GnNNcN-4Wv5VNOSsNX6',
-      duration: '12:20',
-      gradientColors: 'bg-gradient-to-br from-green-600 via-green-700 to-emerald-700',
       textColor: 'text-white'
     }
   ];
@@ -51,7 +34,7 @@ const ContentSection: React.FC = () => {
         </div>
 
         {/* Amazon Support Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <div className="bg-white rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border-2 border-amber-200">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               Support Our Ministry
@@ -77,20 +60,43 @@ const ContentSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Jango Music Player Section */}
+        <div className="text-center mb-16">
+          <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border-2 border-purple-300">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Listen on Jango Radio
+            </h3>
+            <p className="text-lg text-purple-100 mb-6">
+              Stream Pure Gold Gospel Singers on Jango's radio platform
+            </p>
+            <a
+              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-700 font-bold text-lg rounded-full hover:bg-purple-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <Music className="w-6 h-6 mr-3" />
+              Play on Jango
+            </a>
+          </div>
+        </div>
+
         {/* Audio Player Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {audioContent.map((content, index) => (
-            <AudioPlayerCard
-              key={index}
-              title={content.title}
-              language={content.language}
-              description={content.description}
-              audioUrl={content.audioUrl}
-              duration={content.duration}
-              gradientColors={content.gradientColors}
-              textColor={content.textColor}
-            />
-          ))}
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            {audioContent.map((content, index) => (
+              <AudioPlayerCard
+                key={index}
+                title={content.title}
+                language={content.language}
+                description={content.description}
+                audioUrl={content.audioUrl}
+                duration={content.duration}
+                gradientColors={content.gradientColors}
+                textColor={content.textColor}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
