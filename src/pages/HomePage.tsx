@@ -5,7 +5,6 @@ import ImpactCounterSection from '../components/ImpactCounterSection';
 import AboutSection from '../components/AboutSection';
 import ContentSection from '../components/ContentSection';
 import DonationSection from '../components/DonationSection';
-import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
@@ -18,7 +17,6 @@ const HomePage: React.FC = () => {
         <AboutSection />
         <ContentSection />
         <DonationSection />
-        <ContactSection />
       </main>
       <Footer />
     </div>
