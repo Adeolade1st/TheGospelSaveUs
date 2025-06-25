@@ -12,7 +12,7 @@ const ContentSection: React.FC = () => {
       title: '',
       language: 'Yorùbá',
       description: '',
-      audioUrl: 'https://drive.google.com/uc?export=download&id=1iYwJ7HAJPTiP8TojyEdSPeP7RpkBZOha',
+      audioUrl: 'https://drive.google.com/uc?export=download&id=16b1nRqvQFc5pdIFO8KNljI9agzVufa6N',
       duration: '15:32',
       gradientColors: 'bg-gradient-to-br from-red-600 via-red-700 to-red-800',
       textColor: 'text-white'
