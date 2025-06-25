@@ -249,9 +249,35 @@ img[alt*="Gospel"] {
 }
 
 /* Enhanced responsive typography */
+@media (max-width: 320px) {
+  body {
+    font-size: 16px; /* Minimum readable size for very small screens */
+  }
+  
+  h1 {
+    font-size: 2rem !important; /* Ensure readability on 320px screens */
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 18px; /* Slightly smaller on mobile but still increased */
+  }
+  
+  /* Ensure proper text wrapping on mobile */
+  h1, h2, h3 {
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  body {
+    font-size: 19px; /* Tablet size */
   }
 }
 
@@ -259,4 +285,28 @@ img[alt*="Gospel"] {
   body {
     font-size: 20px; /* Full size on desktop */
   }
+}
+
+/* Smooth scroll behavior with offset for fixed header */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Enhanced button focus states for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #ff3131;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ensure WCAG 2.1 AA compliance for color contrast */
+.text-gray-600 {
+  color: #4b5563; /* Ensures sufficient contrast ratio */
+}
+
+.text-red-200 {
+  color: #fecaca; /* Maintains readability on dark backgrounds */
 }

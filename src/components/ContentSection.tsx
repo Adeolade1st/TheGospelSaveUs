@@ -1,18 +1,11 @@
 import React from 'react';
-import { Music, Globe, Heart, Users, TrendingUp } from 'lucide-react';
+import { Music, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import AnimatedCounter from './AnimatedCounter';
 
 const ContentSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
-
-  const impactStats = [
-    { icon: Users, value: 1, label: t.soulsReached, suffix: ' m+' },
-    { icon: TrendingUp, value: 4, label: t.languagesServed },
-    { icon: Heart, value: 2500, label: t.monthlyDonors, suffix: '+' }
-  ];
 
   const languageCards = [
     {
@@ -44,31 +37,14 @@ const ContentSection: React.FC = () => {
   return (
     <section id="content" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header - Reduced by 4px */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             The Spoken Word
           </h2>
           <p className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Experience transformative spoken word content in your native language
           </p>
-        </div>
-
-        {/* Counter Section - Moved above Support Our Ministry */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {impactStats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-2xl p-8 text-center shadow-lg transform hover:scale-105 transition-all duration-300 border border-gray-100">
-              <stat.icon className="w-12 h-12 text-red-600 mx-auto mb-4" />
-              <div className="text-3xl font-bold text-gray-900 mb-2">
-                <AnimatedCounter 
-                  end={stat.value} 
-                  suffix={stat.suffix || ''} 
-                  duration={2500 + (index * 500)}
-                />
-              </div>
-              <div className="text-gray-600 font-medium">{stat.label}</div>
-            </div>
-          ))}
         </div>
 
         {/* Language Cards Section */}
@@ -118,7 +94,7 @@ const ContentSection: React.FC = () => {
         <div className="text-center mb-12">
           <div className="bg-white rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border-2 border-amber-200">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Support Our Ministry
+              Buy Downloadable MP3 on Amazon
             </h3>
             <p className="text-xl text-gray-700 mb-6 leading-relaxed">
               Support by purchasing the audio on Amazon

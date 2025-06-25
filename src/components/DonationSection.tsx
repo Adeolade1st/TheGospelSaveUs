@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Users, Globe, TrendingUp, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 
@@ -59,9 +59,9 @@ const DonationSection: React.FC = () => {
   return (
     <section id="donate" className="py-16 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header - Reduced by 4px */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             {t.donationTitle}
           </h2>
           <p className="text-2xl text-red-100 max-w-3xl mx-auto leading-relaxed">
