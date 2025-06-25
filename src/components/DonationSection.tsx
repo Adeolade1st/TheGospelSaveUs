@@ -76,21 +76,6 @@ const DonationSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Impact Stats with Animated Counters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {impactStats.map((stat, index) => (
-            <div key={index} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300">
-              <stat.icon className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-              <AnimatedCounter 
-                end={stat.value} 
-                suffix={stat.suffix || ''} 
-                duration={2500 + (index * 500)}
-              />
-              <div className="text-red-200 font-medium mt-2">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
         {/* Donation Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {donationTiers.map((tier, index) => (
@@ -118,6 +103,27 @@ const DonationSection: React.FC = () => {
               <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800">
                 Support This Tier
               </button>
+
+              {/* Impact Stats moved beneath each tier button */}
+              {index === 1 && (
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <div className="grid grid-cols-1 gap-4">
+                    {impactStats.map((stat, statIndex) => (
+                      <div key={statIndex} className="text-center">
+                        <stat.icon className="w-6 h-6 text-red-600 mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-gray-900">
+                          <AnimatedCounter 
+                            end={stat.value} 
+                            suffix={stat.suffix || ''} 
+                            duration={2500 + (statIndex * 500)}
+                          />
+                        </div>
+                        <div className="text-gray-600 text-sm font-medium">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -138,6 +144,32 @@ const DonationSection: React.FC = () => {
             <button className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105">
               Custom Amount
             </button>
+          </div>
+        </div>
+
+        {/* Jango Chart Section - Inserted above carousel */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
+          <h3 className="text-2xl font-bold text-white text-center mb-8">Jango Airplay Packages</h3>
+          <div className="bg-white rounded-2xl p-6 overflow-x-auto">
+            <img 
+              src="/src/assets/jango chart.png" 
+              alt="Jango Airplay Package Pricing Chart" 
+              className="w-full h-auto max-w-none"
+              style={{ minWidth: '800px' }}
+            />
+          </div>
+          <div className="text-center mt-6">
+            <p className="text-red-100 text-sm mb-4">
+              Choose the package that best fits your support level and help us reach more souls through Jango's radio platform.
+            </p>
+            <a
+              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300"
+            >
+              Visit Jango Page
+            </a>
           </div>
         </div>
 
