@@ -273,6 +273,11 @@ img[alt*="Gospel"] {
     word-wrap: break-word;
     hyphens: auto;
   }
+  
+  /* Hide Jango airplay package on mobile */
+  .jango-airplay-package {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
