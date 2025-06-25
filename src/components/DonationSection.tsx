@@ -57,7 +57,7 @@ const DonationSection: React.FC = () => {
   ];
 
   return (
-    <section id="donate" className="py-20 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
+    <section id="donate" className="py-16 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Reduced by 4px */}
         <div className="text-center mb-16">
