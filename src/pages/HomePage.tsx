@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
                 title="The Gospel Saves Us"
                 language="Yorùbá"
                 description="A powerful spoken word message about salvation and God's transforming grace"
-                audioUrl="yoruba.mp3"
+                audioUrl="/yoruba-gospel-message.mp3"
                 duration="Audio Message"
                 gradientColors="bg-gradient-to-br from-red-600 via-red-700 to-amber-600"
                 textColor="text-white"
