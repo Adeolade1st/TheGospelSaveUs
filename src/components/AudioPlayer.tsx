@@ -12,7 +12,8 @@ import {
   RefreshCw,
   Keyboard,
   List,
-  ExternalLink
+  ExternalLink,
+  Clock
 } from 'lucide-react';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
@@ -34,13 +35,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [showPlaylistPanel, setShowPlaylistPanel] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [corsError, setCorsError] = useState(false);
+  const [timeoutError, setTimeoutError] = useState(false);
 
   // Get current track
   const currentTrack = playlist[currentTrackIndex];
   const effectiveAudioUrl = uploadedFile ? undefined : (audioUrl || currentTrack?.audioUrl);
   const effectiveAudioFile = uploadedFile || audioFile;
 
-  // Audio player hook with CORS error handling
+  // Audio player hook with enhanced error handling
   const { audioRef, state, controls } = useAudioPlayer({
     audioUrl: effectiveAudioUrl,
     audioFile: effectiveAudioFile,
@@ -55,10 +57,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       console.error('Audio player error:', error);
       if (error.includes('CORS') || error.includes('cross-origin')) {
         setCorsError(true);
+        setTimeoutError(false);
+      } else if (error.includes('timeout') || error.includes('stalled')) {
+        setTimeoutError(true);
+        setCorsError(false);
       }
     },
     onReady: () => {
       setCorsError(false);
+      setTimeoutError(false);
       if (autoPlay) {
         controls.play();
       }
@@ -116,6 +123,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
     setUploadedFile(file);
     setCorsError(false);
+    setTimeoutError(false);
   }, []);
 
   // Navigation handlers
@@ -130,6 +138,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       onTrackChange?.(currentTrackIndex + 1);
     }
   }, [playlist.length, currentTrackIndex, onTrackChange]);
+
+  // Retry handler
+  const handleRetry = useCallback(() => {
+    setCorsError(false);
+    setTimeoutError(false);
+    if (audioRef.current) {
+      audioRef.current.load();
+    }
+  }, [audioRef]);
 
   const progressPercentage = state.duration > 0 ? (state.currentTime / state.duration) * 100 : 0;
   const bufferedPercentage = state.bufferedPercentage;
@@ -213,6 +230,53 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           </p>
         )}
       </div>
+
+      {/* Timeout Error Display */}
+      {timeoutError && (
+        <div className="bg-yellow-50 border-b border-yellow-200 p-4">
+          <div className="flex items-start space-x-3">
+            <Clock className="text-yellow-500 flex-shrink-0 mt-0.5" size={20} />
+            <div className="flex-1">
+              <h4 className="font-semibold text-yellow-800 mb-2">Loading Timeout</h4>
+              <p className="text-yellow-700 text-sm mb-3">
+                The audio file is taking too long to load. This could be due to a slow network connection, 
+                large file size, or server issues.
+              </p>
+              
+              <div className="space-y-2">
+                <h5 className="font-medium text-yellow-800 text-sm">Try these solutions:</h5>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <button
+                    onClick={handleRetry}
+                    className="inline-flex items-center space-x-2 text-xs bg-yellow-100 text-yellow-800 px-3 py-2 rounded hover:bg-yellow-200 transition-colors"
+                  >
+                    <RefreshCw size={12} />
+                    <span>Retry Loading</span>
+                  </button>
+                  
+                  <label
+                    htmlFor="audio-file-upload"
+                    className="inline-flex items-center space-x-2 text-xs bg-yellow-100 text-yellow-800 px-3 py-2 rounded hover:bg-yellow-200 transition-colors cursor-pointer"
+                  >
+                    <Upload size={12} />
+                    <span>Upload Local File</span>
+                  </label>
+                  
+                  <a
+                    href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 text-xs bg-yellow-100 text-yellow-800 px-3 py-2 rounded hover:bg-yellow-200 transition-colors"
+                  >
+                    <ExternalLink size={12} />
+                    <span>Listen on Jango</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* CORS Error Display */}
       {corsError && (
@@ -311,7 +375,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       )}
 
       {/* Error display */}
-      {state.error && !corsError && (
+      {state.error && !corsError && !timeoutError && (
         <div className="bg-red-50 border-b border-red-200 p-4">
           <div className="flex items-start space-x-3">
             <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />
@@ -319,7 +383,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
               <p className="text-red-800 text-sm">{state.error}</p>
               <div className="mt-2 flex space-x-2">
                 <button
-                  onClick={() => window.location.reload()}
+                  onClick={handleRetry}
                   className="text-xs bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 transition-colors flex items-center space-x-1"
                 >
                   <RefreshCw size={12} />
@@ -444,7 +508,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         </div>
 
         {/* Loading indicator */}
-        {state.isLoading && !state.error && (
+        {state.isLoading && !state.error && !timeoutError && !corsError && (
           <div className="mt-4 flex items-center justify-center space-x-2 text-gray-500">
             <Loader2 className="animate-spin" size={16} />
             <span className="text-sm">Loading audio...</span>
@@ -452,7 +516,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         )}
 
         {/* Alternative listening options */}
-        {(state.error || corsError) && (
+        {(state.error || corsError || timeoutError) && (
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-semibold text-blue-900 mb-2">Alternative Listening Options</h4>
             <div className="space-y-2">
