@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center space-x-4 mb-6">
               <img 
                 src="/the_gospel_save_us_logo-removebg-preview.png" 
-                alt="The Gospel Save Us" 
+                alt="God Will Provide Outreach Ministry" 
                 className="w-[70px] h-[70px] object-contain"
                 style={{ 
                   backgroundColor: 'transparent',
@@ -72,27 +72,27 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact Info - Merged from Contact Section */}
+          {/* Contact Info - Updated with white text color */}
           <div>
             <h4 className="text-xl font-bold mb-6">{t.connectWithUs}</h4>
             <div className="space-y-4">
               <div className="flex items-center">
                 <Mail className="mr-3 text-red-300" size={18} />
-                <span className="text-red-200">Jones8874@bellsouth.net</span>
+                <span className="text-white">godwillprovide@ministry.org</span>
               </div>
               <div className="flex items-center">
                 <Phone className="mr-3 text-red-300" size={18} />
-                <span className="text-red-200">(404) 709-9620</span>
+                <span className="text-white">(404) 709-9620</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="mr-3 text-red-300" size={18} />
-                <span className="text-red-200">Atlanta, Georgia</span>
+                <span className="text-white">Atlanta, Georgia</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="mr-3 text-red-300" size={18} />
                 <div>
-                  <p className="text-red-200 text-sm font-medium">Mailing Address:</p>
-                  <p className="text-red-200">P.O. Box 213, Fairburn, GA 30213</p>
+                  <p className="text-white text-sm font-medium">Mailing Address:</p>
+                  <p className="text-white">P.O. Box 213, Fairburn, GA 30213</p>
                 </div>
               </div>
             </div>
@@ -103,7 +103,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 The Gospel Save Us Ministry. {t.allRightsReserved}
+              © 2024 God Will Provide Outreach Ministry. {t.allRightsReserved}
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">

@@ -139,19 +139,20 @@ const DonationSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-50 transform hover:scale-105 transition-all duration-300"
+              style={{ backgroundColor: '#FFFFFF', color: '#FF0000' }}
             >
               Visit Jango Page
             </a>
           </div>
         </div>
 
-        {/* Testimonials Carousel */}
+        {/* Testimonials Carousel - Updated with optimized speed */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
           <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
-            <div className="flex flex-nowrap animate-scroll-carousel">
+            <div className="flex flex-nowrap animate-scroll-carousel-optimized">
               {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
-                <div key={index} className="flex-shrink-0 w-80 mx-2 p-6 bg-[#F8F9FA] rounded-lg shadow-md">
+                <div key={index} className="flex-shrink-0 w-80 mx-2 p-6 bg-[#F8F9FA] rounded-lg shadow-md testimonial-card">
                   <p className="text-gray-700 mb-4 italic text-lg leading-relaxed">
                     "{testimonial.quote}"
                   </p>

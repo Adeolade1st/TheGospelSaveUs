@@ -49,7 +49,7 @@ const Header: React.FC = () => {
             <div className="flex items-center">
               <img 
                 src="/the_gospel_save_us_logo-removebg-preview.png" 
-                alt="The Gospel Save Us" 
+                alt="God Will Provide Outreach Ministry" 
                 className="w-[70px] h-[70px] object-contain"
                 style={{ 
                   backgroundColor: 'transparent',

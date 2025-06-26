@@ -12,7 +12,7 @@ const ContentSection: React.FC = () => {
       name: 'Yoruba',
       nativeName: 'Yorùbá',
       description: 'Language of the Southwest',
-      image: 'https://images.pexels.com/photos/3808904/pexels-photo-3808904.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: 'https://images.pexels.com/photos/8088495/pexels-photo-8088495.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
       gradient: 'from-red-600 via-red-700 to-red-800'
     },
@@ -20,7 +20,7 @@ const ContentSection: React.FC = () => {
       name: 'Igbo',
       nativeName: 'Igbo',
       description: 'Language of the Southeast',
-      image: 'https://images.pexels.com/photos/3807758/pexels-photo-3807758.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: 'https://images.pexels.com/photos/8088501/pexels-photo-8088501.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       gradient: 'from-amber-600 via-amber-700 to-orange-700'
     },
@@ -28,7 +28,7 @@ const ContentSection: React.FC = () => {
       name: 'Hausa',
       nativeName: 'Hausa',
       description: 'Northern Nigeria\'s lingua franca',
-      image: 'https://images.pexels.com/photos/3808004/pexels-photo-3808004.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: 'https://images.pexels.com/photos/8088489/pexels-photo-8088489.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
       gradient: 'from-green-600 via-green-700 to-emerald-700'
     }
@@ -53,15 +53,24 @@ const ContentSection: React.FC = () => {
             {languageCards.map((language, index) => (
               <div
                 key={index}
-                className={`relative overflow-hidden rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-br ${language.gradient}`}
+                className={`relative overflow-hidden rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-br ${language.gradient} language-card`}
               >
                 {/* Background Image */}
                 <div className="relative h-64">
-                  <img
-                    src={language.image}
-                    alt={`${language.name} cultural imagery`}
-                    className="w-full h-full object-cover opacity-30"
-                  />
+                  <picture>
+                    <source 
+                      srcSet={language.image.replace('jpeg', 'webp')} 
+                      type="image/webp"
+                    />
+                    <img
+                      src={language.image}
+                      alt={`${language.name} cultural imagery - African person in prayer/meditation`}
+                      className="w-full h-full object-cover opacity-30"
+                      loading="lazy"
+                      width="1920"
+                      height="1080"
+                    />
+                  </picture>
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>

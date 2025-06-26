@@ -105,7 +105,7 @@ p, span, div {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Testimonials Carousel Animation - Updated for 3 seconds per slide */
+/* Testimonials Carousel Animation - Optimized speed (25% increase) */
 @keyframes scroll-carousel {
   0% {
     transform: translateX(0);
@@ -119,8 +119,26 @@ p, span, div {
   animation: scroll-carousel 15s linear infinite;
 }
 
-.animate-scroll-carousel:hover {
+.animate-scroll-carousel-optimized {
+  animation: scroll-carousel 18.75s linear infinite; /* 15s * 1.25 = 18.75s */
+}
+
+.animate-scroll-carousel:hover,
+.animate-scroll-carousel-optimized:hover {
   animation-play-state: paused;
+}
+
+/* Mobile carousel optimization - 80% of desktop size */
+@media (max-width: 768px) {
+  .testimonial-card {
+    width: 256px; /* 80% of 320px (80px * 4) */
+    aspect-ratio: 16/9; /* Maintain 16:9 aspect ratio */
+  }
+  
+  /* Hide Jango airplay package on mobile */
+  .jango-airplay-package {
+    display: none;
+  }
 }
 
 /* Animations */
@@ -223,7 +241,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Logo optimization for crisp rendering */
-img[alt*="Gospel"] {
+img[alt*="Gospel"],
+img[alt*="God Will Provide"] {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   image-rendering: pixelated;
@@ -238,7 +257,7 @@ img[alt*="Gospel"] {
   background: transparent;
 }
 
-/* Language card hover effects */
+/* Language card hover effects - Enhanced */
 .language-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -272,11 +291,6 @@ img[alt*="Gospel"] {
   h1, h2, h3 {
     word-wrap: break-word;
     hyphens: auto;
-  }
-  
-  /* Hide Jango airplay package on mobile */
-  .jango-airplay-package {
-    display: none;
   }
 }
 
@@ -316,8 +330,31 @@ button:focus-visible {
   color: #fecaca; /* Maintains readability on dark backgrounds */
 }
 
+/* Contact information white text color for accessibility */
+.contact-info-white {
+  color: #FFFFFF !important;
+}
+
 /* Custom spacing utility for py-15 */
 .py-15 {
   padding-top: 3.75rem; /* 60px */
   padding-bottom: 3.75rem; /* 60px */
+}
+
+/* Image optimization for web performance */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* WebP support with JPEG fallback */
+.webp-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }

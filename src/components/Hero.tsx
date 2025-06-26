@@ -35,9 +35,9 @@ const Hero: React.FC = () => {
             <span className="text-white font-medium">Transforming Hearts Across Nigeria</span>
           </div>
 
-          {/* Main Title - Reduced by 4px */}
+          {/* Main Title - Updated organization name */}
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            {t.heroTitle}
+            God Will Provide Outreach Ministry
           </h1>
 
           {/* Subtitle - Reduced by 4px */}
