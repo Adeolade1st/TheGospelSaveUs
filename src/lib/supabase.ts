@@ -45,58 +45,6 @@ export interface Database {
           updated_at?: string;
         };
       };
-      spoken_word_content: {
-        Row: {
-          id: string;
-          title: string;
-          artist: string;
-          description: string | null;
-          audio_url: string;
-          language: 'yoruba' | 'igbo' | 'hausa' | 'english';
-          duration: string;
-          scripture_ref: string | null;
-          theme: string | null;
-          thumbnail: string | null;
-          created_at: string;
-          updated_at: string;
-          is_active: boolean;
-        };
-        Insert: {
-          id?: string;
-          title: string;
-          artist?: string;
-          description?: string | null;
-          audio_url: string;
-          language: 'yoruba' | 'igbo' | 'hausa' | 'english';
-          duration?: string;
-          scripture_ref?: string | null;
-          theme?: string | null;
-          thumbnail?: string | null;
-          created_at?: string;
-          updated_at?: string;
-          is_active?: boolean;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          artist?: string;
-          description?: string | null;
-          audio_url?: string;
-          language?: 'yoruba' | 'igbo' | 'hausa' | 'english';
-          duration?: string;
-          scripture_ref?: string | null;
-          theme?: string | null;
-          thumbnail?: string | null;
-          created_at?: string;
-          updated_at?: string;
-          is_active?: boolean;
-        };
-      };
     };
   };
 }
-
-// Type helpers
-export type SpokenWordContent = Database['public']['Tables']['spoken_word_content']['Row'];
-export type SpokenWordContentInsert = Database['public']['Tables']['spoken_word_content']['Insert'];
-export type SpokenWordContentUpdate = Database['public']['Tables']['spoken_word_content']['Update'];
