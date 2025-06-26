@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Loader2, AlertCircle, Info } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward, Loader2, AlertCircle, Info, RefreshCw } from 'lucide-react';
 
 interface AudioPlayerCardProps {
   title: string;
@@ -30,13 +30,60 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string[]>([]);
   const [showDebug, setShowDebug] = useState(false);
+  const [fileExists, setFileExists] = useState<boolean | null>(null);
   
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const addDebugInfo = (message: string) => {
     const timestamp = new Date().toLocaleTimeString();
-    setDebugInfo(prev => [...prev, `[${timestamp}] ${message}`]);
+    setDebugInfo(prev => [...prev.slice(-10), `[${timestamp}] ${message}`]);
     console.log(`Audio Debug: ${message}`);
+  };
+
+  // Check if file exists and is accessible
+  const checkFileAccess = async () => {
+    try {
+      addDebugInfo(`Checking file access for: ${audioUrl}`);
+      
+      // Try multiple approaches to check file accessibility
+      const response = await fetch(audioUrl, { 
+        method: 'HEAD',
+        cache: 'no-cache'
+      });
+      
+      if (response.ok) {
+        const contentType = response.headers.get('content-type');
+        const contentLength = response.headers.get('content-length');
+        addDebugInfo(`File accessible - Type: ${contentType}, Size: ${contentLength} bytes`);
+        setFileExists(true);
+        return true;
+      } else {
+        addDebugInfo(`File check failed - HTTP ${response.status}: ${response.statusText}`);
+        setFileExists(false);
+        return false;
+      }
+    } catch (error) {
+      addDebugInfo(`File check error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      
+      // Try alternative check with GET request for first few bytes
+      try {
+        const response = await fetch(audioUrl, {
+          headers: { 'Range': 'bytes=0-1023' },
+          cache: 'no-cache'
+        });
+        
+        if (response.ok || response.status === 206) {
+          addDebugInfo('File accessible via range request');
+          setFileExists(true);
+          return true;
+        }
+      } catch (rangeError) {
+        addDebugInfo(`Range request also failed: ${rangeError instanceof Error ? rangeError.message : 'Unknown error'}`);
+      }
+      
+      setFileExists(false);
+      return false;
+    }
   };
 
   useEffect(() => {
@@ -44,6 +91,9 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     if (!audio) return;
 
     addDebugInfo(`Initializing audio with URL: ${audioUrl}`);
+
+    // Check file accessibility first
+    checkFileAccess();
 
     // Event handlers with detailed logging
     const handleLoadStart = () => {
@@ -54,7 +104,7 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     };
 
     const handleLoadedMetadata = () => {
-      addDebugInfo(`Metadata loaded - Duration: ${audio.duration}s`);
+      addDebugInfo(`Metadata loaded - Duration: ${audio.duration}s, Ready state: ${audio.readyState}`);
       setTotalDuration(audio.duration);
     };
 
@@ -87,13 +137,13 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       if (audioElement.error) {
         switch (audioElement.error.code) {
           case MediaError.MEDIA_ERR_ABORTED:
-            errorMessage = 'Audio loading was aborted';
+            errorMessage = 'Audio loading was aborted by user';
             break;
           case MediaError.MEDIA_ERR_NETWORK:
-            errorMessage = 'Network error while loading audio';
+            errorMessage = 'Network error - check your connection and file location';
             break;
           case MediaError.MEDIA_ERR_DECODE:
-            errorMessage = 'Audio decoding error - file may be corrupted';
+            errorMessage = 'Audio decoding error - file may be corrupted or in wrong format';
             break;
           case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
             errorMessage = 'Audio format not supported or file not found';
@@ -126,11 +176,15 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     };
 
     const handleSuspend = () => {
-      addDebugInfo('Suspend - Audio loading suspended');
+      addDebugInfo('Suspend - Audio loading suspended (normal behavior)');
     };
 
     const handleStalled = () => {
-      addDebugInfo('Stalled - Audio loading stalled');
+      addDebugInfo('Stalled - Audio loading stalled (may indicate network issues)');
+    };
+
+    const handleAbort = () => {
+      addDebugInfo('Abort - Audio loading aborted');
     };
 
     // Add all event listeners
@@ -145,18 +199,7 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     audio.addEventListener('progress', handleProgress);
     audio.addEventListener('suspend', handleSuspend);
     audio.addEventListener('stalled', handleStalled);
-
-    // Test if the audio source is accessible
-    fetch(audioUrl, { method: 'HEAD' })
-      .then(response => {
-        addDebugInfo(`File check - Status: ${response.status}, Type: ${response.headers.get('content-type')}`);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-      })
-      .catch(err => {
-        addDebugInfo(`File check failed: ${err.message}`);
-      });
+    audio.addEventListener('abort', handleAbort);
     
     return () => {
       audio.removeEventListener('loadstart', handleLoadStart);
@@ -170,6 +213,7 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       audio.removeEventListener('progress', handleProgress);
       audio.removeEventListener('suspend', handleSuspend);
       audio.removeEventListener('stalled', handleStalled);
+      audio.removeEventListener('abort', handleAbort);
     };
   }, [audioUrl]);
 
@@ -180,7 +224,20 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     setError(null);
     setIsReady(false);
     setDebugInfo([]);
+    setFileExists(null);
   }, [audioUrl]);
+
+  const reloadAudio = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      addDebugInfo('Manually reloading audio');
+      setError(null);
+      setIsReady(false);
+      setIsLoading(true);
+      audio.load();
+      checkFileAccess();
+    }
+  };
 
   const togglePlay = async () => {
     const audio = audioRef.current;
@@ -195,25 +252,35 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         audio.pause();
         setIsPlaying(false);
       } else {
-        addDebugInfo('Attempting to play audio');
+        addDebugInfo(`Attempting to play audio - Ready state: ${audio.readyState}`);
         setIsLoading(true);
+        setError(null);
         
-        // Check if audio is ready
+        // Force reload if audio isn't ready
+        if (audio.readyState === 0) {
+          addDebugInfo('Audio not loaded, forcing reload');
+          audio.load();
+        }
+        
+        // Wait for audio to be ready with shorter timeout
         if (audio.readyState < 2) {
           addDebugInfo('Audio not ready, waiting for canplay event');
           await new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
-              reject(new Error('Audio load timeout'));
-            }, 10000);
+              addDebugInfo('Audio load timeout reached');
+              reject(new Error('Audio load timeout - file may be too large or inaccessible'));
+            }, 5000); // Reduced timeout to 5 seconds
 
             const onCanPlay = () => {
+              addDebugInfo('Audio ready to play');
               clearTimeout(timeout);
               audio.removeEventListener('canplay', onCanPlay);
               audio.removeEventListener('error', onError);
               resolve(void 0);
             };
 
-            const onError = () => {
+            const onError = (e: Event) => {
+              addDebugInfo('Audio error during loading');
               clearTimeout(timeout);
               audio.removeEventListener('canplay', onCanPlay);
               audio.removeEventListener('error', onError);
@@ -246,7 +313,6 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       audioRef.current.volume = newVolume;
     }
     setIsMuted(newVolume === 0);
-    addDebugInfo(`Volume changed to: ${Math.round(newVolume * 100)}%`);
   };
 
   const toggleMute = () => {
@@ -254,11 +320,9 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       if (isMuted) {
         audioRef.current.volume = volume;
         setIsMuted(false);
-        addDebugInfo('Audio unmuted');
       } else {
         audioRef.current.volume = 0;
         setIsMuted(true);
-        addDebugInfo('Audio muted');
       }
     }
   };
@@ -295,11 +359,21 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         ref={audioRef} 
         src={audioUrl} 
         preload="metadata"
+        crossOrigin="anonymous"
         aria-label={`Audio player for ${title} in ${language}`}
       />
       
       {/* Debug Toggle Button */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={reloadAudio}
+          className="text-xs bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 hover:bg-white/30 transition-colors flex items-center space-x-1"
+          title="Reload audio file"
+        >
+          <RefreshCw size={12} />
+          <span>Reload</span>
+        </button>
+        
         <button
           onClick={() => setShowDebug(!showDebug)}
           className="text-xs bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 hover:bg-white/30 transition-colors flex items-center space-x-1"
@@ -309,22 +383,35 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         </button>
       </div>
 
+      {/* File Status Indicator */}
+      {fileExists !== null && (
+        <div className={`mb-4 p-2 rounded-lg text-xs ${
+          fileExists 
+            ? 'bg-green-500/20 border border-green-300/30' 
+            : 'bg-red-500/20 border border-red-300/30'
+        }`}>
+          File Status: {fileExists ? '✓ Accessible' : '✗ Not Found or Inaccessible'}
+        </div>
+      )}
+
       {/* Debug Panel */}
       {showDebug && (
-        <div className="mb-6 p-4 bg-black/30 backdrop-blur-sm rounded-lg max-h-40 overflow-y-auto">
+        <div className="mb-6 p-4 bg-black/30 backdrop-blur-sm rounded-lg max-h-48 overflow-y-auto">
           <h4 className="text-sm font-bold mb-2">Debug Information:</h4>
-          <div className="text-xs space-y-1">
-            <div>Audio URL: {audioUrl}</div>
-            <div>Ready State: {audioRef.current?.readyState || 'N/A'}</div>
-            <div>Network State: {audioRef.current?.networkState || 'N/A'}</div>
-            <div>Current Time: {formatTime(currentTime)}</div>
-            <div>Duration: {formatTime(totalDuration)}</div>
-            <div>Is Ready: {isReady ? 'Yes' : 'No'}</div>
-            <div>Is Loading: {isLoading ? 'Yes' : 'No'}</div>
+          <div className="text-xs space-y-1 mb-3">
+            <div><strong>Audio URL:</strong> {audioUrl}</div>
+            <div><strong>File Exists:</strong> {fileExists === null ? 'Checking...' : fileExists ? 'Yes' : 'No'}</div>
+            <div><strong>Ready State:</strong> {audioRef.current?.readyState || 'N/A'} (0=HAVE_NOTHING, 1=HAVE_METADATA, 2=HAVE_CURRENT_DATA, 3=HAVE_FUTURE_DATA, 4=HAVE_ENOUGH_DATA)</div>
+            <div><strong>Network State:</strong> {audioRef.current?.networkState || 'N/A'} (0=EMPTY, 1=IDLE, 2=LOADING, 3=NO_SOURCE)</div>
+            <div><strong>Current Time:</strong> {formatTime(currentTime)}</div>
+            <div><strong>Duration:</strong> {formatTime(totalDuration)}</div>
+            <div><strong>Is Ready:</strong> {isReady ? 'Yes' : 'No'}</div>
+            <div><strong>Is Loading:</strong> {isLoading ? 'Yes' : 'No'}</div>
+            <div><strong>Error:</strong> {error || 'None'}</div>
           </div>
-          <div className="mt-3 border-t border-white/20 pt-2">
-            <div className="text-xs space-y-1 max-h-20 overflow-y-auto">
-              {debugInfo.slice(-5).map((info, index) => (
+          <div className="border-t border-white/20 pt-2">
+            <div className="text-xs space-y-1 max-h-24 overflow-y-auto">
+              {debugInfo.map((info, index) => (
                 <div key={index} className="text-white/80">{info}</div>
               ))}
             </div>
@@ -343,9 +430,17 @@ const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
 
       {/* Error Display */}
       {error && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-300/30 rounded-lg flex items-center space-x-2">
-          <AlertCircle className="text-white flex-shrink-0" size={16} />
-          <p className="text-white text-sm">{error}</p>
+        <div className="mb-4 p-3 bg-red-500/20 border border-red-300/30 rounded-lg flex items-start space-x-2">
+          <AlertCircle className="text-white flex-shrink-0 mt-0.5" size={16} />
+          <div className="flex-1">
+            <p className="text-white text-sm">{error}</p>
+            <button
+              onClick={reloadAudio}
+              className="mt-2 text-xs bg-white/20 rounded px-2 py-1 hover:bg-white/30 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
         </div>
       )}
 
