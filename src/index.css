@@ -358,3 +358,64 @@ img {
 * {
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
+
+/* Audio player keyboard navigation styles */
+.audio-progress:focus {
+  outline: 2px solid #ff3131;
+  outline-offset: 2px;
+}
+
+/* Enhanced audio player progress bar */
+.audio-progress-container {
+  position: relative;
+}
+
+.audio-progress-handle {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.audio-progress-container:hover .audio-progress-handle,
+.audio-progress-container:focus-within .audio-progress-handle {
+  opacity: 1;
+}
+
+/* Loading state animations */
+@keyframes audioLoading {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.audio-loading {
+  animation: audioLoading 1.5s ease-in-out infinite;
+}
+
+/* Error state styles */
+.audio-error {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+/* Volume slider enhancements */
+input[type="range"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive audio player adjustments */
+@media (max-width: 480px) {
+  .audio-player-card {
+    padding: 1rem;
+  }
+  
+  .audio-controls {
+    gap: 1rem;
+  }
+  
+  .audio-main-button {
+    width: 3rem;
+    height: 3rem;
+  }
+}
