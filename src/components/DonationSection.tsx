@@ -30,29 +30,29 @@ const DonationSection: React.FC = () => {
 
   const testimonials = [
     {
-      quote: "Supporting this ministry has been one of the most fulfilling decisions of my life. Seeing lives transformed through God's word in our native languages is incredible.",
-      name: "Sister Mary O.",
-      location: "Atlanta, Georgia"
+      quote: "A blessing to my heart and soul. God has blessed and this is the beginning that never ends.",
+      name: "Bishop Henry White",
+      location: "Sept 17, 2024"
     },
     {
-      quote: "The monthly updates showing how many souls are reached gives me so much joy. My contribution is making a real difference in spreading God's love.",
-      name: "Brother John A.",
-      location: "Atlanta, Georgia"
+      quote: "A blessing to my heart and soul. Thank in His Name.",
+      name: "",
+      location: "Aug 10, 2024"
     },
     {
-      quote: "I love how this ministry reaches people in their heart language. The spoken word format is so powerful and accessible to everyone.",
-      name: "Pastor David K.",
-      location: "Houston, Texas"
+      quote: "GOD IS GREAT... THANK YOU FOR PRAISING HIM!!!!!!!!",
+      name: "",
+      location: "July 17, 2022"
     },
     {
-      quote: "Being part of this mission to take the gospel worldwide through radio airplay is amazing. Every donation truly counts.",
-      name: "Sister Grace M.",
-      location: "Chicago, Illinois"
+      quote: "Your music is pure delight. I like it.",
+      name: "",
+      location: "Dec 14, 2014"
     },
     {
-      quote: "The impact reports show real results. It's encouraging to see how God is using our small contributions for His glory.",
-      name: "Brother Samuel T.",
-      location: "Miami, Florida"
+      quote: "love this message!!!!!!!!!",
+      name: "",
+      location: "Feb 20, 2020"
     }
   ];
 
@@ -139,7 +139,6 @@ const DonationSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-50 transform hover:scale-105 transition-all duration-300"
-              style={{ backgroundColor: '#FFFFFF', color: '#FF0000' }}
             >
               Visit Jango Page
             </a>
@@ -156,7 +155,9 @@ const DonationSection: React.FC = () => {
                   <p className="text-gray-700 mb-4 italic text-lg leading-relaxed">
                     "{testimonial.quote}"
                   </p>
-                  <div className="text-gray-900 font-semibold">- {testimonial.name}</div>
+                  {testimonial.name && (
+                    <div className="text-gray-900 font-semibold">- {testimonial.name}</div>
+                  )}
                   <div className="text-gray-600 text-sm">{testimonial.location}</div>
                 </div>
               ))}
