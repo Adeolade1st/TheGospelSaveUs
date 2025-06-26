@@ -11,7 +11,8 @@ import {
   Upload,
   RefreshCw,
   Keyboard,
-  List
+  List,
+  ExternalLink
 } from 'lucide-react';
 import { useAudioPlayer } from '../hooks/useAudioPlayer';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
@@ -32,13 +33,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [showPlaylistPanel, setShowPlaylistPanel] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [corsError, setCorsError] = useState(false);
 
   // Get current track
   const currentTrack = playlist[currentTrackIndex];
   const effectiveAudioUrl = uploadedFile ? undefined : (audioUrl || currentTrack?.audioUrl);
   const effectiveAudioFile = uploadedFile || audioFile;
 
-  // Audio player hook
+  // Audio player hook with CORS error handling
   const { audioRef, state, controls } = useAudioPlayer({
     audioUrl: effectiveAudioUrl,
     audioFile: effectiveAudioFile,
@@ -51,8 +53,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     },
     onError: (error) => {
       console.error('Audio player error:', error);
+      if (error.includes('CORS') || error.includes('cross-origin')) {
+        setCorsError(true);
+      }
     },
     onReady: () => {
+      setCorsError(false);
       if (autoPlay) {
         controls.play();
       }
@@ -109,6 +115,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
 
     setUploadedFile(file);
+    setCorsError(false);
   }, []);
 
   // Navigation handlers
@@ -129,10 +136,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   return (
     <div className={`bg-white rounded-2xl shadow-xl overflow-hidden ${className}`}>
-      {/* Hidden audio element */}
+      {/* Hidden audio element with CORS handling */}
       <audio 
         ref={audioRef}
         preload="metadata"
+        crossOrigin="anonymous"
         aria-label={`Audio player${currentTrack ? ` for ${currentTrack.title}` : ''}`}
       />
 
@@ -206,6 +214,45 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         )}
       </div>
 
+      {/* CORS Error Display */}
+      {corsError && (
+        <div className="bg-orange-50 border-b border-orange-200 p-4">
+          <div className="flex items-start space-x-3">
+            <AlertCircle className="text-orange-500 flex-shrink-0 mt-0.5" size={20} />
+            <div className="flex-1">
+              <h4 className="font-semibold text-orange-800 mb-2">CORS Error - Audio Blocked</h4>
+              <p className="text-orange-700 text-sm mb-3">
+                The audio file cannot be played due to Cross-Origin Resource Sharing (CORS) restrictions. 
+                This is a server configuration issue, not a problem with your browser.
+              </p>
+              
+              <div className="space-y-2">
+                <h5 className="font-medium text-orange-800 text-sm">Solutions:</h5>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <label
+                    htmlFor="audio-file-upload"
+                    className="inline-flex items-center space-x-2 text-xs bg-orange-100 text-orange-800 px-3 py-2 rounded hover:bg-orange-200 transition-colors cursor-pointer"
+                  >
+                    <Upload size={12} />
+                    <span>Upload Local File</span>
+                  </label>
+                  
+                  <a
+                    href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 text-xs bg-orange-100 text-orange-800 px-3 py-2 rounded hover:bg-orange-200 transition-colors"
+                  >
+                    <ExternalLink size={12} />
+                    <span>Listen on Jango</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Keyboard shortcuts help */}
       {showKeyboardHelp && (
         <div className="bg-blue-50 border-b border-blue-200 p-4">
@@ -264,7 +311,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       )}
 
       {/* Error display */}
-      {state.error && (
+      {state.error && !corsError && (
         <div className="bg-red-50 border-b border-red-200 p-4">
           <div className="flex items-start space-x-3">
             <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />
@@ -401,6 +448,32 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           <div className="mt-4 flex items-center justify-center space-x-2 text-gray-500">
             <Loader2 className="animate-spin" size={16} />
             <span className="text-sm">Loading audio...</span>
+          </div>
+        )}
+
+        {/* Alternative listening options */}
+        {(state.error || corsError) && (
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h4 className="font-semibold text-blue-900 mb-2">Alternative Listening Options</h4>
+            <div className="space-y-2">
+              <a
+                href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-sm bg-blue-100 text-blue-800 px-3 py-2 rounded hover:bg-blue-200 transition-colors"
+              >
+                <ExternalLink size={14} />
+                <span>Listen on Jango Radio</span>
+              </a>
+              
+              <label
+                htmlFor="audio-file-upload"
+                className="inline-flex items-center space-x-2 text-sm bg-blue-100 text-blue-800 px-3 py-2 rounded hover:bg-blue-200 transition-colors cursor-pointer ml-2"
+              >
+                <Upload size={14} />
+                <span>Upload Your Own Audio</span>
+              </label>
+            </div>
           </div>
         )}
       </div>
