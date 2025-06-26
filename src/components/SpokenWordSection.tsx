@@ -3,6 +3,7 @@ import { Music, Globe, Headphones } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import PlaylistAudioPlayer from './PlaylistAudioPlayer';
+import AudioDebugger from './AudioDebugger';
 
 const SpokenWordSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -38,6 +39,14 @@ const SpokenWordSection: React.FC = () => {
     }
   ];
 
+  // Test URLs for debugging
+  const testUrls = [
+    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/yoruba.mp3',
+    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Ibo%20version%20of%20The%20Gospel-1.mp3',
+    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa%20version%20of%20The%20Gospel.mp3',
+    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3'
+  ];
+
   return (
     <section id="content" className="py-15 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,6 +58,32 @@ const SpokenWordSection: React.FC = () => {
           <p className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Experience transformative spoken word content in your native language
           </p>
+        </div>
+
+        {/* Audio Diagnostics Section */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center space-x-2 bg-orange-100 text-orange-800 px-4 py-2 rounded-full mb-4">
+              <Music size={20} />
+              <span className="font-semibold">Audio Diagnostics</span>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Testing Audio File Accessibility
+            </h3>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              We're testing your audio files to identify any playback issues. This helps us troubleshoot and ensure optimal performance.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {testUrls.map((url, index) => (
+              <AudioDebugger 
+                key={index}
+                audioUrl={url}
+                className="max-w-full"
+              />
+            ))}
+          </div>
         </div>
 
         {/* Featured Audio Player */}
