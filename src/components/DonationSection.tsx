@@ -2,6 +2,7 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
+import PaymentButton from './PaymentButton';
 
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -27,6 +28,8 @@ const DonationSection: React.FC = () => {
       impact: 'Reaches approximately 5,000 souls monthly'
     }
   ];
+
+  const oneTimeDonations = [25, 50, 100, 250, 500];
 
   const testimonials = [
     {
@@ -59,7 +62,7 @@ const DonationSection: React.FC = () => {
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header - Reduced by 4px */}
+        {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             {t.donationTitle}
@@ -93,9 +96,17 @@ const DonationSection: React.FC = () => {
                 </div>
               </div>
 
-              <button className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900">
-                Support This Tier
-              </button>
+              <PaymentButton
+                amount={tier.amount}
+                description={`Monthly donation - ${tier.title} tier`}
+                metadata={{
+                  tier: tier.title,
+                  type: 'monthly_subscription'
+                }}
+                className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900"
+              >
+                <span>Support This Tier</span>
+              </PaymentButton>
             </div>
           ))}
         </div>
@@ -105,17 +116,30 @@ const DonationSection: React.FC = () => {
           <h3 className="text-2xl font-bold text-white mb-4">Prefer a One-time Gift?</h3>
           <p className="text-red-200 mb-8 text-lg leading-relaxed">Every contribution helps us reach more souls with God's transforming word</p>
           <div className="flex flex-wrap justify-center gap-4">
-            {[25, 50, 100, 250, 500].map((amount) => (
-              <button
+            {oneTimeDonations.map((amount) => (
+              <PaymentButton
                 key={amount}
+                amount={amount}
+                description={`One-time donation of $${amount}`}
+                metadata={{
+                  type: 'one_time_donation',
+                  amount: amount.toString()
+                }}
                 className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105"
               >
-                ${amount}
-              </button>
+                <span>${amount}</span>
+              </PaymentButton>
             ))}
-            <button className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105">
-              Custom Amount
-            </button>
+            <PaymentButton
+              amount={0} // Custom amount will be handled differently
+              description="Custom donation amount"
+              metadata={{
+                type: 'custom_donation'
+              }}
+              className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105"
+            >
+              <span>Custom Amount</span>
+            </PaymentButton>
           </div>
         </div>
 
@@ -145,7 +169,7 @@ const DonationSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Testimonials Carousel - Updated with optimized speed */}
+        {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
           <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
