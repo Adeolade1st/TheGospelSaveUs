@@ -53,56 +53,9 @@ p, span, div {
   overflow: hidden;
 }
 
-/* Custom slider styles */
-.slider {
-  background: linear-gradient(to right, #ff3131 0%, #ff3131 50%, #e5e7eb 50%, #e5e7eb 100%);
-}
-
-.slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ff3131;
-  cursor: pointer;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ff3131;
-  cursor: pointer;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-/* White slider for audio players */
-.slider-white {
-  background: linear-gradient(to right, #ffffff 0%, #ffffff 50%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.3) 100%);
-}
-
-.slider-white::-webkit-slider-thumb {
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.slider-white::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+/* Audio placeholder progress bar animations */
+.audio-progress-bar {
+  transition: width 0.1s ease-out;
 }
 
 /* Testimonials Carousel Animation - Optimized speed (25% increase) */
@@ -138,6 +91,24 @@ p, span, div {
   /* Hide Jango airplay package on mobile */
   .jango-airplay-package {
     display: none;
+  }
+
+  /* Responsive audio placeholders */
+  .audio-placeholder-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .audio-placeholder-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .audio-placeholder-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -226,18 +197,41 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Audio player specific animations */
-@keyframes spin {
+/* Audio placeholder specific styles */
+.audio-placeholder {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.audio-placeholder:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.audio-placeholder .play-button {
+  transition: all 0.2s ease;
+}
+
+.audio-placeholder .play-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.audio-placeholder .play-button:active {
+  transform: scale(0.95);
+}
+
+/* Progress bar animations */
+@keyframes progressFill {
   from {
-    transform: rotate(0deg);
+    width: 0%;
   }
   to {
-    transform: rotate(360deg);
+    width: var(--progress-width);
   }
 }
 
-.animate-spin {
-  animation: spin 1s linear infinite;
+.progress-animated {
+  animation: progressFill 0.1s ease-out;
 }
 
 /* Logo optimization for crisp rendering */
@@ -359,25 +353,10 @@ img {
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-/* Audio player keyboard navigation styles */
-.audio-progress:focus {
+/* Audio placeholder keyboard navigation styles */
+.audio-placeholder:focus-within {
   outline: 2px solid #ff3131;
   outline-offset: 2px;
-}
-
-/* Enhanced audio player progress bar */
-.audio-progress-container {
-  position: relative;
-}
-
-.audio-progress-handle {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.audio-progress-container:hover .audio-progress-handle,
-.audio-progress-container:focus-within .audio-progress-handle {
-  opacity: 1;
 }
 
 /* Loading state animations */
@@ -391,22 +370,9 @@ img {
   animation: audioLoading 1.5s ease-in-out infinite;
 }
 
-/* Error state styles */
-.audio-error {
-  background-color: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
-}
-
-/* Volume slider enhancements */
-input[type="range"]:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 /* Responsive audio player adjustments */
 @media (max-width: 480px) {
-  .audio-player-card {
+  .audio-placeholder {
     padding: 1rem;
   }
   

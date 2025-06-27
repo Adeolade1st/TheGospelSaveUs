@@ -2,35 +2,48 @@ import React from 'react';
 import { Music, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
+import AudioPlaceholder from './AudioPlaceholder';
 
 const SpokenWordSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
 
-  const languageCards = [
+  const audioSamples = [
     {
-      name: 'Yoruba',
+      language: 'Yoruba',
       nativeName: 'Yorùbá',
       description: 'Language of the Southwest',
-      image: 'https://images.pexels.com/photos/8088495/pexels-photo-8088495.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      gradient: 'from-red-600 via-red-700 to-red-800'
+      duration: '3:45',
+      gradient: 'from-red-600 to-red-800',
+      sampleTitle: 'The Gospel Saves Us',
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba'
     },
     {
-      name: 'Igbo',
+      language: 'Igbo',
       nativeName: 'Igbo',
       description: 'Language of the Southeast',
-      image: 'https://images.pexels.com/photos/8088501/pexels-photo-8088501.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
-      gradient: 'from-amber-600 via-amber-700 to-orange-700'
+      duration: '4:12',
+      gradient: 'from-amber-600 to-orange-700',
+      sampleTitle: 'Victory Over Fear',
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo'
     },
     {
-      name: 'Hausa',
+      language: 'Hausa',
       nativeName: 'Hausa',
       description: 'Northern Nigeria\'s lingua franca',
-      image: 'https://images.pexels.com/photos/8088489/pexels-photo-8088489.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      gradient: 'from-green-600 via-green-700 to-emerald-700'
+      duration: '3:58',
+      gradient: 'from-green-600 to-emerald-700',
+      sampleTitle: 'Faith That Moves Mountains',
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa'
+    },
+    {
+      language: 'English',
+      nativeName: 'English',
+      description: 'International language',
+      duration: '4:33',
+      gradient: 'from-blue-600 to-indigo-700',
+      sampleTitle: 'Transformed by Grace',
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers'
     }
   ];
 
@@ -47,63 +60,46 @@ const SpokenWordSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Language Cards Section */}
+        {/* Audio Samples Section */}
         <div className="mb-16">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               Browse by Language
             </h3>
             <p className="text-gray-600">
-              Explore our content organized by native languages
+              Listen to audio samples in Nigerian languages and English
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {languageCards.map((language, index) => (
-              <div
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {audioSamples.map((sample, index) => (
+              <AudioPlaceholder
                 key={index}
-                className={`relative overflow-hidden rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-br ${language.gradient} language-card`}
-              >
-                {/* Background Image */}
-                <div className="relative h-64">
-                  <picture>
-                    <source 
-                      srcSet={language.image.replace('jpeg', 'webp')} 
-                      type="image/webp"
-                    />
-                    <img
-                      src={language.image}
-                      alt={`${language.name} cultural imagery - African person in prayer/meditation`}
-                      className="w-full h-full object-cover opacity-30"
-                      loading="lazy"
-                      width="1920"
-                      height="1080"
-                    />
-                  </picture>
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                </div>
-                
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
-                  <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-4 self-start">
-                    <span className="text-sm font-bold uppercase tracking-wider">{language.name}</span>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">{language.nativeName}</h3>
-                  <p className="text-white/80 text-sm mb-6">{language.description}</p>
-                  
-                  <a
-                    href={language.jangoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center space-x-2 bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-white/90 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                  >
-                    <Music size={16} />
-                    <span>Listen on Jango</span>
-                  </a>
-                </div>
-              </div>
+                language={sample.language}
+                nativeName={sample.nativeName}
+                duration={sample.duration}
+                description={sample.description}
+                gradient={sample.gradient}
+                sampleTitle={sample.sampleTitle}
+                className="w-full"
+              />
             ))}
+          </div>
+
+          {/* Additional Info */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-4">
+              These are sample previews. For full audio content, visit our Jango Radio page.
+            </p>
+            <a
+              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+            >
+              <Music size={16} />
+              <span>Listen to Full Collection</span>
+            </a>
           </div>
         </div>
 
