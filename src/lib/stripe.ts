@@ -16,7 +16,16 @@ export const createCheckoutSession = async (priceData: {
 }) => {
   try {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const response = await fetch(`${supabaseUrl}/functions/v1/create-checkout-session`, {
+    
+    if (!supabaseUrl) {
+      throw new Error('Missing Supabase URL. Please add VITE_SUPABASE_URL to your environment variables.');
+    }
+
+    // Ensure the URL is properly formatted
+    const baseUrl = supabaseUrl.endsWith('/') ? supabaseUrl.slice(0, -1) : supabaseUrl;
+    const functionUrl = `${baseUrl}/functions/v1/create-checkout-session`;
+
+    const response = await fetch(functionUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,8 +35,8 @@ export const createCheckoutSession = async (priceData: {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to create checkout session');
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(errorData.error || `HTTP ${response.status}: Failed to create checkout session`);
     }
 
     const session = await response.json();

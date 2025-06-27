@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Loader2, CreditCard } from 'lucide-react';
+import { Loader2, CreditCard, AlertCircle } from 'lucide-react';
 import { createCheckoutSession, redirectToCheckout } from '../lib/stripe';
 
 interface PaymentButtonProps {
@@ -25,6 +25,15 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     setError(null);
 
     try {
+      // Validate environment variables
+      if (!import.meta.env.VITE_SUPABASE_URL) {
+        throw new Error('Supabase URL is not configured. Please check your environment variables.');
+      }
+
+      if (!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) {
+        throw new Error('Stripe publishable key is not configured. Please check your environment variables.');
+      }
+
       // Create checkout session
       const session = await createCheckoutSession({
         amount: amount * 100, // Convert to cents
@@ -40,7 +49,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       // Redirect to Stripe Checkout
       await redirectToCheckout(session.id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Payment failed');
+      const errorMessage = err instanceof Error ? err.message : 'Payment failed';
+      setError(errorMessage);
       console.error('Payment error:', err);
     } finally {
       setIsLoading(false);
@@ -70,8 +80,17 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       </button>
       
       {error && (
-        <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-          {error}
+        <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
+          <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={16} />
+          <div className="flex-1">
+            <p className="text-red-700 text-sm">{error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-600 hover:text-red-800 text-xs mt-1 underline"
+            >
+              Dismiss
+            </button>
+          </div>
         </div>
       )}
     </div>
