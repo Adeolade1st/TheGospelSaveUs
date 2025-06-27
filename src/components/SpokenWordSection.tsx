@@ -14,7 +14,7 @@ const SpokenWordSection: React.FC = () => {
       nativeName: 'Yorùbá',
       description: 'Language of the Southwest',
       duration: '3:45',
-      gradient: 'from-red-600 to-red-800',
+      gradient: 'from-blue-600 to-indigo-700', // Changed from red to blue
       sampleTitle: 'The Gospel Saves Us',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba'
@@ -44,7 +44,7 @@ const SpokenWordSection: React.FC = () => {
       nativeName: 'English',
       description: 'International language',
       duration: '4:33',
-      gradient: 'from-blue-600 to-indigo-700',
+      gradient: 'from-red-600 to-red-800', // Changed from blue to red
       sampleTitle: 'Transformed by Grace',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers'
@@ -126,7 +126,7 @@ const SpokenWordSection: React.FC = () => {
         </div>
 
         {/* Platform Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Amazon Support Section */}
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl shadow-xl p-8 text-white transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-center mb-6">
@@ -182,28 +182,6 @@ const SpokenWordSection: React.FC = () => {
                 Play on Jango
               </a>
             </div>
-          </div>
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center">
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto">
-            <Globe className="w-12 h-12 text-red-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Experience God's Word in Your Language
-            </h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Join thousands who have found hope, healing, and purpose through our multilingual spoken word ministry. 
-              Each message is carefully crafted to speak directly to your heart in the language you understand best.
-            </p>
-            <a
-              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
-            >
-              Start Listening Now
-            </a>
           </div>
         </div>
       </div>
