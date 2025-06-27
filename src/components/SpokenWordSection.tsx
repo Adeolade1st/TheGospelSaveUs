@@ -14,10 +14,11 @@ const SpokenWordSection: React.FC = () => {
       nativeName: 'Yorùbá',
       description: 'Language of the Southwest',
       duration: '3:45',
-      gradient: 'from-blue-600 to-indigo-700', // Changed from red to blue
-      sampleTitle: 'Eyin rere', // Updated translation
+      gradient: 'from-blue-600 to-indigo-700',
+      sampleTitle: 'Eyin rere',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba'
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
+      artist: 'Janet Olaitan'
     },
     {
       language: 'Igbo',
@@ -25,9 +26,10 @@ const SpokenWordSection: React.FC = () => {
       description: 'Language of the Southeast',
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
-      sampleTitle: 'Ozi oma', // Updated translation
+      sampleTitle: 'Ozi oma',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Igbo.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo'
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
+      artist: 'Minister Susan Collins'
     },
     {
       language: 'Hausa',
@@ -35,19 +37,21 @@ const SpokenWordSection: React.FC = () => {
       description: 'Northern Nigeria\'s lingua franca',
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
-      sampleTitle: 'Labari mai dadi', // Updated translation
+      sampleTitle: 'Labari mai dadi',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa'
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
+      artist: 'Isaac O. Samuel'
     },
     {
       language: 'English',
       nativeName: 'English',
       description: 'International language',
       duration: '4:33',
-      gradient: 'from-red-600 to-red-800', // Changed from blue to red
+      gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers'
+      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
+      artist: 'Evangelist Birdie Jones'
     }
   ];
 
@@ -86,6 +90,7 @@ const SpokenWordSection: React.FC = () => {
                 gradient={sample.gradient}
                 sampleTitle={sample.sampleTitle}
                 audioUrl={sample.audioUrl}
+                artist={sample.artist}
                 className="w-full"
               />
             ))}
@@ -93,17 +98,23 @@ const SpokenWordSection: React.FC = () => {
 
           {/* Audio Information */}
           <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h4 className="font-semibold text-blue-900 mb-2">Audio File Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
+            <h4 className="font-semibold text-blue-900 mb-4">Audio File Information</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-blue-800">
               <div>
-                <p><strong>Format:</strong> MP3</p>
-                <p><strong>Quality:</strong> High-quality audio</p>
-                <p><strong>Source:</strong> Supabase Storage</p>
+                <p className="mb-2"><strong>Format:</strong> MP3</p>
+                <p className="mb-2"><strong>Quality:</strong> High-quality audio</p>
+                <p className="mb-2"><strong>Source:</strong> Supabase Storage</p>
+                <p><strong>Languages:</strong> Yoruba, Igbo, Hausa, English</p>
               </div>
               <div>
-                <p><strong>Languages:</strong> Yoruba, Igbo, Hausa, English</p>
-                <p><strong>Artist:</strong> Evangelist Birdie Jones</p>
-                <p><strong>Ministry:</strong> Pure Gold Gospel Singers</p>
+                <p className="mb-2"><strong>Artists by Language:</strong></p>
+                <ul className="space-y-1 ml-4">
+                  <li>• <strong>English:</strong> Evangelist Birdie Jones</li>
+                  <li>• <strong>Igbo:</strong> Minister Susan Collins</li>
+                  <li>• <strong>Yoruba:</strong> Janet Olaitan</li>
+                  <li>• <strong>Hausa:</strong> Isaac O. Samuel</li>
+                </ul>
+                <p className="mt-3"><strong>Ministry:</strong> Pure Gold Gospel Singers</p>
               </div>
             </div>
           </div>

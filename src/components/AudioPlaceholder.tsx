@@ -9,6 +9,7 @@ interface AudioPlaceholderProps {
   gradient: string;
   sampleTitle: string;
   audioUrl: string;
+  artist: string;
   className?: string;
 }
 
@@ -20,6 +21,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   gradient,
   sampleTitle,
   audioUrl,
+  artist,
   className = ''
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -171,7 +173,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
         src={audioUrl} 
         preload="metadata"
         crossOrigin="anonymous"
-        aria-label={`Audio player for ${sampleTitle} in ${nativeName}`}
+        aria-label={`Audio player for ${sampleTitle} in ${nativeName} by ${artist}`}
       />
 
       {/* Header with Language Info */}
@@ -194,8 +196,9 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
       {/* Audio Content */}
       <div className="p-6">
         <div className="mb-4">
-          <h4 className="font-semibold text-gray-900 mb-2">{sampleTitle}</h4>
-          <p className="text-sm text-gray-600">Audio content in {nativeName}</p>
+          <h4 className="font-semibold text-gray-900 mb-1">{sampleTitle}</h4>
+          <p className="text-sm text-gray-600 mb-1">by {artist}</p>
+          <p className="text-xs text-gray-500">Audio content in {nativeName}</p>
         </div>
 
         {/* Error Display */}
