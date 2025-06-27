@@ -72,36 +72,8 @@ export const useAudioPlayer = ({
       onTrackEnd?.();
     };
 
-    const handleError = (e: Event) => {
-      const audioElement = e.target as HTMLAudioElement;
-      let errorMessage = 'Audio playback failed';
-      
-      if (audioElement.error) {
-        switch (audioElement.error.code) {
-          case MediaError.MEDIA_ERR_ABORTED:
-            errorMessage = 'Audio loading was aborted';
-            break;
-          case MediaError.MEDIA_ERR_NETWORK:
-            errorMessage = 'Network error - check connection and file location';
-            break;
-          case MediaError.MEDIA_ERR_DECODE:
-            errorMessage = 'Audio decoding error - file may be corrupted or wrong format';
-            break;
-          case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            errorMessage = 'Audio format not supported or file not found';
-            break;
-          default:
-            errorMessage = `Audio error code: ${audioElement.error.code}`;
-        }
-      }
-
-      // Check for CORS-related errors
-      if (errorMessage.includes('CORS') || 
-          errorMessage.includes('cross-origin') ||
-          audioElement.error?.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
-        errorMessage = 'CORS error: Audio file blocked by cross-origin policy';
-      }
-
+    const handleError = () => {
+      const errorMessage = audio.error?.message || 'Audio playback failed';
       updateState({ 
         isLoading: false, 
         isPlaying: false, 
@@ -137,15 +109,8 @@ export const useAudioPlayer = ({
     audio.addEventListener('canplaythrough', handleCanPlayThrough);
     audio.addEventListener('volumechange', handleVolumeChange);
 
-    // Set initial volume and configure CORS
+    // Set initial volume
     audio.volume = state.volume;
-    audio.crossOrigin = 'anonymous';
-
-    // Set the source
-    if (audioSrc) {
-      audio.src = audioSrc;
-      audio.load();
-    }
 
     return () => {
       audio.removeEventListener('loadstart', handleLoadStart);
@@ -182,19 +147,7 @@ export const useAudioPlayer = ({
       await audio.play();
       updateState({ isPlaying: true, error: null });
     } catch (error) {
-      let errorMessage = 'Playback failed';
-      
-      if (error instanceof Error) {
-        errorMessage = error.message;
-        
-        // Check for CORS-related errors
-        if (error.message.includes('CORS') || 
-            error.message.includes('cross-origin') ||
-            error.name === 'NotAllowedError') {
-          errorMessage = 'CORS error: Audio file blocked by cross-origin policy';
-        }
-      }
-      
+      const errorMessage = error instanceof Error ? error.message : 'Playback failed';
       updateState({ error: errorMessage, isPlaying: false });
       onError?.(errorMessage);
     }
