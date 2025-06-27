@@ -1,8 +1,7 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, Heart, Mail, Phone } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import PaymentButton from './PaymentButton';
 
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -59,6 +58,21 @@ const DonationSection: React.FC = () => {
     }
   ];
 
+  const contactMethods = [
+    {
+      icon: Mail,
+      label: 'Email',
+      value: 'godwillprovide@ministry.org',
+      href: 'mailto:godwillprovide@ministry.org'
+    },
+    {
+      icon: Phone,
+      label: 'Phone',
+      value: '(404) 709-9620',
+      href: 'tel:+14047099620'
+    }
+  ];
+
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +86,7 @@ const DonationSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Donation Tiers */}
+        {/* Donation Information */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {donationTiers.map((tier, index) => (
             <div key={index} className="relative bg-white rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300">
@@ -96,50 +110,55 @@ const DonationSection: React.FC = () => {
                 </div>
               </div>
 
-              <PaymentButton
-                amount={tier.amount}
-                description={`Monthly donation - ${tier.title} tier`}
-                metadata={{
-                  tier: tier.title,
-                  type: 'monthly_subscription'
-                }}
-                className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900"
-              >
-                <span>Support This Tier</span>
-              </PaymentButton>
+              <div className="text-center">
+                <p className="text-gray-600 text-sm mb-4">
+                  Contact us to support this tier
+                </p>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* One-time Donation */}
-        <div className="text-center mb-16">
-          <h3 className="text-2xl font-bold text-white mb-4">Prefer a One-time Gift?</h3>
-          <p className="text-red-200 mb-8 text-lg leading-relaxed">Every contribution helps us reach more souls with God's transforming word</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {oneTimeDonations.map((amount) => (
-              <PaymentButton
-                key={amount}
-                amount={amount}
-                description={`One-time donation of $${amount}`}
-                metadata={{
-                  type: 'one_time_donation',
-                  amount: amount.toString()
-                }}
-                className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105"
-              >
-                <span>${amount}</span>
-              </PaymentButton>
-            ))}
-            <PaymentButton
-              amount={0} // Custom amount will be handled differently
-              description="Custom donation amount"
-              metadata={{
-                type: 'custom_donation'
-              }}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105"
-            >
-              <span>Custom Amount</span>
-            </PaymentButton>
+        {/* Contact Information for Donations */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
+          <h3 className="text-2xl font-bold text-white text-center mb-8">How to Donate</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Heart className="text-white" size={32} />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-4">Support Our Ministry</h4>
+              <p className="text-red-100 mb-6 leading-relaxed">
+                Your generous donations help us reach more souls with God's transforming word through our multilingual spoken word ministry.
+              </p>
+              <div className="space-y-3">
+                {contactMethods.map((method, index) => (
+                  <a
+                    key={index}
+                    href={method.href}
+                    className="flex items-center justify-center space-x-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-6 py-3 text-white hover:bg-white/30 transition-all duration-200"
+                  >
+                    <method.icon size={20} />
+                    <span>{method.value}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Mail className="text-white" size={32} />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-4">Mailing Address</h4>
+              <div className="bg-white/10 rounded-lg p-6">
+                <p className="text-white font-medium mb-2">God Will Provide Outreach Ministry</p>
+                <p className="text-red-100">P.O. Box 213</p>
+                <p className="text-red-100">Fairburn, GA 30213</p>
+              </div>
+              <p className="text-red-100 mt-4 text-sm">
+                Please include your contact information with mailed donations for acknowledgment.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -171,7 +190,7 @@ const DonationSection: React.FC = () => {
 
         {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
-          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
+          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
             <div className="flex flex-nowrap animate-scroll-carousel-optimized">
               {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
