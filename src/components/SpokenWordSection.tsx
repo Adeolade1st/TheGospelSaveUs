@@ -1,9 +1,7 @@
 import React from 'react';
-import { Music, Globe, Headphones } from 'lucide-react';
+import { Music, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import PlaylistAudioPlayer from './PlaylistAudioPlayer';
-import AudioDebugger from './AudioDebugger';
 
 const SpokenWordSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -16,8 +14,7 @@ const SpokenWordSection: React.FC = () => {
       description: 'Language of the Southwest',
       image: 'https://images.pexels.com/photos/8088495/pexels-photo-8088495.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      gradient: 'from-red-600 via-red-700 to-red-800',
-      language: 'yoruba' as const
+      gradient: 'from-red-600 via-red-700 to-red-800'
     },
     {
       name: 'Igbo',
@@ -25,8 +22,7 @@ const SpokenWordSection: React.FC = () => {
       description: 'Language of the Southeast',
       image: 'https://images.pexels.com/photos/8088501/pexels-photo-8088501.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
-      gradient: 'from-amber-600 via-amber-700 to-orange-700',
-      language: 'igbo' as const
+      gradient: 'from-amber-600 via-amber-700 to-orange-700'
     },
     {
       name: 'Hausa',
@@ -34,17 +30,8 @@ const SpokenWordSection: React.FC = () => {
       description: 'Northern Nigeria\'s lingua franca',
       image: 'https://images.pexels.com/photos/8088489/pexels-photo-8088489.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      gradient: 'from-green-600 via-green-700 to-emerald-700',
-      language: 'hausa' as const
+      gradient: 'from-green-600 via-green-700 to-emerald-700'
     }
-  ];
-
-  // Test URLs for debugging
-  const testUrls = [
-    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/yoruba.mp3',
-    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Ibo%20version%20of%20The%20Gospel-1.mp3',
-    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa%20version%20of%20The%20Gospel.mp3',
-    'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3'
   ];
 
   return (
@@ -58,56 +45,6 @@ const SpokenWordSection: React.FC = () => {
           <p className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Experience transformative spoken word content in your native language
           </p>
-        </div>
-
-        {/* Audio Diagnostics Section */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center space-x-2 bg-orange-100 text-orange-800 px-4 py-2 rounded-full mb-4">
-              <Music size={20} />
-              <span className="font-semibold">Audio Diagnostics</span>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Testing Audio File Accessibility
-            </h3>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              We're testing your audio files to identify any playback issues. This helps us troubleshoot and ensure optimal performance.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {testUrls.map((url, index) => (
-              <AudioDebugger 
-                key={index}
-                audioUrl={url}
-                className="max-w-full"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Featured Audio Player */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center space-x-2 bg-red-100 text-red-800 px-4 py-2 rounded-full mb-4">
-              <Headphones size={20} />
-              <span className="font-semibold">Featured Audio Player</span>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Listen to Our Complete Audio Library
-            </h3>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Access our full collection of spoken word messages in Yorùbá, Igbo, Hausa, and English. 
-              Switch between languages, browse playlists, and enjoy seamless playback.
-            </p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <PlaylistAudioPlayer 
-              language="yoruba"
-              autoPlay={false}
-            />
-          </div>
         </div>
 
         {/* Language Cards Section */}
@@ -155,35 +92,15 @@ const SpokenWordSection: React.FC = () => {
                   <h3 className="text-2xl font-bold mb-2">{language.nativeName}</h3>
                   <p className="text-white/80 text-sm mb-6">{language.description}</p>
                   
-                  <div className="flex space-x-3">
-                    <a
-                      href={language.jangoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center space-x-2 bg-white text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-white/90 transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
-                    >
-                      <Music size={14} />
-                      <span>Jango Radio</span>
-                    </a>
-                    
-                    <button
-                      onClick={() => {
-                        const audioPlayer = document.querySelector('[data-language-selector]');
-                        if (audioPlayer) {
-                          audioPlayer.scrollIntoView({ behavior: 'smooth' });
-                          // Trigger language change in the audio player
-                          const languageButton = document.querySelector(`[data-language="${language.language}"]`) as HTMLButtonElement;
-                          if (languageButton) {
-                            setTimeout(() => languageButton.click(), 500);
-                          }
-                        }
-                      }}
-                      className="inline-flex items-center justify-center space-x-2 bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105 text-sm"
-                    >
-                      <Headphones size={14} />
-                      <span>Listen Now</span>
-                    </button>
-                  </div>
+                  <a
+                    href={language.jangoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-2 bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-white/90 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  >
+                    <Music size={16} />
+                    <span>Listen on Jango</span>
+                  </a>
                 </div>
               </div>
             ))}
@@ -261,17 +178,14 @@ const SpokenWordSection: React.FC = () => {
               Join thousands who have found hope, healing, and purpose through our multilingual spoken word ministry. 
               Each message is carefully crafted to speak directly to your heart in the language you understand best.
             </p>
-            <button
-              onClick={() => {
-                const audioPlayer = document.querySelector('[data-language-selector]');
-                if (audioPlayer) {
-                  audioPlayer.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+            <a
+              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
             >
               Start Listening Now
-            </button>
+            </a>
           </div>
         </div>
       </div>

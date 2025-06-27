@@ -1,9 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import AudioUploadManager from '../components/AudioUploadManager';
-import DatabaseAudioPlayer from '../components/DatabaseAudioPlayer';
-import { Settings, Upload, Database, Music } from 'lucide-react';
+import { Settings, Users, BarChart3, FileText } from 'lucide-react';
 
 const AdminPage: React.FC = () => {
   const { user, loading } = useAuth();
@@ -20,6 +18,21 @@ const AdminPage: React.FC = () => {
     return <Navigate to="/login" replace />;
   }
 
+  const adminStats = [
+    { label: 'Total Users', value: '1,247', icon: Users, color: 'bg-blue-500' },
+    { label: 'Monthly Visitors', value: '15,832', icon: BarChart3, color: 'bg-green-500' },
+    { label: 'Content Views', value: '45,291', icon: FileText, color: 'bg-purple-500' },
+    { label: 'Active Sessions', value: '892', icon: Settings, color: 'bg-orange-500' }
+  ];
+
+  const recentActivity = [
+    { action: 'New user registration', user: 'John Doe', time: '2 minutes ago' },
+    { action: 'Content viewed', user: 'Mary Smith', time: '5 minutes ago' },
+    { action: 'Donation received', user: 'David Johnson', time: '12 minutes ago' },
+    { action: 'Newsletter subscription', user: 'Sarah Wilson', time: '18 minutes ago' },
+    { action: 'Contact form submitted', user: 'Michael Brown', time: '25 minutes ago' }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-amber-50">
       {/* Header */}
@@ -31,7 +44,7 @@ const AdminPage: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600">Manage audio content and uploads</p>
+              <p className="text-gray-600">Manage your ministry platform</p>
             </div>
           </div>
         </div>
@@ -39,98 +52,89 @@ const AdminPage: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload Manager */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-3">
-              <Upload className="text-red-600" size={24} />
-              <h2 className="text-xl font-bold text-gray-900">File Upload</h2>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {adminStats.map((stat, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                </div>
+                <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}>
+                  <stat.icon className="text-white" size={24} />
+                </div>
+              </div>
             </div>
-            <AudioUploadManager />
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Recent Activity */}
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Recent Activity</h2>
+            <div className="space-y-4">
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium text-gray-900">{activity.action}</p>
+                    <p className="text-sm text-gray-600">{activity.user}</p>
+                  </div>
+                  <span className="text-xs text-gray-500">{activity.time}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Database Player */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-3">
-              <Database className="text-red-600" size={24} />
-              <h2 className="text-xl font-bold text-gray-900">Content Library</h2>
+          {/* Quick Actions */}
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+            <div className="grid grid-cols-1 gap-4">
+              <button className="flex items-center space-x-3 p-4 bg-red-50 hover:bg-red-100 rounded-lg transition-colors duration-200">
+                <Users className="text-red-600" size={20} />
+                <span className="font-medium text-gray-900">Manage Users</span>
+              </button>
+              <button className="flex items-center space-x-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200">
+                <BarChart3 className="text-blue-600" size={20} />
+                <span className="font-medium text-gray-900">View Analytics</span>
+              </button>
+              <button className="flex items-center space-x-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors duration-200">
+                <FileText className="text-green-600" size={20} />
+                <span className="font-medium text-gray-900">Content Management</span>
+              </button>
+              <button className="flex items-center space-x-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors duration-200">
+                <Settings className="text-purple-600" size={20} />
+                <span className="font-medium text-gray-900">System Settings</span>
+              </button>
             </div>
-            <DatabaseAudioPlayer />
           </div>
         </div>
 
-        {/* Instructions */}
-        <div className="mt-12 bg-white rounded-2xl shadow-xl p-8">
-          <div className="flex items-center space-x-3 mb-6">
-            <Music className="text-red-600" size={24} />
-            <h2 className="text-xl font-bold text-gray-900">How to Use Supabase Storage</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Process</h3>
-              <ol className="space-y-3 text-gray-700">
-                <li className="flex items-start space-x-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-bold">1</span>
-                  <span>Click "Upload Audio" to select your audio files (MP3, WAV, OGG, etc.)</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                  <span>Fill out the content form with title, description, language, and other details</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-bold">3</span>
-                  <span>Files are uploaded to Supabase Storage and database entries are created</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-bold">4</span>
-                  <span>Public URLs are generated automatically for use in audio players</span>
-                </li>
-              </ol>
+        {/* Ministry Overview */}
+        <div className="mt-8 bg-white rounded-2xl shadow-xl p-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Ministry Overview</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="text-red-600" size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Community Growth</h3>
+              <p className="text-gray-600">Our community continues to grow with new members joining daily to experience God's transforming word.</p>
             </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Storage Features</h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start space-x-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Secure cloud storage with CDN delivery</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Automatic public URL generation</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-green-500">✓</span>
-                  <span>File size limit: 100MB per file</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Supported formats: MP3, WAV, OGG, M4A, FLAC</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Database integration for content management</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Search and filter capabilities</span>
-                </li>
-              </ul>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="text-blue-600" size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Impact Metrics</h3>
+              <p className="text-gray-600">Track the reach and impact of our multilingual spoken word ministry across different regions.</p>
             </div>
-          </div>
-
-          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h4 className="font-semibold text-blue-900 mb-2">Getting Your Supabase URLs</h4>
-            <p className="text-blue-800 text-sm">
-              Once uploaded, your audio files will have URLs like: 
-              <code className="bg-blue-100 px-2 py-1 rounded ml-1">
-                https://[project-id].supabase.co/storage/v1/object/public/audio-files/[filename]
-              </code>
-            </p>
-            <p className="text-blue-800 text-sm mt-2">
-              These URLs can be used directly in your audio players and will be automatically integrated into your content database.
-            </p>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="text-green-600" size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Content Library</h3>
+              <p className="text-gray-600">Manage and organize our growing collection of spoken word content in multiple languages.</p>
+            </div>
           </div>
         </div>
       </div>

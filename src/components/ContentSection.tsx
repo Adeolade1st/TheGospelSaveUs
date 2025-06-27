@@ -157,6 +157,28 @@ const ContentSection: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Call to Action */}
+        <div className="text-center">
+          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto">
+            <Globe className="w-12 h-12 text-red-600 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Experience God's Word in Your Language
+            </h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              Join thousands who have found hope, healing, and purpose through our multilingual spoken word ministry. 
+              Each message is carefully crafted to speak directly to your heart in the language you understand best.
+            </p>
+            <a
+              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+            >
+              Start Listening Now
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
