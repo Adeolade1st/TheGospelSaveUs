@@ -16,6 +16,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:45',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'The Gospel Saves Us',
+      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba'
     },
     {
@@ -25,6 +26,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Victory Over Fear',
+      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Igbo.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo'
     },
     {
@@ -34,6 +36,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Faith That Moves Mountains',
+      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa'
     },
     {
@@ -43,6 +46,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Transformed by Grace',
+      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers'
     }
   ];
@@ -71,7 +75,7 @@ const SpokenWordSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 audio-placeholder-grid">
             {audioSamples.map((sample, index) => (
               <AudioPlaceholder
                 key={index}
@@ -81,15 +85,33 @@ const SpokenWordSection: React.FC = () => {
                 description={sample.description}
                 gradient={sample.gradient}
                 sampleTitle={sample.sampleTitle}
+                audioUrl={sample.audioUrl}
                 className="w-full"
               />
             ))}
           </div>
 
+          {/* Audio Information */}
+          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h4 className="font-semibold text-blue-900 mb-2">Audio File Information</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
+              <div>
+                <p><strong>Format:</strong> MP3</p>
+                <p><strong>Quality:</strong> High-quality audio</p>
+                <p><strong>Source:</strong> Supabase Storage</p>
+              </div>
+              <div>
+                <p><strong>Languages:</strong> Yoruba, Igbo, Hausa, English</p>
+                <p><strong>Artist:</strong> Evangelist Birdie Jones</p>
+                <p><strong>Ministry:</strong> Pure Gold Gospel Singers</p>
+              </div>
+            </div>
+          </div>
+
           {/* Additional Info */}
           <div className="mt-8 text-center">
             <p className="text-gray-600 mb-4">
-              These are sample previews. For full audio content, visit our Jango Radio page.
+              These are complete audio messages. For our full collection, visit our Jango Radio page.
             </p>
             <a
               href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
