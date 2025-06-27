@@ -20,6 +20,19 @@ const Hero: React.FC = () => {
     }
   };
 
+  const handleListenNowClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const browseSection = document.getElementById('browse-by-language');
+    if (browseSection) {
+      const headerHeight = 64; // Account for fixed header
+      const targetPosition = browseSection.offsetTop - headerHeight;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-red-900 via-red-800 to-amber-900 overflow-hidden">
       {/* Background Pattern */}
@@ -53,9 +66,8 @@ const Hero: React.FC = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
             <a
-              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#browse-by-language"
+              onClick={handleListenNowClick}
               className="group flex items-center space-x-3 bg-white text-red-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-red-50 transition-all duration-300 transform hover:scale-105 shadow-2xl"
             >
               <Play className="group-hover:scale-110 transition-transform duration-300" size={24} />

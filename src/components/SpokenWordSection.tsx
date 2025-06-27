@@ -15,7 +15,7 @@ const SpokenWordSection: React.FC = () => {
       description: 'Language of the Southwest',
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700', // Changed from red to blue
-      sampleTitle: 'The Gospel Saves Us',
+      sampleTitle: 'Eyin rere', // Updated translation
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba'
     },
@@ -25,7 +25,7 @@ const SpokenWordSection: React.FC = () => {
       description: 'Language of the Southeast',
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
-      sampleTitle: 'Victory Over Fear',
+      sampleTitle: 'Ozi oma', // Updated translation
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Igbo.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo'
     },
@@ -35,7 +35,7 @@ const SpokenWordSection: React.FC = () => {
       description: 'Northern Nigeria\'s lingua franca',
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
-      sampleTitle: 'Faith That Moves Mountains',
+      sampleTitle: 'Labari mai dadi', // Updated translation
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa'
     },
@@ -66,7 +66,7 @@ const SpokenWordSection: React.FC = () => {
 
         {/* Audio Samples Section */}
         <div className="mb-16">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8" id="browse-by-language">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               Browse by Language
             </h3>
