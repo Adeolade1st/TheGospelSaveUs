@@ -33,8 +33,10 @@ serve(async (req) => {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session
         
+        console.log('Processing completed checkout session:', session.id)
+        
         // Store donation in database
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('donations')
           .insert({
             stripe_session_id: session.id,
@@ -42,23 +44,99 @@ serve(async (req) => {
             currency: session.currency,
             customer_email: session.customer_details?.email,
             status: 'completed',
-            metadata: session.metadata,
-            created_at: new Date().toISOString()
+            metadata: session.metadata || {},
+            created_at: new Date(session.created * 1000).toISOString(),
+            updated_at: new Date().toISOString()
           })
 
-        if (error) {
-          console.error('Error storing donation:', error)
+        if (insertError) {
+          console.error('Error storing donation:', insertError)
+          // Don't return error to Stripe, log it for manual review
+        } else {
+          console.log('Successfully stored donation for session:', session.id)
+        }
+        break
+
+      case 'checkout.session.expired':
+        const expiredSession = event.data.object as Stripe.Checkout.Session
+        
+        // Update donation status to expired
+        const { error: updateError } = await supabase
+          .from('donations')
+          .update({ 
+            status: 'expired',
+            updated_at: new Date().toISOString()
+          })
+          .eq('stripe_session_id', expiredSession.id)
+
+        if (updateError) {
+          console.error('Error updating expired session:', updateError)
         }
         break
 
       case 'payment_intent.succeeded':
         const paymentIntent = event.data.object as Stripe.PaymentIntent
         console.log('Payment succeeded:', paymentIntent.id)
+        
+        // Update donation status if needed
+        if (paymentIntent.metadata?.session_id) {
+          await supabase
+            .from('donations')
+            .update({ 
+              status: 'completed',
+              updated_at: new Date().toISOString()
+            })
+            .eq('stripe_session_id', paymentIntent.metadata.session_id)
+        }
         break
 
       case 'payment_intent.payment_failed':
         const failedPayment = event.data.object as Stripe.PaymentIntent
         console.log('Payment failed:', failedPayment.id)
+        
+        // Update donation status to failed
+        if (failedPayment.metadata?.session_id) {
+          await supabase
+            .from('donations')
+            .update({ 
+              status: 'failed',
+              updated_at: new Date().toISOString()
+            })
+            .eq('stripe_session_id', failedPayment.metadata.session_id)
+        }
+        break
+
+      case 'invoice.payment_succeeded':
+        const invoice = event.data.object as Stripe.Invoice
+        console.log('Subscription payment succeeded:', invoice.id)
+        
+        // Handle recurring subscription payments
+        if (invoice.subscription) {
+          const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
+          
+          // Store recurring donation
+          await supabase
+            .from('donations')
+            .insert({
+              stripe_session_id: `recurring_${invoice.id}`,
+              amount: invoice.amount_paid,
+              currency: invoice.currency,
+              customer_email: invoice.customer_email,
+              status: 'completed',
+              metadata: {
+                type: 'recurring_payment',
+                subscription_id: subscription.id,
+                invoice_id: invoice.id
+              },
+              created_at: new Date(invoice.created * 1000).toISOString(),
+              updated_at: new Date().toISOString()
+            })
+        }
+        break
+
+      case 'customer.subscription.deleted':
+        const deletedSubscription = event.data.object as Stripe.Subscription
+        console.log('Subscription cancelled:', deletedSubscription.id)
         break
 
       default:
