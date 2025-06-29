@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Heart, Mail, Phone } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import PaymentButton from './PaymentButton';
@@ -59,6 +59,12 @@ const DonationSection: React.FC = () => {
     }
   ];
 
+  const handleDonation = (amount: number, description: string) => {
+    // This will be replaced with actual donation processing
+    // For now, redirect to external donation platform or show processing
+    window.open('https://www.paypal.com/donate', '_blank');
+  };
+
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,42 +76,6 @@ const DonationSection: React.FC = () => {
           <p className="text-2xl text-red-100 max-w-3xl mx-auto leading-relaxed">
             {t.donationSubtitle}
           </p>
-        </div>
-
-        {/* Contact Information for Donations */}
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
-          <h3 className="text-2xl font-bold text-white text-center mb-8">How to Donate</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Mail className="text-white" size={32} />
-              </div>
-              <h4 className="text-xl font-bold text-white mb-2">Email Us</h4>
-              <p className="text-red-100 mb-4">Contact us directly for donation information</p>
-              <a
-                href="mailto:godwillprovide@ministry.org"
-                className="inline-flex items-center space-x-2 bg-white text-red-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105"
-              >
-                <Mail size={16} />
-                <span>godwillprovide@ministry.org</span>
-              </a>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Phone className="text-white" size={32} />
-              </div>
-              <h4 className="text-xl font-bold text-white mb-2">Call Us</h4>
-              <p className="text-red-100 mb-4">Speak with us about supporting our ministry</p>
-              <a
-                href="tel:+14047099620"
-                className="inline-flex items-center space-x-2 bg-white text-red-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105"
-              >
-                <Phone size={16} />
-                <span>(404) 709-9620</span>
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* Donation Tiers */}
@@ -132,17 +102,12 @@ const DonationSection: React.FC = () => {
                 </div>
               </div>
 
-              <PaymentButton
-                amount={tier.amount}
-                description={`Monthly donation - ${tier.title} tier`}
-                metadata={{
-                  tier: tier.title,
-                  type: 'monthly_subscription'
-                }}
+              <button
+                onClick={() => handleDonation(tier.amount, `Monthly donation - ${tier.title} tier`)}
                 className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900"
               >
-                <span>Contact for This Tier</span>
-              </PaymentButton>
+                <span>Donate Now</span>
+              </button>
             </div>
           ))}
         </div>
@@ -153,41 +118,20 @@ const DonationSection: React.FC = () => {
           <p className="text-red-200 mb-8 text-lg leading-relaxed">Every contribution helps us reach more souls with God's transforming word</p>
           <div className="flex flex-wrap justify-center gap-4">
             {oneTimeDonations.map((amount) => (
-              <PaymentButton
+              <button
                 key={amount}
-                amount={amount}
-                description={`One-time donation of $${amount}`}
-                metadata={{
-                  type: 'one_time_donation',
-                  amount: amount.toString()
-                }}
+                onClick={() => handleDonation(amount, `One-time donation of $${amount}`)}
                 className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105"
               >
                 <span>${amount}</span>
-              </PaymentButton>
+              </button>
             ))}
-            <PaymentButton
-              amount={0}
-              description="Custom donation amount"
-              metadata={{
-                type: 'custom_donation'
-              }}
+            <button
+              onClick={() => handleDonation(0, "Custom donation amount")}
               className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105"
             >
               <span>Custom Amount</span>
-            </PaymentButton>
-          </div>
-        </div>
-
-        {/* Mailing Address */}
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
-          <h3 className="text-2xl font-bold text-white text-center mb-6">Send Donations By Mail</h3>
-          <div className="text-center">
-            <div className="bg-white/20 rounded-lg p-6 inline-block">
-              <h4 className="text-lg font-bold text-white mb-2">God Will Provide Outreach Ministry</h4>
-              <p className="text-red-100">P.O. Box 213</p>
-              <p className="text-red-100">Fairburn, GA 30213</p>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -233,34 +177,6 @@ const DonationSection: React.FC = () => {
                   <div className="text-gray-600 text-sm">{testimonial.location}</div>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto">
-            <Heart className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Partner With Us Today
-            </h3>
-            <p className="text-red-100 mb-6 leading-relaxed">
-              Your support enables us to continue spreading God's transforming word across Nigeria and beyond. 
-              Contact us today to learn more about partnership opportunities.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:godwillprovide@ministry.org"
-                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
-              >
-                Email Us
-              </a>
-              <a
-                href="tel:+14047099620"
-                className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 shadow-lg"
-              >
-                Call Us
-              </a>
             </div>
           </div>
         </div>
