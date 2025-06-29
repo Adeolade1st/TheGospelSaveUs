@@ -2,6 +2,7 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
+import PaymentButton from './PaymentButton';
 
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -58,12 +59,6 @@ const DonationSection: React.FC = () => {
     }
   ];
 
-  const handleDonation = (amount: number, description: string) => {
-    // Placeholder for future donation processing integration
-    console.log(`Processing donation: $${amount} - ${description}`);
-    // This will be replaced with actual payment processor integration
-  };
-
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,12 +96,17 @@ const DonationSection: React.FC = () => {
                 </div>
               </div>
 
-              <button
-                onClick={() => handleDonation(tier.amount, `Monthly donation - ${tier.title} tier`)}
+              <PaymentButton
+                amount={tier.amount}
+                description={`Monthly donation - ${tier.title} tier`}
+                metadata={{
+                  tier: tier.title,
+                  type: 'monthly_subscription'
+                }}
                 className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900"
               >
                 <span>Support This Tier</span>
-              </button>
+              </PaymentButton>
             </div>
           ))}
         </div>
@@ -117,20 +117,29 @@ const DonationSection: React.FC = () => {
           <p className="text-red-200 mb-8 text-lg leading-relaxed">Every contribution helps us reach more souls with God's transforming word</p>
           <div className="flex flex-wrap justify-center gap-4">
             {oneTimeDonations.map((amount) => (
-              <button
+              <PaymentButton
                 key={amount}
-                onClick={() => handleDonation(amount, `One-time donation of $${amount}`)}
+                amount={amount}
+                description={`One-time donation of $${amount}`}
+                metadata={{
+                  type: 'one_time_donation',
+                  amount: amount.toString()
+                }}
                 className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/30 transition-all duration-200 transform hover:scale-105"
               >
                 <span>${amount}</span>
-              </button>
+              </PaymentButton>
             ))}
-            <button
-              onClick={() => handleDonation(0, "Custom donation amount")}
+            <PaymentButton
+              amount={0} // Custom amount will be handled differently
+              description="Custom donation amount"
+              metadata={{
+                type: 'custom_donation'
+              }}
               className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105"
             >
               <span>Custom Amount</span>
-            </button>
+            </PaymentButton>
           </div>
         </div>
 
