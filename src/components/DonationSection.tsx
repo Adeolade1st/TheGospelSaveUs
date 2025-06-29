@@ -2,7 +2,6 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
-import PaymentButton from './PaymentButton';
 
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -60,9 +59,9 @@ const DonationSection: React.FC = () => {
   ];
 
   const handleDonation = (amount: number, description: string) => {
-    // This will be replaced with actual donation processing
-    // For now, redirect to external donation platform or show processing
-    window.open('https://www.paypal.com/donate', '_blank');
+    // Placeholder for future donation processing integration
+    console.log(`Processing donation: $${amount} - ${description}`);
+    // This will be replaced with actual payment processor integration
   };
 
   return (
@@ -106,7 +105,7 @@ const DonationSection: React.FC = () => {
                 onClick={() => handleDonation(tier.amount, `Monthly donation - ${tier.title} tier`)}
                 className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900"
               >
-                <span>Donate Now</span>
+                <span>Support This Tier</span>
               </button>
             </div>
           ))}
