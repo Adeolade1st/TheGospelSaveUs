@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, Heart, Mail, Phone } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import PaymentButton from './PaymentButton';
@@ -72,6 +72,42 @@ const DonationSection: React.FC = () => {
           </p>
         </div>
 
+        {/* Contact Information for Donations */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
+          <h3 className="text-2xl font-bold text-white text-center mb-8">How to Donate</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Mail className="text-white" size={32} />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-2">Email Us</h4>
+              <p className="text-red-100 mb-4">Contact us directly for donation information</p>
+              <a
+                href="mailto:godwillprovide@ministry.org"
+                className="inline-flex items-center space-x-2 bg-white text-red-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105"
+              >
+                <Mail size={16} />
+                <span>godwillprovide@ministry.org</span>
+              </a>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Phone className="text-white" size={32} />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-2">Call Us</h4>
+              <p className="text-red-100 mb-4">Speak with us about supporting our ministry</p>
+              <a
+                href="tel:+14047099620"
+                className="inline-flex items-center space-x-2 bg-white text-red-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105"
+              >
+                <Phone size={16} />
+                <span>(404) 709-9620</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* Donation Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {donationTiers.map((tier, index) => (
@@ -105,7 +141,7 @@ const DonationSection: React.FC = () => {
                 }}
                 className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-red-700 to-red-800 text-white hover:from-red-800 hover:to-red-900"
               >
-                <span>Support This Tier</span>
+                <span>Contact for This Tier</span>
               </PaymentButton>
             </div>
           ))}
@@ -131,7 +167,7 @@ const DonationSection: React.FC = () => {
               </PaymentButton>
             ))}
             <PaymentButton
-              amount={0} // Custom amount will be handled differently
+              amount={0}
               description="Custom donation amount"
               metadata={{
                 type: 'custom_donation'
@@ -140,6 +176,18 @@ const DonationSection: React.FC = () => {
             >
               <span>Custom Amount</span>
             </PaymentButton>
+          </div>
+        </div>
+
+        {/* Mailing Address */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
+          <h3 className="text-2xl font-bold text-white text-center mb-6">Send Donations By Mail</h3>
+          <div className="text-center">
+            <div className="bg-white/20 rounded-lg p-6 inline-block">
+              <h4 className="text-lg font-bold text-white mb-2">God Will Provide Outreach Ministry</h4>
+              <p className="text-red-100">P.O. Box 213</p>
+              <p className="text-red-100">Fairburn, GA 30213</p>
+            </div>
           </div>
         </div>
 
@@ -171,7 +219,7 @@ const DonationSection: React.FC = () => {
 
         {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
-          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
+          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
             <div className="flex flex-nowrap animate-scroll-carousel-optimized">
               {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
@@ -185,6 +233,34 @@ const DonationSection: React.FC = () => {
                   <div className="text-gray-600 text-sm">{testimonial.location}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Call to Action */}
+        <div className="text-center mt-16">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto">
+            <Heart className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Partner With Us Today
+            </h3>
+            <p className="text-red-100 mb-6 leading-relaxed">
+              Your support enables us to continue spreading God's transforming word across Nigeria and beyond. 
+              Contact us today to learn more about partnership opportunities.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="mailto:godwillprovide@ministry.org"
+                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-full font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              >
+                Email Us
+              </a>
+              <a
+                href="tel:+14047099620"
+                className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              >
+                Call Us
+              </a>
             </div>
           </div>
         </div>
