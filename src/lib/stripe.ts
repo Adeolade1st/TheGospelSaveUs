@@ -3,16 +3,15 @@ import { loadStripe } from '@stripe/stripe-js';
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 
 if (!stripePublishableKey) {
-  console.warn('Stripe publishable key not found. Payment functionality will be limited.');
+  throw new Error('Missing Stripe publishable key. Please add VITE_STRIPE_PUBLISHABLE_KEY to your environment variables.');
 }
 
-export const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
+export const stripePromise = loadStripe(stripePublishableKey);
 
-export const createPaymentIntent = async (paymentData: {
+export const createCheckoutSession = async (priceData: {
   amount: number;
   currency: string;
   description: string;
-  customer_email?: string;
   metadata?: Record<string, string>;
 }) => {
   try {
@@ -22,8 +21,9 @@ export const createPaymentIntent = async (paymentData: {
       throw new Error('Missing Supabase URL. Please add VITE_SUPABASE_URL to your environment variables.');
     }
 
+    // Ensure the URL is properly formatted
     const baseUrl = supabaseUrl.endsWith('/') ? supabaseUrl.slice(0, -1) : supabaseUrl;
-    const functionUrl = `${baseUrl}/functions/v1/create-payment`;
+    const functionUrl = `${baseUrl}/functions/v1/create-checkout-session`;
 
     const response = await fetch(functionUrl, {
       method: 'POST',
@@ -31,29 +31,35 @@ export const createPaymentIntent = async (paymentData: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
       },
-      body: JSON.stringify({
-        amount: paymentData.amount * 100, // Convert to cents
-        currency: paymentData.currency,
-        description: paymentData.description,
-        customer_email: paymentData.customer_email,
-        metadata: paymentData.metadata
-      }),
+      body: JSON.stringify(priceData),
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new Error(errorData.error || `HTTP ${response.status}: Failed to create payment intent`);
+      throw new Error(errorData.error || `HTTP ${response.status}: Failed to create checkout session`);
     }
 
-    const result = await response.json();
-    
-    if (!result.success) {
-      throw new Error(result.error || 'Failed to create payment intent');
-    }
-
-    return result;
+    const session = await response.json();
+    return session;
   } catch (error) {
-    console.error('Error creating payment intent:', error);
+    console.error('Error creating checkout session:', error);
+    throw error;
+  }
+};
+
+export const redirectToCheckout = async (sessionId: string) => {
+  const stripe = await stripePromise;
+  
+  if (!stripe) {
+    throw new Error('Stripe failed to load');
+  }
+
+  const { error } = await stripe.redirectToCheckout({
+    sessionId,
+  });
+
+  if (error) {
+    console.error('Error redirecting to checkout:', error);
     throw error;
   }
 };

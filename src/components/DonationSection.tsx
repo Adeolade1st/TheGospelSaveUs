@@ -171,7 +171,7 @@ const DonationSection: React.FC = () => {
 
         {/* Testimonials Carousel */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
-          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Supporters Say</h3>
+          <h3 className="text-2xl font-bold text-white text-center mb-8">What Our Donors Say</h3>
           <div className="relative overflow-hidden max-w-full md:max-w-[632px] lg:max-w-[948px] mx-auto">
             <div className="flex flex-nowrap animate-scroll-carousel-optimized">
               {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
