@@ -152,6 +152,11 @@ input[type="range"]:disabled {
     width: 256px; /* 80% of 320px (80px * 4) */
     aspect-ratio: 16/9; /* Maintain 16:9 aspect ratio */
   }
+  
+  /* Hide Jango airplay package on mobile */
+  .jango-airplay-package {
+    display: none;
+  }
 
   /* Responsive audio placeholders */
   .audio-placeholder-grid {
