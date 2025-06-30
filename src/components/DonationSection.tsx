@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
@@ -7,6 +7,8 @@ import PaymentButton from './PaymentButton';
 const DonationSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage.code];
+  const [showCustomAmount, setShowCustomAmount] = useState(false);
+  const [customAmount, setCustomAmount] = useState('');
 
   const donationTiers = [
     {
@@ -58,6 +60,14 @@ const DonationSection: React.FC = () => {
       location: "Feb 20, 2020"
     }
   ];
+
+  const handleCustomAmountSubmit = () => {
+    const amount = parseFloat(customAmount);
+    if (amount && amount > 0) {
+      setShowCustomAmount(false);
+      setCustomAmount('');
+    }
+  };
 
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
@@ -130,18 +140,73 @@ const DonationSection: React.FC = () => {
                 <span>${amount}</span>
               </PaymentButton>
             ))}
-            <PaymentButton
-              amount={0} // Custom amount will be handled differently
-              description="Custom donation amount"
-              metadata={{
-                type: 'custom_donation'
-              }}
+            <button
+              onClick={() => setShowCustomAmount(true)}
               className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:from-amber-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105"
             >
               <span>Custom Amount</span>
-            </PaymentButton>
+            </button>
           </div>
         </div>
+
+        {/* Custom Amount Modal */}
+        {showCustomAmount && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Enter Custom Amount</h3>
+              <div className="mb-6">
+                <label htmlFor="customAmount" className="block text-sm font-medium text-gray-700 mb-2">
+                  Donation Amount (USD)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">$</span>
+                  <input
+                    type="number"
+                    id="customAmount"
+                    value={customAmount}
+                    onChange={(e) => setCustomAmount(e.target.value)}
+                    placeholder="0.00"
+                    min="1"
+                    step="0.01"
+                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => {
+                    setShowCustomAmount(false);
+                    setCustomAmount('');
+                  }}
+                  className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                >
+                  Cancel
+                </button>
+                {parseFloat(customAmount) > 0 ? (
+                  <PaymentButton
+                    amount={parseFloat(customAmount)}
+                    description={`Custom donation of $${customAmount}`}
+                    metadata={{
+                      type: 'custom_donation',
+                      amount: customAmount
+                    }}
+                    className="flex-1 py-3 px-4 bg-gradient-to-r from-red-700 to-red-800 text-white rounded-lg hover:from-red-800 hover:to-red-900 transition-all duration-200 font-semibold"
+                    onClick={handleCustomAmountSubmit}
+                  >
+                    <span>Donate ${customAmount}</span>
+                  </PaymentButton>
+                ) : (
+                  <button
+                    disabled
+                    className="flex-1 py-3 px-4 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed font-semibold"
+                  >
+                    Enter Amount
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Jango Chart Section */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16 jango-airplay-package">
