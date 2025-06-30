@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Loader2, CreditCard, AlertCircle, RefreshCw, Clock, Wifi, WifiOff } from 'lucide-react';
-import { createCheckoutSession, redirectToCheckout } from '../lib/stripe';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Loader2, CreditCard, AlertCircle, RefreshCw, Clock, Wifi, WifiOff, CheckCircle } from 'lucide-react';
+import { createCheckoutSession, redirectToCheckout, validateStripeConfiguration } from '../lib/stripe';
 
 interface PaymentButtonProps {
   amount: number;
@@ -11,6 +11,7 @@ interface PaymentButtonProps {
   onClick?: () => void;
   maxRetries?: number;
   timeoutMs?: number;
+  disabled?: boolean;
 }
 
 interface PaymentState {
@@ -19,6 +20,7 @@ interface PaymentState {
   retryCount: number;
   isTimedOut: boolean;
   lastAttemptTime: number | null;
+  phase: 'idle' | 'validating' | 'creating-session' | 'redirecting' | 'success' | 'error';
 }
 
 const PaymentButton: React.FC<PaymentButtonProps> = ({
@@ -28,91 +30,110 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   children,
   metadata = {},
   onClick,
-  maxRetries = 3,
-  timeoutMs = 30000 // 30 seconds
+  maxRetries = 2,
+  timeoutMs = 15000, // Reduced to 15 seconds for faster feedback
+  disabled = false
 }) => {
   const [state, setState] = useState<PaymentState>({
     isLoading: false,
     error: null,
     retryCount: 0,
     isTimedOut: false,
-    lastAttemptTime: null
+    lastAttemptTime: null,
+    phase: 'idle'
   });
 
   const timeoutRef = useRef<NodeJS.Timeout>();
   const abortControllerRef = useRef<AbortController>();
   const isComponentMounted = useRef(true);
+  const lastClickTime = useRef<number>(0);
 
   useEffect(() => {
     isComponentMounted.current = true;
+    
+    // Validate Stripe configuration on component mount
+    const configValidation = validateStripeConfiguration();
+    if (!configValidation.isValid) {
+      setState(prev => ({
+        ...prev,
+        error: 'Payment system configuration error. Please contact support.',
+        phase: 'error'
+      }));
+    }
+
     return () => {
       isComponentMounted.current = false;
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      cleanup();
     };
   }, []);
 
-  const logPaymentAttempt = (action: string, details: any = {}) => {
+  const cleanup = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = undefined;
+    }
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = undefined;
+    }
+  }, []);
+
+  const logPaymentEvent = useCallback((event: string, details: any = {}) => {
     const logData = {
       timestamp: new Date().toISOString(),
-      action,
+      event,
       amount,
-      description,
+      description: description.substring(0, 50),
       retryCount: state.retryCount,
+      phase: state.phase,
+      sessionId: crypto.randomUUID().substring(0, 8),
       ...details
     };
     
     console.log('[PaymentButton]', logData);
     
-    // Send to analytics service if available
-    if (window.gtag) {
-      window.gtag('event', 'payment_attempt', {
+    // Analytics tracking
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'payment_button_action', {
         event_category: 'payment',
-        event_label: action,
+        event_label: event,
         value: amount,
         custom_parameters: details
       });
     }
-  };
+  }, [amount, description, state.retryCount, state.phase]);
 
-  const resetState = () => {
-    setState({
+  const updateState = useCallback((updates: Partial<PaymentState>) => {
+    if (!isComponentMounted.current) return;
+    setState(prev => {
+      const newState = { ...prev, ...updates };
+      
+      // Log state changes for debugging
+      if (updates.phase && updates.phase !== prev.phase) {
+        logPaymentEvent('phase_change', {
+          from: prev.phase,
+          to: updates.phase,
+          isLoading: newState.isLoading
+        });
+      }
+      
+      return newState;
+    });
+  }, [logPaymentEvent]);
+
+  const resetState = useCallback(() => {
+    cleanup();
+    updateState({
       isLoading: false,
       error: null,
       retryCount: 0,
       isTimedOut: false,
-      lastAttemptTime: null
+      lastAttemptTime: null,
+      phase: 'idle'
     });
-  };
+  }, [cleanup, updateState]);
 
-  const updateState = (updates: Partial<PaymentState>) => {
-    if (!isComponentMounted.current) return;
-    setState(prev => ({ ...prev, ...updates }));
-  };
-
-  const validateEnvironment = (): { isValid: boolean; error?: string } => {
-    if (!import.meta.env.VITE_SUPABASE_URL) {
-      return {
-        isValid: false,
-        error: 'Payment service configuration error. Please contact support.'
-      };
-    }
-
-    if (!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) {
-      return {
-        isValid: false,
-        error: 'Payment processor not configured. Please contact support.'
-      };
-    }
-
-    return { isValid: true };
-  };
-
-  const validatePaymentData = (): { isValid: boolean; error?: string } => {
+  const validatePaymentData = useCallback((): { isValid: boolean; error?: string } => {
     if (!amount || amount <= 0) {
       return {
         isValid: false,
@@ -134,22 +155,40 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       };
     }
 
+    if (!description || description.trim().length === 0) {
+      return {
+        isValid: false,
+        error: 'Payment description is required.'
+      };
+    }
+
     return { isValid: true };
-  };
+  }, [amount, description]);
 
-  const createTimeoutPromise = (ms: number): Promise<never> => {
-    return new Promise((_, reject) => {
+  const createTimeoutHandler = useCallback((timeoutMs: number) => {
+    return new Promise<never>((_, reject) => {
       timeoutRef.current = setTimeout(() => {
-        reject(new Error('TIMEOUT'));
-      }, ms);
+        logPaymentEvent('payment_timeout', { timeoutMs });
+        reject(new Error('PAYMENT_TIMEOUT'));
+      }, timeoutMs);
     });
-  };
+  }, [logPaymentEvent]);
 
-  const attemptPayment = async (): Promise<void> => {
+  const attemptPayment = useCallback(async (): Promise<void> => {
     // Create new abort controller for this attempt
     abortControllerRef.current = new AbortController();
     
-    const paymentPromise = createCheckoutSession({
+    updateState({ phase: 'validating' });
+    
+    // Validate payment data
+    const validation = validatePaymentData();
+    if (!validation.isValid) {
+      throw new Error(validation.error);
+    }
+
+    updateState({ phase: 'creating-session' });
+    
+    const sessionPromise = createCheckoutSession({
       amount: amount * 100, // Convert to cents
       currency: 'usd',
       description,
@@ -157,81 +196,88 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         ...metadata,
         ministry: 'God Will Provide Outreach Ministry',
         type: amount >= 100 ? 'monthly_donation' : 'one_time_donation',
-        attempt: state.retryCount + 1,
-        timestamp: new Date().toISOString()
+        attempt: (state.retryCount + 1).toString(),
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent.substring(0, 100)
       }
+    }, {
+      timeout: timeoutMs - 2000, // Leave 2 seconds for redirect
+      retryCount: state.retryCount
     });
 
-    const timeoutPromise = createTimeoutPromise(timeoutMs);
+    const timeoutPromise = createTimeoutHandler(timeoutMs);
 
     try {
-      // Race between payment creation and timeout
-      const session = await Promise.race([paymentPromise, timeoutPromise]);
+      // Race between session creation and timeout
+      const session = await Promise.race([sessionPromise, timeoutPromise]);
       
-      // Clear timeout if payment succeeds
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      // Clear timeout since we got a response
+      cleanup();
+
+      if (!session || !session.id) {
+        throw new Error('Invalid session response from payment service');
       }
 
-      logPaymentAttempt('checkout_session_created', {
+      logPaymentEvent('session_created', {
         sessionId: session.id,
-        success: true
+        mode: session.mode || 'payment'
       });
+
+      updateState({ phase: 'redirecting' });
+
+      // Small delay to show redirecting state
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Redirect to Stripe Checkout
       await redirectToCheckout(session.id);
       
       // If we reach here, redirect was successful
-      logPaymentAttempt('redirect_successful', {
-        sessionId: session.id
-      });
+      updateState({ phase: 'success' });
+      logPaymentEvent('redirect_success', { sessionId: session.id });
 
     } catch (error) {
-      // Clear timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
+      cleanup();
+      
       if (error instanceof Error) {
-        if (error.message === 'TIMEOUT') {
-          logPaymentAttempt('payment_timeout', {
-            timeoutMs,
-            attempt: state.retryCount + 1
-          });
-          throw new Error('Payment request timed out. Please try again.');
+        if (error.message === 'PAYMENT_TIMEOUT') {
+          throw new Error('Payment request timed out. Please check your connection and try again.');
         }
         
-        logPaymentAttempt('payment_error', {
-          error: error.message,
-          attempt: state.retryCount + 1
-        });
+        // Handle specific error types
+        if (error.message.includes('network') || error.message.includes('fetch')) {
+          throw new Error('Network error. Please check your internet connection and try again.');
+        }
+        
+        if (error.message.includes('configuration')) {
+          throw new Error('Payment system configuration error. Please contact support.');
+        }
+        
         throw error;
       }
       
       throw new Error('An unexpected error occurred during payment processing.');
     }
-  };
+  }, [amount, description, metadata, state.retryCount, timeoutMs, validatePaymentData, createTimeoutHandler, cleanup, updateState, logPaymentEvent]);
 
-  const handlePayment = async () => {
-    // Prevent multiple simultaneous clicks
+  const handlePayment = useCallback(async () => {
+    const now = Date.now();
+    
+    // Prevent rapid successive clicks (debounce)
+    if (now - lastClickTime.current < 1000) {
+      logPaymentEvent('rapid_click_prevented', { timeSinceLastClick: now - lastClickTime.current });
+      return;
+    }
+    lastClickTime.current = now;
+
+    // Prevent multiple simultaneous requests
     if (state.isLoading) {
-      logPaymentAttempt('duplicate_click_prevented');
+      logPaymentEvent('concurrent_click_prevented', { currentPhase: state.phase });
       return;
     }
 
-    // Validate environment
-    const envValidation = validateEnvironment();
-    if (!envValidation.isValid) {
-      updateState({ error: envValidation.error });
-      logPaymentAttempt('environment_validation_failed', { error: envValidation.error });
-      return;
-    }
-
-    // Validate payment data
-    const dataValidation = validatePaymentData();
-    if (!dataValidation.isValid) {
-      updateState({ error: dataValidation.error });
-      logPaymentAttempt('data_validation_failed', { error: dataValidation.error });
+    // Check if button is disabled
+    if (disabled) {
+      logPaymentEvent('disabled_click_prevented');
       return;
     }
 
@@ -239,13 +285,15 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       isLoading: true,
       error: null,
       isTimedOut: false,
-      lastAttemptTime: Date.now()
+      lastAttemptTime: now,
+      phase: 'validating'
     });
 
-    logPaymentAttempt('payment_initiated', {
+    logPaymentEvent('payment_initiated', {
       amount,
-      description,
-      retryCount: state.retryCount
+      description: description.substring(0, 50),
+      retryCount: state.retryCount,
+      userAgent: navigator.userAgent.substring(0, 100)
     });
 
     try {
@@ -257,60 +305,65 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Payment failed';
       
-      logPaymentAttempt('payment_failed', {
+      logPaymentEvent('payment_failed', {
         error: errorMessage,
         retryCount: state.retryCount,
         willRetry: state.retryCount < maxRetries
       });
 
-      if (state.retryCount < maxRetries) {
+      if (state.retryCount < maxRetries && !errorMessage.includes('configuration')) {
         // Automatic retry with exponential backoff
-        const retryDelay = Math.min(1000 * Math.pow(2, state.retryCount), 5000);
+        const retryDelay = Math.min(1000 * Math.pow(2, state.retryCount), 3000);
         
         updateState({
           retryCount: state.retryCount + 1,
-          error: `${errorMessage} Retrying in ${Math.ceil(retryDelay / 1000)} seconds...`
+          error: `${errorMessage} Retrying in ${Math.ceil(retryDelay / 1000)} seconds...`,
+          phase: 'error'
         });
 
         setTimeout(() => {
-          if (isComponentMounted.current) {
+          if (isComponentMounted.current && state.retryCount < maxRetries) {
             handlePayment();
           }
         }, retryDelay);
       } else {
-        // Max retries reached
+        // Max retries reached or configuration error
         updateState({
           isLoading: false,
           error: errorMessage,
-          isTimedOut: errorMessage.includes('timed out')
+          isTimedOut: errorMessage.includes('timed out'),
+          phase: 'error'
         });
       }
     }
-  };
+  }, [state.isLoading, state.retryCount, disabled, amount, description, maxRetries, updateState, logPaymentEvent, attemptPayment, onClick]);
 
-  const handleRetry = () => {
-    logPaymentAttempt('manual_retry_initiated');
+  const handleRetry = useCallback(() => {
+    logPaymentEvent('manual_retry_initiated');
     resetState();
-    handlePayment();
-  };
+    setTimeout(() => handlePayment(), 100); // Small delay to ensure state is reset
+  }, [logPaymentEvent, resetState, handlePayment]);
 
-  const handleFallback = () => {
-    logPaymentAttempt('fallback_initiated');
-    
-    // Fallback to direct Stripe checkout page or contact form
-    const fallbackUrl = `https://donate.stripe.com/test_fallback?amount=${amount * 100}&description=${encodeURIComponent(description)}`;
-    
-    window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
-    
-    updateState({
-      error: 'Redirected to alternative payment method. Please complete your donation in the new window.'
-    });
-  };
+  const handleDismiss = useCallback(() => {
+    logPaymentEvent('error_dismissed');
+    resetState();
+  }, [logPaymentEvent, resetState]);
 
-  const getErrorIcon = () => {
-    if (state.isTimedOut) return <Clock size={16} />;
-    if (state.error?.includes('network') || state.error?.includes('connection')) return <WifiOff size={16} />;
-    return <AlertCircle size={16} />;
+  const getPhaseMessage = () => {
+    switch (state.phase) {
+      case 'validating':
+        return 'Validating payment...';
+      case 'creating-session':
+        return 'Setting up secure payment...';
+      case 'redirecting':
+        return 'Redirecting to payment...';
+      case 'success':
+        return 'Redirecting...';
+      default:
+        return state.retryCount > 0 
+          ? `Retrying... (${state.retryCount}/${maxRetries})`
+          : 'Processing...';
+    }
   };
 
   const getButtonContent = () => {
@@ -318,12 +371,16 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       return (
         <>
           <Loader2 className="animate-spin" size={20} />
-          <span>
-            {state.retryCount > 0 
-              ? `Retrying... (${state.retryCount}/${maxRetries})`
-              : 'Processing...'
-            }
-          </span>
+          <span>{getPhaseMessage()}</span>
+        </>
+      );
+    }
+
+    if (state.phase === 'success') {
+      return (
+        <>
+          <CheckCircle size={20} />
+          <span>Redirecting...</span>
         </>
       );
     }
@@ -336,10 +393,15 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     );
   };
 
-  const isDisabled = state.isLoading;
-  const hasError = !!state.error;
+  const getErrorIcon = () => {
+    if (state.isTimedOut) return <Clock size={16} />;
+    if (state.error?.includes('network') || state.error?.includes('connection')) return <WifiOff size={16} />;
+    return <AlertCircle size={16} />;
+  };
+
+  const isDisabled = state.isLoading || disabled;
+  const hasError = !!state.error && state.phase === 'error';
   const canRetry = hasError && !state.isLoading && state.retryCount < maxRetries;
-  const needsFallback = hasError && state.retryCount >= maxRetries;
 
   return (
     <div className="payment-button-container">
@@ -351,16 +413,38 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         } ${hasError ? 'border-red-300' : ''} flex items-center justify-center space-x-2 transition-all duration-200 relative`}
         aria-label={`Make payment of $${amount}`}
         data-testid="payment-button"
+        data-phase={state.phase}
+        data-loading={state.isLoading}
       >
         {getButtonContent()}
         
-        {/* Connection status indicator */}
+        {/* Loading indicator */}
         {state.isLoading && (
           <div className="absolute -top-1 -right-1">
             <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
           </div>
         )}
       </button>
+      
+      {/* Progress indicator for loading states */}
+      {state.isLoading && (
+        <div className="mt-2">
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+            <Wifi className="animate-pulse" size={14} />
+            <span>{getPhaseMessage()}</span>
+          </div>
+          <div className="mt-1 w-full bg-gray-200 rounded-full h-1">
+            <div 
+              className="bg-blue-600 h-1 rounded-full transition-all duration-300"
+              style={{ 
+                width: state.phase === 'validating' ? '25%' : 
+                       state.phase === 'creating-session' ? '60%' : 
+                       state.phase === 'redirecting' ? '90%' : '100%'
+              }}
+            />
+          </div>
+        </div>
+      )}
       
       {/* Error Display */}
       {hasError && (
@@ -389,18 +473,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
                   </button>
                 )}
                 
-                {needsFallback && (
-                  <button
-                    onClick={handleFallback}
-                    className="inline-flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
-                  >
-                    <Wifi size={12} />
-                    <span>Alternative Payment</span>
-                  </button>
-                )}
-                
                 <button
-                  onClick={resetState}
+                  onClick={handleDismiss}
                   className="inline-flex items-center space-x-1 px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition-colors"
                 >
                   <span>Dismiss</span>
@@ -412,7 +486,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
                 <p className="text-xs text-red-600">
                   {state.isTimedOut 
                     ? 'The payment request timed out. Please check your internet connection and try again.'
-                    : 'If this problem persists, please contact support or try the alternative payment method.'
+                    : 'If this problem persists, please contact support.'
                   }
                 </p>
                 {state.lastAttemptTime && (
@@ -422,18 +496,6 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
                 )}
               </div>
             </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Success Feedback */}
-      {state.isLoading && state.retryCount === 0 && (
-        <div className="mt-2 text-center">
-          <p className="text-sm text-gray-600">
-            Securing your payment...
-          </p>
-          <div className="mt-1 w-full bg-gray-200 rounded-full h-1">
-            <div className="bg-blue-600 h-1 rounded-full animate-pulse" style={{ width: '60%' }}></div>
           </div>
         </div>
       )}

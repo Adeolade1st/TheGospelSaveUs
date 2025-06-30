@@ -3,7 +3,7 @@ import Stripe from 'https://esm.sh/stripe@14.21.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-retry-count',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-retry-count, x-request-id, x-health-check',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
@@ -11,6 +11,7 @@ interface RequestMetadata {
   clientTimestamp?: string;
   userAgent?: string;
   retryCount?: string;
+  requestId?: string;
   [key: string]: any;
 }
 
@@ -27,8 +28,25 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
-  const requestId = crypto.randomUUID();
+  const requestId = req.headers.get('x-request-id') || crypto.randomUUID();
   const startTime = Date.now();
+  const isHealthCheck = req.headers.get('x-health-check') === 'true';
+
+  // Handle health check requests
+  if (isHealthCheck) {
+    console.log(`[${requestId}] Health check request received`);
+    return new Response(
+      JSON.stringify({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        requestId 
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      }
+    );
+  }
 
   try {
     // Initialize Stripe with error handling
@@ -36,7 +54,10 @@ serve(async (req) => {
     if (!stripeSecretKey) {
       console.error(`[${requestId}] Missing STRIPE_SECRET_KEY environment variable`);
       return new Response(
-        JSON.stringify({ error: 'Payment service configuration error' }),
+        JSON.stringify({ 
+          error: 'Payment service configuration error',
+          requestId 
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 500,
@@ -46,18 +67,25 @@ serve(async (req) => {
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16',
-      timeout: 20000, // 20 second timeout
-      maxNetworkRetries: 2,
+      timeout: 15000, // 15 second timeout for Stripe API calls
+      maxNetworkRetries: 1, // Reduced retries for faster failure
     })
 
     // Parse and validate request body
     let requestData: CheckoutRequest;
     try {
-      requestData = await req.json();
+      const bodyText = await req.text();
+      if (!bodyText.trim()) {
+        throw new Error('Empty request body');
+      }
+      requestData = JSON.parse(bodyText);
     } catch (error) {
       console.error(`[${requestId}] Invalid JSON in request body:`, error);
       return new Response(
-        JSON.stringify({ error: 'Invalid request format' }),
+        JSON.stringify({ 
+          error: 'Invalid request format',
+          requestId 
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400,
@@ -67,11 +95,14 @@ serve(async (req) => {
 
     const { amount, currency, description, metadata = {} } = requestData;
 
-    // Enhanced validation
+    // Enhanced validation with detailed logging
     if (!amount || typeof amount !== 'number' || amount <= 0) {
-      console.warn(`[${requestId}] Invalid amount: ${amount}`);
+      console.warn(`[${requestId}] Invalid amount: ${amount} (type: ${typeof amount})`);
       return new Response(
-        JSON.stringify({ error: 'Valid amount is required' }),
+        JSON.stringify({ 
+          error: 'Valid amount is required',
+          requestId 
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400,
@@ -80,8 +111,12 @@ serve(async (req) => {
     }
 
     if (amount < 100) { // Minimum $1.00
+      console.warn(`[${requestId}] Amount below minimum: ${amount} cents`);
       return new Response(
-        JSON.stringify({ error: 'Minimum donation amount is $1.00' }),
+        JSON.stringify({ 
+          error: 'Minimum donation amount is $1.00',
+          requestId 
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400,
@@ -90,8 +125,12 @@ serve(async (req) => {
     }
 
     if (amount > 99999999) { // Maximum $999,999.99
+      console.warn(`[${requestId}] Amount above maximum: ${amount} cents`);
       return new Response(
-        JSON.stringify({ error: 'Maximum donation amount is $999,999.99' }),
+        JSON.stringify({ 
+          error: 'Maximum donation amount is $999,999.99',
+          requestId 
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400,
@@ -100,8 +139,12 @@ serve(async (req) => {
     }
 
     if (!description || typeof description !== 'string' || description.trim().length === 0) {
+      console.warn(`[${requestId}] Invalid description: ${description}`);
       return new Response(
-        JSON.stringify({ error: 'Description is required' }),
+        JSON.stringify({ 
+          error: 'Description is required',
+          requestId 
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 400,
@@ -115,14 +158,19 @@ serve(async (req) => {
       currency: currency || 'usd',
       description: description.substring(0, 100),
       retryCount: metadata.retryCount || '0',
-      userAgent: metadata.userAgent?.substring(0, 100) || 'unknown'
+      userAgent: metadata.userAgent?.substring(0, 100) || 'unknown',
+      clientTimestamp: metadata.clientTimestamp
     });
 
     // Determine if this is a subscription or one-time payment
     const isSubscription = metadata?.type === 'monthly_subscription' || amount >= 10000 // $100 or more
 
-    // Get origin for redirect URLs
-    const origin = req.headers.get('origin') || req.headers.get('referer')?.split('/').slice(0, 3).join('/') || 'https://localhost:5173';
+    // Get origin for redirect URLs with fallback
+    const origin = req.headers.get('origin') || 
+                   req.headers.get('referer')?.split('/').slice(0, 3).join('/') || 
+                   'https://localhost:5173';
+
+    console.log(`[${requestId}] Using origin for redirects: ${origin}`);
 
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],
@@ -180,19 +228,30 @@ serve(async (req) => {
     // Create Stripe checkout session with timeout handling
     let session: Stripe.Checkout.Session;
     try {
+      const stripeStartTime = Date.now();
       session = await stripe.checkout.sessions.create(sessionConfig);
+      const stripeResponseTime = Date.now() - stripeStartTime;
+      
+      console.log(`[${requestId}] Stripe API call completed in ${stripeResponseTime}ms`);
+      
     } catch (stripeError: any) {
-      console.error(`[${requestId}] Stripe API error:`, {
+      const stripeResponseTime = Date.now() - startTime;
+      
+      console.error(`[${requestId}] Stripe API error after ${stripeResponseTime}ms:`, {
         type: stripeError.type,
         code: stripeError.code,
         message: stripeError.message,
-        statusCode: stripeError.statusCode
+        statusCode: stripeError.statusCode,
+        requestId: stripeError.requestId
       });
 
-      // Handle specific Stripe errors
+      // Handle specific Stripe errors with user-friendly messages
       if (stripeError.type === 'card_error') {
         return new Response(
-          JSON.stringify({ error: 'Payment method error. Please try a different card.' }),
+          JSON.stringify({ 
+            error: 'Payment method error. Please try a different card.',
+            requestId 
+          }),
           {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400,
@@ -200,7 +259,10 @@ serve(async (req) => {
         )
       } else if (stripeError.type === 'rate_limit_error') {
         return new Response(
-          JSON.stringify({ error: 'Too many requests. Please wait a moment and try again.' }),
+          JSON.stringify({ 
+            error: 'Too many requests. Please wait a moment and try again.',
+            requestId 
+          }),
           {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 429,
@@ -208,15 +270,32 @@ serve(async (req) => {
         )
       } else if (stripeError.type === 'api_connection_error') {
         return new Response(
-          JSON.stringify({ error: 'Payment service temporarily unavailable. Please try again.' }),
+          JSON.stringify({ 
+            error: 'Payment service temporarily unavailable. Please try again.',
+            requestId 
+          }),
           {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 503,
           },
         )
+      } else if (stripeError.type === 'authentication_error') {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Payment service configuration error. Please contact support.',
+            requestId 
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 500,
+          },
+        )
       } else {
         return new Response(
-          JSON.stringify({ error: 'Payment processing error. Please try again.' }),
+          JSON.stringify({ 
+            error: 'Payment processing error. Please try again.',
+            requestId 
+          }),
           {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 500,
@@ -230,15 +309,37 @@ serve(async (req) => {
     console.log(`[${requestId}] Checkout session created successfully:`, {
       sessionId: session.id,
       mode: session.mode,
-      processingTimeMs: processingTime
+      processingTimeMs: processingTime,
+      hasUrl: !!session.url,
+      expiresAt: session.expires_at
     });
+
+    // Validate session before returning
+    if (!session.id || !session.url) {
+      console.error(`[${requestId}] Invalid session created:`, {
+        hasId: !!session.id,
+        hasUrl: !!session.url
+      });
+      
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid session created. Please try again.',
+          requestId 
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        },
+      )
+    }
 
     return new Response(
       JSON.stringify({ 
         id: session.id, 
         url: session.url,
         mode: session.mode,
-        requestId
+        requestId,
+        expiresAt: session.expires_at
       }),
       {
         headers: { 
@@ -253,10 +354,10 @@ serve(async (req) => {
   } catch (error) {
     const processingTime = Date.now() - startTime;
     
-    console.error(`[${requestId}] Unexpected error:`, {
+    console.error(`[${requestId}] Unexpected error after ${processingTime}ms:`, {
       error: error.message,
       stack: error.stack,
-      processingTimeMs: processingTime
+      name: error.name
     });
 
     return new Response(

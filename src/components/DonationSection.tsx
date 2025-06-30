@@ -33,6 +33,21 @@ const DonationSection: React.FC = () => {
 
   const oneTimeDonations = [25, 50, 100, 250, 500];
 
+  const handleCustomAmountSubmit = () => {
+    const amount = parseFloat(customAmount);
+    if (amount && amount >= 1) {
+      // The PaymentButton will handle the actual payment processing
+      // We just need to close the modal after the payment is initiated
+      setShowCustomAmount(false);
+      setCustomAmount('');
+    }
+  };
+
+  const handleCustomAmountCancel = () => {
+    setShowCustomAmount(false);
+    setCustomAmount('');
+  };
+
   const testimonials = [
     {
       quote: "A blessing to my heart and soul. God has blessed and this is the beginning that never ends.",
@@ -60,21 +75,6 @@ const DonationSection: React.FC = () => {
       location: "Feb 20, 2020"
     }
   ];
-
-  const handleCustomAmountSubmit = () => {
-    const amount = parseFloat(customAmount);
-    if (amount && amount > 0) {
-      // The PaymentButton will handle the actual payment processing
-      // We just need to close the modal after the payment is initiated
-      setShowCustomAmount(false);
-      setCustomAmount('');
-    }
-  };
-
-  const handleCustomAmountCancel = () => {
-    setShowCustomAmount(false);
-    setCustomAmount('');
-  };
 
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">

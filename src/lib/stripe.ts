@@ -3,10 +3,10 @@ import { loadStripe } from '@stripe/stripe-js';
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 
 if (!stripePublishableKey) {
-  throw new Error('Missing Stripe publishable key. Please add VITE_STRIPE_PUBLISHABLE_KEY to your environment variables.');
+  console.error('Missing Stripe publishable key. Please add VITE_STRIPE_PUBLISHABLE_KEY to your environment variables.');
 }
 
-export const stripePromise = loadStripe(stripePublishableKey);
+export const stripePromise = loadStripe(stripePublishableKey || '');
 
 // Enhanced error types for better error handling
 export class StripeConfigError extends Error {
@@ -38,19 +38,19 @@ export const createCheckoutSession = async (priceData: {
 }, options: {
   timeout?: number;
   retryCount?: number;
-} = {}): Promise<{ id: string; url: string }> => {
-  const { timeout = 25000, retryCount = 0 } = options;
+} = {}): Promise<{ id: string; url: string; mode?: string }> => {
+  const { timeout = 12000, retryCount = 0 } = options; // Reduced timeout to 12 seconds
+  const requestId = crypto.randomUUID().substring(0, 8);
 
   try {
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    
-    if (!supabaseUrl) {
-      throw new StripeConfigError('Missing Supabase URL. Please add VITE_SUPABASE_URL to your environment variables.');
+    // Validate configuration first
+    const configValidation = validateStripeConfiguration();
+    if (!configValidation.isValid) {
+      throw new StripeConfigError(configValidation.errors[0] || 'Stripe configuration error');
     }
 
-    if (!import.meta.env.VITE_SUPABASE_ANON_KEY) {
-      throw new StripeConfigError('Missing Supabase anonymous key. Please add VITE_SUPABASE_ANON_KEY to your environment variables.');
-    }
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
     // Validate price data
     if (!priceData.amount || priceData.amount <= 0) {
@@ -61,47 +61,78 @@ export const createCheckoutSession = async (priceData: {
       throw new StripeValidationError('Amount too large: maximum is $999,999.99');
     }
 
+    if (!priceData.description || priceData.description.trim().length === 0) {
+      throw new StripeValidationError('Description is required');
+    }
+
     // Ensure the URL is properly formatted
-    const baseUrl = supabaseUrl.endsWith('/') ? supabaseUrl.slice(0, -1) : supabaseUrl;
+    const baseUrl = supabaseUrl!.endsWith('/') ? supabaseUrl!.slice(0, -1) : supabaseUrl;
     const functionUrl = `${baseUrl}/functions/v1/create-checkout-session`;
+
+    console.log(`[Stripe:${requestId}] Creating checkout session:`, {
+      amount: priceData.amount,
+      description: priceData.description.substring(0, 50),
+      retryCount,
+      timeout
+    });
 
     // Create abort controller for timeout handling
     const abortController = new AbortController();
-    const timeoutId = setTimeout(() => abortController.abort(), timeout);
+    const timeoutId = setTimeout(() => {
+      console.warn(`[Stripe:${requestId}] Request timeout after ${timeout}ms`);
+      abortController.abort();
+    }, timeout);
 
     try {
+      const startTime = Date.now();
+      
       const response = await fetch(functionUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${supabaseKey}`,
           'X-Client-Info': 'god-will-provide-ministry/1.0.0',
           'X-Retry-Count': retryCount.toString(),
+          'X-Request-ID': requestId,
         },
         body: JSON.stringify({
           ...priceData,
           metadata: {
             ...priceData.metadata,
             clientTimestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
+            requestId,
             retryCount: retryCount.toString()
           }
         }),
         signal: abortController.signal,
       });
 
+      const responseTime = Date.now() - startTime;
       clearTimeout(timeoutId);
+
+      console.log(`[Stripe:${requestId}] Response received:`, {
+        status: response.status,
+        responseTime: `${responseTime}ms`,
+        ok: response.ok
+      });
 
       // Handle different HTTP status codes
       if (!response.ok) {
         let errorMessage = `HTTP ${response.status}: Failed to create checkout session`;
+        let errorData: any = {};
         
         try {
-          const errorData = await response.json();
+          errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
         } catch {
           // If we can't parse the error response, use the default message
         }
+
+        console.error(`[Stripe:${requestId}] API Error:`, {
+          status: response.status,
+          error: errorMessage,
+          errorData
+        });
 
         // Categorize errors for better handling
         if (response.status >= 500) {
@@ -119,8 +150,15 @@ export const createCheckoutSession = async (priceData: {
       
       // Validate response structure
       if (!session || !session.id) {
+        console.error(`[Stripe:${requestId}] Invalid response:`, session);
         throw new StripeValidationError('Invalid response from payment service: missing session ID');
       }
+
+      console.log(`[Stripe:${requestId}] Session created successfully:`, {
+        sessionId: session.id,
+        mode: session.mode,
+        hasUrl: !!session.url
+      });
 
       return session;
 
@@ -128,10 +166,12 @@ export const createCheckoutSession = async (priceData: {
       clearTimeout(timeoutId);
       
       if (error instanceof DOMException && error.name === 'AbortError') {
+        console.error(`[Stripe:${requestId}] Request aborted (timeout)`);
         throw new StripeNetworkError('Request timed out. Please check your internet connection and try again.');
       }
       
       if (error instanceof TypeError && error.message.includes('fetch')) {
+        console.error(`[Stripe:${requestId}] Network error:`, error);
         throw new StripeNetworkError('Network error. Please check your internet connection and try again.');
       }
       
@@ -143,19 +183,24 @@ export const createCheckoutSession = async (priceData: {
       }
       
       // Wrap unknown errors
+      console.error(`[Stripe:${requestId}] Unexpected error:`, error);
       throw new StripeNetworkError(
         'An unexpected error occurred while setting up payment. Please try again.',
         error instanceof Error ? error : new Error(String(error))
       );
     }
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error(`[Stripe:${requestId}] Error creating checkout session:`, error);
     throw error;
   }
 };
 
 export const redirectToCheckout = async (sessionId: string): Promise<void> => {
+  const requestId = crypto.randomUUID().substring(0, 8);
+  
   try {
+    console.log(`[Stripe:${requestId}] Redirecting to checkout:`, { sessionId });
+
     if (!sessionId) {
       throw new StripeValidationError('Session ID is required for checkout redirect');
     }
@@ -163,15 +208,23 @@ export const redirectToCheckout = async (sessionId: string): Promise<void> => {
     const stripe = await stripePromise;
     
     if (!stripe) {
+      console.error(`[Stripe:${requestId}] Stripe failed to load`);
       throw new StripeConfigError('Stripe failed to load. Please refresh the page and try again.');
     }
 
+    const startTime = Date.now();
     const { error } = await stripe.redirectToCheckout({
       sessionId,
     });
 
+    const redirectTime = Date.now() - startTime;
+    
     if (error) {
-      console.error('Stripe redirect error:', error);
+      console.error(`[Stripe:${requestId}] Redirect error:`, {
+        type: error.type,
+        message: error.message,
+        redirectTime: `${redirectTime}ms`
+      });
       
       // Handle specific Stripe errors
       if (error.type === 'invalid_request_error') {
@@ -182,8 +235,10 @@ export const redirectToCheckout = async (sessionId: string): Promise<void> => {
         throw new StripeNetworkError(error.message || 'Failed to redirect to payment page. Please try again.');
       }
     }
+
+    console.log(`[Stripe:${requestId}] Redirect initiated successfully in ${redirectTime}ms`);
   } catch (error) {
-    console.error('Error redirecting to checkout:', error);
+    console.error(`[Stripe:${requestId}] Error redirecting to checkout:`, error);
     throw error;
   }
 };
@@ -213,10 +268,18 @@ export const validateStripeConfiguration = (): { isValid: boolean; errors: strin
 };
 
 // Health check function for payment service
-export const checkPaymentServiceHealth = async (): Promise<{ isHealthy: boolean; latency?: number; error?: string }> => {
+export const checkPaymentServiceHealth = async (): Promise<{ 
+  isHealthy: boolean; 
+  latency?: number; 
+  error?: string;
+  details?: any;
+}> => {
   const startTime = Date.now();
+  const requestId = crypto.randomUUID().substring(0, 8);
   
   try {
+    console.log(`[Stripe:${requestId}] Checking payment service health`);
+    
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     if (!supabaseUrl) {
       return { isHealthy: false, error: 'Supabase URL not configured' };
@@ -226,24 +289,45 @@ export const checkPaymentServiceHealth = async (): Promise<{ isHealthy: boolean;
     const healthUrl = `${baseUrl}/functions/v1/create-checkout-session`;
 
     // Make a lightweight request to check if the service is responding
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     const response = await fetch(healthUrl, {
       method: 'OPTIONS',
-      signal: AbortSignal.timeout(5000) // 5 second timeout
+      signal: controller.signal,
+      headers: {
+        'X-Health-Check': 'true',
+        'X-Request-ID': requestId
+      }
     });
 
+    clearTimeout(timeoutId);
     const latency = Date.now() - startTime;
 
-    return {
+    const result = {
       isHealthy: response.status < 500,
       latency,
-      error: response.status >= 500 ? `Service error: ${response.status}` : undefined
+      error: response.status >= 500 ? `Service error: ${response.status}` : undefined,
+      details: {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      }
     };
+
+    console.log(`[Stripe:${requestId}] Health check completed:`, result);
+    return result;
+
   } catch (error) {
     const latency = Date.now() - startTime;
-    return {
+    const result = {
       isHealthy: false,
       latency,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
+      details: { error: error instanceof Error ? error.stack : String(error) }
     };
+
+    console.error(`[Stripe:${requestId}] Health check failed:`, result);
+    return result;
   }
 };
