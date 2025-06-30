@@ -229,44 +229,85 @@ const DonationSection: React.FC = () => {
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16 jango-airplay-package">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Jango Airplay Packages</h3>
           
-          {/* Updated image section with better error handling */}
+          {/* Updated image section with the attached chart */}
           <div className="bg-white rounded-2xl p-6 overflow-x-auto">
             <div className="min-w-[800px] flex items-center justify-center">
-              <div className="w-full max-w-4xl">
-                {/* Fallback content when image is not available */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-8 text-center">
+              <div className="w-full max-w-5xl">
+                <img 
+                  src="/src/assets/jango chart copy.png" 
+                  alt="Jango Airplay Package Pricing Chart showing Free, Intro ($10), Gold ($30), Platinum ($100), and Multi-Platinum ($250) packages with detailed features and monthly plays"
+                  className="w-full h-auto rounded-lg shadow-lg"
+                  style={{ 
+                    maxWidth: '100%',
+                    height: 'auto',
+                    objectFit: 'contain'
+                  }}
+                  onError={(e) => {
+                    console.error('Failed to load Jango chart image');
+                    // Fallback content if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) {
+                      fallback.style.display = 'block';
+                    }
+                  }}
+                />
+                
+                {/* Fallback content (hidden by default, shown if image fails) */}
+                <div className="hidden bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-8 text-center">
                   <h4 className="text-2xl font-bold text-gray-900 mb-6">Jango Airplay Package Options</h4>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                    <div className="bg-white rounded-lg p-6 shadow-md">
-                      <h5 className="font-bold text-lg text-blue-600 mb-3">Basic Package</h5>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• 1,000 plays per month</li>
-                        <li>• Basic analytics</li>
-                        <li>• Standard support</li>
-                        <li className="font-semibold text-blue-600">$25/month</li>
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-left">
+                    <div className="bg-gray-100 rounded-lg p-4 shadow-md">
+                      <h5 className="font-bold text-lg text-gray-600 mb-3">Free</h5>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li>• $0</li>
+                        <li>• 10 monthly plays*</li>
+                        <li>• 1 song upload</li>
+                        <li>• 1 week data access</li>
                       </ul>
                     </div>
                     
-                    <div className="bg-white rounded-lg p-6 shadow-md border-2 border-blue-500">
-                      <h5 className="font-bold text-lg text-blue-600 mb-3">Premium Package</h5>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• 5,000 plays per month</li>
-                        <li>• Advanced analytics</li>
-                        <li>• Priority support</li>
-                        <li>• Featured placement</li>
-                        <li className="font-semibold text-blue-600">$100/month</li>
+                    <div className="bg-purple-100 rounded-lg p-4 shadow-md">
+                      <h5 className="font-bold text-lg text-purple-600 mb-3">Intro</h5>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li>• $10</li>
+                        <li>• 200 monthly plays</li>
+                        <li>• 10 song uploads</li>
+                        <li>• All-time data access</li>
                       </ul>
                     </div>
                     
-                    <div className="bg-white rounded-lg p-6 shadow-md">
-                      <h5 className="font-bold text-lg text-blue-600 mb-3">Enterprise Package</h5>
-                      <ul className="space-y-2 text-gray-700">
-                        <li>• Unlimited plays</li>
-                        <li>• Full analytics suite</li>
-                        <li>• Dedicated support</li>
-                        <li>• Custom branding</li>
-                        <li className="font-semibold text-blue-600">$250/month</li>
+                    <div className="bg-yellow-100 rounded-lg p-4 shadow-md">
+                      <h5 className="font-bold text-lg text-yellow-600 mb-3">Gold</h5>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li>• $30</li>
+                        <li>• 600 monthly plays</li>
+                        <li>• 100 bonus plays</li>
+                        <li>• 20 song uploads</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-blue-100 rounded-lg p-4 shadow-md border-2 border-blue-500">
+                      <h5 className="font-bold text-lg text-blue-600 mb-3">Platinum</h5>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li>• $100</li>
+                        <li>• 2,000 monthly plays</li>
+                        <li>• 500 bonus plays</li>
+                        <li>• 30 song uploads</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-teal-100 rounded-lg p-4 shadow-md relative">
+                      <div className="absolute -top-2 -right-2 bg-teal-600 text-white text-xs px-2 py-1 rounded">Best Deal!</div>
+                      <h5 className="font-bold text-lg text-teal-600 mb-3">Multi-Platinum</h5>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li>• $250</li>
+                        <li>• 5,000 monthly plays</li>
+                        <li>• 1,250 bonus plays</li>
+                        <li>• Unlimited uploads</li>
+                        <li>• Concierge service</li>
                       </ul>
                     </div>
                   </div>
