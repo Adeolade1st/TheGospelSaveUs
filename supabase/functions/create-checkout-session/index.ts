@@ -64,11 +64,15 @@ serve(async (req) => {
         ministry: 'God Will Provide Outreach Ministry',
         ...metadata
       },
-      customer_creation: 'always',
       billing_address_collection: 'auto',
       phone_number_collection: {
         enabled: true
       }
+    }
+
+    // Only add customer_creation for payment mode (not subscription mode)
+    if (!isSubscription) {
+      sessionConfig.customer_creation = 'always'
     }
 
     // Create Stripe checkout session
