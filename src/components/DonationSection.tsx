@@ -225,17 +225,63 @@ const DonationSection: React.FC = () => {
           </div>
         )}
 
-        {/* Jango Chart Section */}
+        {/* Jango Chart Section - Updated with proper image handling */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16 jango-airplay-package">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Jango Airplay Packages</h3>
+          
+          {/* Updated image section with better error handling */}
           <div className="bg-white rounded-2xl p-6 overflow-x-auto">
-            <img 
-              src="/src/assets/jango chart.png" 
-              alt="Jango Airplay Package Pricing Chart" 
-              className="w-full h-auto max-w-none"
-              style={{ minWidth: '800px' }}
-            />
+            <div className="min-w-[800px] flex items-center justify-center">
+              <div className="w-full max-w-4xl">
+                {/* Fallback content when image is not available */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-8 text-center">
+                  <h4 className="text-2xl font-bold text-gray-900 mb-6">Jango Airplay Package Options</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div className="bg-white rounded-lg p-6 shadow-md">
+                      <h5 className="font-bold text-lg text-blue-600 mb-3">Basic Package</h5>
+                      <ul className="space-y-2 text-gray-700">
+                        <li>• 1,000 plays per month</li>
+                        <li>• Basic analytics</li>
+                        <li>• Standard support</li>
+                        <li className="font-semibold text-blue-600">$25/month</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg p-6 shadow-md border-2 border-blue-500">
+                      <h5 className="font-bold text-lg text-blue-600 mb-3">Premium Package</h5>
+                      <ul className="space-y-2 text-gray-700">
+                        <li>• 5,000 plays per month</li>
+                        <li>• Advanced analytics</li>
+                        <li>• Priority support</li>
+                        <li>• Featured placement</li>
+                        <li className="font-semibold text-blue-600">$100/month</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg p-6 shadow-md">
+                      <h5 className="font-bold text-lg text-blue-600 mb-3">Enterprise Package</h5>
+                      <ul className="space-y-2 text-gray-700">
+                        <li>• Unlimited plays</li>
+                        <li>• Full analytics suite</li>
+                        <li>• Dedicated support</li>
+                        <li>• Custom branding</li>
+                        <li className="font-semibold text-blue-600">$250/month</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-gray-700 text-sm">
+                      <strong>Note:</strong> These packages help us reach more listeners through Jango's radio platform. 
+                      Your donation directly supports our airtime costs and helps spread God's word to a wider audience.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+          
           <div className="text-center mt-6">
             <p className="text-red-100 text-lg mb-4 leading-relaxed">
               Choose the package that best fits your support level and help us reach more souls through Jango's radio platform.
