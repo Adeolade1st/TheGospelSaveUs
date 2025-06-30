@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import PaymentButton from './PaymentButton';
@@ -64,9 +64,16 @@ const DonationSection: React.FC = () => {
   const handleCustomAmountSubmit = () => {
     const amount = parseFloat(customAmount);
     if (amount && amount > 0) {
+      // The PaymentButton will handle the actual payment processing
+      // We just need to close the modal after the payment is initiated
       setShowCustomAmount(false);
       setCustomAmount('');
     }
+  };
+
+  const handleCustomAmountCancel = () => {
+    setShowCustomAmount(false);
+    setCustomAmount('');
   };
 
   return (
@@ -152,7 +159,16 @@ const DonationSection: React.FC = () => {
         {/* Custom Amount Modal */}
         {showCustomAmount && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative">
+              {/* Close button */}
+              <button
+                onClick={handleCustomAmountCancel}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label="Close modal"
+              >
+                <X size={24} />
+              </button>
+
               <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Enter Custom Amount</h3>
               <div className="mb-6">
                 <label htmlFor="customAmount" className="block text-sm font-medium text-gray-700 mb-2">
@@ -169,20 +185,21 @@ const DonationSection: React.FC = () => {
                     min="1"
                     step="0.01"
                     className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+                    autoFocus
                   />
                 </div>
+                {customAmount && parseFloat(customAmount) < 1 && (
+                  <p className="mt-2 text-sm text-red-600">Minimum donation amount is $1.00</p>
+                )}
               </div>
               <div className="flex gap-4">
                 <button
-                  onClick={() => {
-                    setShowCustomAmount(false);
-                    setCustomAmount('');
-                  }}
+                  onClick={handleCustomAmountCancel}
                   className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
                 >
                   Cancel
                 </button>
-                {parseFloat(customAmount) > 0 ? (
+                {parseFloat(customAmount) >= 1 ? (
                   <PaymentButton
                     amount={parseFloat(customAmount)}
                     description={`Custom donation of $${customAmount}`}
