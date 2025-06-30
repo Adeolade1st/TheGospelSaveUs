@@ -152,6 +152,16 @@ const Header: React.FC = () => {
                         </button>
                         <button
                           onClick={() => {
+                            window.location.href = '/settings';
+                            setIsUserDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2"
+                        >
+                          <Settings size={16} />
+                          <span>Settings</span>
+                        </button>
+                        <button
+                          onClick={() => {
                             window.location.href = '/admin';
                             setIsUserDropdownOpen(false);
                           }}
@@ -246,6 +256,15 @@ const Header: React.FC = () => {
 
                 {user && (
                   <div className="pt-4 space-y-2">
+                    <button
+                      onClick={() => {
+                        window.location.href = '/settings';
+                        setIsMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
+                    >
+                      Profile Settings
+                    </button>
                     <button
                       onClick={() => {
                         window.location.href = '/admin';

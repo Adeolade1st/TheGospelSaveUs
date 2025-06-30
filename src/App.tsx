@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage';
+import UserProfilePage from './pages/UserProfilePage';
 import AdminPage from './pages/AdminPage';
 import SuccessPage from './pages/SuccessPage';
 import StripeTestPage from './pages/StripeTestPage';
@@ -36,6 +37,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <UserProfilePage />
                 </ProtectedRoute>
               } 
             />
