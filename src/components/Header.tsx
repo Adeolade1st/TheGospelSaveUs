@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Menu, X, Globe, ChevronDown, User, LogOut, Settings } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import { usePermissions } from '../hooks/usePermissions';
 import { languages } from '../data/languages';
 import { translations } from '../data/translations';
 import AuthModal from './auth/AuthModal';
+import PermissionGate from './auth/PermissionGate';
+import { PERMISSIONS } from '../utils/rbac';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +18,7 @@ const Header: React.FC = () => {
   
   const { currentLanguage, setCurrentLanguage } = useLanguage();
   const { user, signOut } = useAuth();
+  const { canAccessAdminDashboard } = usePermissions();
 
   const t = translations[currentLanguage.code];
 
@@ -161,16 +165,7 @@ const Header: React.FC = () => {
                           </p>
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
-                        <button
-                          onClick={() => {
-                            window.location.href = '/profile';
-                            setIsUserDropdownOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2"
-                        >
-                          <User size={16} />
-                          <span>Profile</span>
-                        </button>
+                        
                         <button
                           onClick={() => {
                             window.location.href = '/settings';
@@ -181,16 +176,21 @@ const Header: React.FC = () => {
                           <Settings size={16} />
                           <span>Settings</span>
                         </button>
-                        <button
-                          onClick={() => {
-                            window.location.href = '/admin';
-                            setIsUserDropdownOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2"
-                        >
-                          <Settings size={16} />
-                          <span>Admin</span>
-                        </button>
+                        
+                        {/* Admin Dashboard Link - Only show if user has admin permissions */}
+                        <PermissionGate permission={PERMISSIONS.ADMIN_DASHBOARD_ACCESS}>
+                          <button
+                            onClick={() => {
+                              window.location.href = '/admin';
+                              setIsUserDropdownOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2"
+                          >
+                            <Settings size={16} />
+                            <span>Admin Dashboard</span>
+                          </button>
+                        </PermissionGate>
+                        
                         <button
                           onClick={handleSignOut}
                           className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2"
@@ -288,15 +288,19 @@ const Header: React.FC = () => {
                     >
                       Profile Settings
                     </button>
-                    <button
-                      onClick={() => {
-                        window.location.href = '/admin';
-                        setIsMenuOpen(false);
-                      }}
-                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
-                    >
-                      Admin Dashboard
-                    </button>
+                    
+                    {/* Admin Dashboard Link for Mobile - Only show if user has admin permissions */}
+                    <PermissionGate permission={PERMISSIONS.ADMIN_DASHBOARD_ACCESS}>
+                      <button
+                        onClick={() => {
+                          window.location.href = '/admin';
+                          setIsMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
+                      >
+                        Admin Dashboard
+                      </button>
+                    </PermissionGate>
                   </div>
                 )}
                 

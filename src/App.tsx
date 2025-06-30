@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AdminRoute from './components/auth/AdminRoute';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -48,13 +49,11 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Admin Routes - Protected with RBAC */}
             <Route 
               path="/admin" 
-              element={
-                <ProtectedRoute>
-                  <AdminPage />
-                </ProtectedRoute>
-              } 
+              element={<AdminPage />}
             />
           </Routes>
         </Router>
