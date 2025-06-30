@@ -4,7 +4,7 @@ export const translations = {
     home: 'Home',
     content: 'Content',
     donate: 'Donate',
-    about: 'About',
+    about: 'About Us',
     contact: 'Contact',
     
     // Hero Section
@@ -52,7 +52,7 @@ export const translations = {
     tier3Impact: 'Reaches approximately 5,000 souls monthly',
     
     // About Section
-    aboutTitle: 'Our Ministry',
+    aboutTitle: 'About Us',
     missionTitle: 'Our Mission',
     missionText: 'To reach every heart in Nigeria and beyond with the transforming power of God\'s word through culturally relevant spoken word ministry in native languages.',
     
@@ -119,7 +119,7 @@ export const translations = {
     monthlyDonors: 'Awọn Oluranlọwọ Oṣooṣu',
     
     // About Section
-    aboutTitle: 'Iṣẹ Wa',
+    aboutTitle: 'Nipa Wa',
     missionTitle: 'Iṣẹ Apinfunni Wa',
     missionText: 'Lati de ọdọ gbogbo ọkan ni Naijiria ati beyond pẹlu agbara ọrọ Ọlọrun ti o le yipada nipa iṣẹ ọrọ ti a sọ ti o baamu aṣa ni awọn ede abinibi.',
     
@@ -155,7 +155,7 @@ export const translations = {
     monthlyDonors: 'Ndị Na-enye Onyinye Kwa Ọnwa',
     
     // About Section
-    aboutTitle: 'Ozi Anyị',
+    aboutTitle: 'Maka Anyị',
     missionTitle: 'Ozi Anyị',
     missionText: 'Iru obi ọ bụla nọ na Naịjirịa na n\'ofe ebe ahụ aka site n\'ike na-agbanwe nke okwu Chineke site n\'ozi okwu a na-ekwu nke dabara na omenala n\'asụsụ obodo.',
     
@@ -191,7 +191,7 @@ export const translations = {
     monthlyDonors: 'Masu Ba da Gudummawa Kowane Wata',
     
     // About Section
-    aboutTitle: 'Aikinmu',
+    aboutTitle: 'Game da Mu',
     missionTitle: 'Manufarmu',
     missionText: 'Don kai ga kowane zuciya a Najeriya da bayan haka tare da ikon canza na kalmar Allah ta hanyar aikin kalmar da aka faɗa wanda ya dace da al\'ada a harsunan gida.',
     

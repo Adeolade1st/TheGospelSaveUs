@@ -40,6 +40,27 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleNavClick = (href: string) => {
+    if (href === '#contact') {
+      // Scroll to footer
+      const footer = document.querySelector('footer');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Handle other navigation normally
+      const element = document.querySelector(href);
+      if (element) {
+        const headerHeight = 64; // Account for fixed header
+        const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg z-50">
@@ -61,13 +82,13 @@ const Header: React.FC = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
-                <a
+                <button
                   key={item.key}
-                  href={item.href}
+                  onClick={() => handleNavClick(item.href)}
                   className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
                 >
                   {t[item.key as keyof typeof t]}
-                </a>
+                </button>
               ))}
             </nav>
 
@@ -199,12 +220,12 @@ const Header: React.FC = () => {
               )}
 
               {/* Donate Button */}
-              <a
-                href="#donate"
+              <button
+                onClick={() => handleNavClick('#donate')}
                 className="hidden sm:inline-flex bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
               >
                 {t.donateNow}
-              </a>
+              </button>
 
               {/* Mobile Menu Button */}
               <button
@@ -221,14 +242,16 @@ const Header: React.FC = () => {
             <div className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
                 {navItems.map((item) => (
-                  <a
+                  <button
                     key={item.key}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
+                    onClick={() => {
+                      handleNavClick(item.href);
+                      setIsMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
                   >
                     {t[item.key as keyof typeof t]}
-                  </a>
+                  </button>
                 ))}
                 
                 {!user && (
@@ -277,13 +300,15 @@ const Header: React.FC = () => {
                   </div>
                 )}
                 
-                <a
-                  href="#donate"
-                  onClick={() => setIsMenuOpen(false)}
+                <button
+                  onClick={() => {
+                    handleNavClick('#donate');
+                    setIsMenuOpen(false);
+                  }}
                   className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-md font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 mt-4"
                 >
                   {t.donateNow}
-                </a>
+                </button>
               </div>
             </div>
           )}
