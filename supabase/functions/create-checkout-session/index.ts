@@ -67,7 +67,7 @@ serve(async (req) => {
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16',
-      timeout: 15000, // 15 second timeout for Stripe API calls
+      timeout: 10000, // 10 second timeout for Stripe API calls
       maxNetworkRetries: 1, // Reduced retries for faster failure
     })
 
@@ -168,7 +168,7 @@ serve(async (req) => {
     // Get origin for redirect URLs with fallback
     const origin = req.headers.get('origin') || 
                    req.headers.get('referer')?.split('/').slice(0, 3).join('/') || 
-                   'https://localhost:5173';
+                   'http://localhost:5173';
 
     console.log(`[${requestId}] Using origin for redirects: ${origin}`);
 

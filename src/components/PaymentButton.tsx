@@ -31,7 +31,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   metadata = {},
   onClick,
   maxRetries = 2,
-  timeoutMs = 15000, // Reduced to 15 seconds for faster feedback
+  timeoutMs = 10000, // Reduced to 10 seconds for faster feedback
   disabled = false
 }) => {
   const [state, setState] = useState<PaymentState>({
@@ -165,15 +165,6 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     return { isValid: true };
   }, [amount, description]);
 
-  const createTimeoutHandler = useCallback((timeoutMs: number) => {
-    return new Promise<never>((_, reject) => {
-      timeoutRef.current = setTimeout(() => {
-        logPaymentEvent('payment_timeout', { timeoutMs });
-        reject(new Error('PAYMENT_TIMEOUT'));
-      }, timeoutMs);
-    });
-  }, [logPaymentEvent]);
-
   const attemptPayment = useCallback(async (): Promise<void> => {
     // Create new abort controller for this attempt
     abortControllerRef.current = new AbortController();
@@ -188,33 +179,26 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
 
     updateState({ phase: 'creating-session' });
     
-    const sessionPromise = createCheckoutSession({
-      amount: amount * 100, // Convert to cents
-      currency: 'usd',
-      description,
-      metadata: {
-        ...metadata,
-        ministry: 'God Will Provide Outreach Ministry',
-        type: amount >= 100 ? 'monthly_donation' : 'one_time_donation',
-        attempt: (state.retryCount + 1).toString(),
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent.substring(0, 100)
-      }
-    }, {
-      timeout: timeoutMs - 2000, // Leave 2 seconds for redirect
-      retryCount: state.retryCount
-    });
-
-    const timeoutPromise = createTimeoutHandler(timeoutMs);
-
     try {
-      // Race between session creation and timeout
-      const session = await Promise.race([sessionPromise, timeoutPromise]);
-      
-      // Clear timeout since we got a response
-      cleanup();
+      // Create checkout session with timeout
+      const session = await createCheckoutSession({
+        amount: amount * 100, // Convert to cents
+        currency: 'usd',
+        description,
+        metadata: {
+          ...metadata,
+          ministry: 'God Will Provide Outreach Ministry',
+          type: amount >= 100 ? 'monthly_donation' : 'one_time_donation',
+          attempt: (state.retryCount + 1).toString(),
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent.substring(0, 100)
+        }
+      }, {
+        timeout: timeoutMs - 2000, // Leave 2 seconds for redirect
+        retryCount: state.retryCount
+      });
 
-      if (!session || !session.id) {
+      if (!session || !session.id || !session.url) {
         throw new Error('Invalid session response from payment service');
       }
 
@@ -239,7 +223,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       cleanup();
       
       if (error instanceof Error) {
-        if (error.message === 'PAYMENT_TIMEOUT') {
+        if (error.message.includes('timeout') || error.message.includes('timed out')) {
           throw new Error('Payment request timed out. Please check your connection and try again.');
         }
         
@@ -257,7 +241,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       
       throw new Error('An unexpected error occurred during payment processing.');
     }
-  }, [amount, description, metadata, state.retryCount, timeoutMs, validatePaymentData, createTimeoutHandler, cleanup, updateState, logPaymentEvent]);
+  }, [amount, description, metadata, state.retryCount, timeoutMs, validatePaymentData, cleanup, updateState, logPaymentEvent]);
 
   const handlePayment = useCallback(async () => {
     const now = Date.now();

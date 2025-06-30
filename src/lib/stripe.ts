@@ -39,7 +39,7 @@ export const createCheckoutSession = async (priceData: {
   timeout?: number;
   retryCount?: number;
 } = {}): Promise<{ id: string; url: string; mode?: string }> => {
-  const { timeout = 12000, retryCount = 0 } = options; // Reduced timeout to 12 seconds
+  const { timeout = 10000, retryCount = 0 } = options; // Reduced to 10 seconds
   const requestId = crypto.randomUUID().substring(0, 8);
 
   try {
@@ -51,6 +51,10 @@ export const createCheckoutSession = async (priceData: {
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new StripeConfigError('Supabase configuration missing');
+    }
 
     // Validate price data
     if (!priceData.amount || priceData.amount <= 0) {
@@ -66,14 +70,15 @@ export const createCheckoutSession = async (priceData: {
     }
 
     // Ensure the URL is properly formatted
-    const baseUrl = supabaseUrl!.endsWith('/') ? supabaseUrl!.slice(0, -1) : supabaseUrl;
+    const baseUrl = supabaseUrl.endsWith('/') ? supabaseUrl.slice(0, -1) : supabaseUrl;
     const functionUrl = `${baseUrl}/functions/v1/create-checkout-session`;
 
     console.log(`[Stripe:${requestId}] Creating checkout session:`, {
       amount: priceData.amount,
       description: priceData.description.substring(0, 50),
       retryCount,
-      timeout
+      timeout,
+      functionUrl
     });
 
     // Create abort controller for timeout handling
@@ -122,8 +127,11 @@ export const createCheckoutSession = async (priceData: {
         let errorData: any = {};
         
         try {
-          errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
+          const responseText = await response.text();
+          if (responseText) {
+            errorData = JSON.parse(responseText);
+            errorMessage = errorData.error || errorMessage;
+          }
         } catch {
           // If we can't parse the error response, use the default message
         }
@@ -146,12 +154,22 @@ export const createCheckoutSession = async (priceData: {
         }
       }
 
-      const session = await response.json();
+      const responseText = await response.text();
+      if (!responseText) {
+        throw new StripeValidationError('Empty response from payment service');
+      }
+
+      const session = JSON.parse(responseText);
       
       // Validate response structure
       if (!session || !session.id) {
         console.error(`[Stripe:${requestId}] Invalid response:`, session);
         throw new StripeValidationError('Invalid response from payment service: missing session ID');
+      }
+
+      if (!session.url) {
+        console.error(`[Stripe:${requestId}] Missing checkout URL:`, session);
+        throw new StripeValidationError('Invalid response from payment service: missing checkout URL');
       }
 
       console.log(`[Stripe:${requestId}] Session created successfully:`, {
