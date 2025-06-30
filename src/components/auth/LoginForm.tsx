@@ -87,7 +87,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
             </label>
             <div className="relative">
@@ -100,7 +100,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
                   validate: (value) => validateEmail(value) || 'Please enter a valid email address'
                 })}
                 type="email"
-                id="email"
+                id="login-email"
+                name="email"
+                autoComplete="email"
                 className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
@@ -115,7 +117,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
           {/* Password Field */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
             <div className="relative">
@@ -127,7 +129,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
                   required: 'Password is required'
                 })}
                 type={showPassword ? 'text' : 'password'}
-                id="password"
+                id="login-password"
+                name="password"
+                autoComplete="current-password"
                 className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
@@ -139,6 +143,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />

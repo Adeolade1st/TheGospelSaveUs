@@ -115,7 +115,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Full Name Field */}
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="register-fullName" className="block text-sm font-medium text-gray-700 mb-2">
               Full Name
             </label>
             <div className="relative">
@@ -135,7 +135,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
                   }
                 })}
                 type="text"
-                id="fullName"
+                id="register-fullName"
+                name="fullName"
+                autoComplete="name"
                 className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.fullName ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
@@ -150,7 +152,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
 
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="register-email" className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
             </label>
             <div className="relative">
@@ -163,7 +165,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
                   validate: (value) => validateEmail(value) || 'Please enter a valid email address'
                 })}
                 type="email"
-                id="email"
+                id="register-email"
+                name="email"
+                autoComplete="email"
                 className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
@@ -178,7 +182,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
 
           {/* Password Field */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="register-password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
             <div className="relative">
@@ -194,7 +198,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
                   }
                 })}
                 type={showPassword ? 'text' : 'password'}
-                id="password"
+                id="register-password"
+                name="password"
+                autoComplete="new-password"
                 className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
@@ -207,6 +213,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
@@ -256,7 +263,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
 
           {/* Confirm Password Field */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="register-confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
               Confirm Password
             </label>
             <div className="relative">
@@ -269,7 +276,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
                   validate: (value) => value === password || 'Passwords do not match'
                 })}
                 type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
+                id="register-confirmPassword"
+                name="confirmPassword"
+                autoComplete="new-password"
                 className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}
@@ -281,6 +290,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onSuccess 
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 disabled={isLoading}
+                aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />

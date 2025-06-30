@@ -81,7 +81,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSwitchToLogin
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
             </label>
             <div className="relative">
@@ -94,7 +94,9 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSwitchToLogin
                   validate: (value) => validateEmail(value) || 'Please enter a valid email address'
                 })}
                 type="email"
-                id="email"
+                id="forgot-email"
+                name="email"
+                autoComplete="email"
                 className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors ${
                   errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
                 }`}

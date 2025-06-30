@@ -237,6 +237,12 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
             aria-valuenow={currentTime}
             aria-label="Audio progress"
             tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handlePlayPause();
+              }
+            }}
           >
             <div 
               className={`h-full bg-gradient-to-r ${gradient} transition-all duration-100 ease-out`}
@@ -298,6 +304,8 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
             disabled={isLoading || !!error}
             className="flex-1 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50"
             aria-label="Volume control"
+            id={`volume-${language}`}
+            name={`volume-${language}`}
           />
           
           <span className="text-xs text-gray-500 w-8 text-right">
