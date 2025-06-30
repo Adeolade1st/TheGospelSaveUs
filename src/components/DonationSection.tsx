@@ -59,6 +59,31 @@ const DonationSection: React.FC = () => {
     }
   ];
 
+  // Jango Airplay Package Data (since image is not displaying properly)
+  const jangoPackages = [
+    {
+      name: "Basic Package",
+      price: "$25",
+      plays: "1,000 plays",
+      duration: "30 days",
+      features: ["Basic analytics", "Standard support"]
+    },
+    {
+      name: "Premium Package", 
+      price: "$100",
+      plays: "5,000 plays",
+      duration: "30 days",
+      features: ["Advanced analytics", "Priority support", "Featured placement"]
+    },
+    {
+      name: "Professional Package",
+      price: "$250", 
+      plays: "15,000 plays",
+      duration: "30 days",
+      features: ["Premium analytics", "24/7 support", "Top placement", "Custom reporting"]
+    }
+  ];
+
   return (
     <section id="donate" className="py-15 bg-gradient-to-br from-red-900 via-red-800 to-amber-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,18 +168,50 @@ const DonationSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Jango Chart Section */}
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16 jango-airplay-package">
+        {/* Jango Airplay Packages Section - Fixed */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Jango Airplay Packages</h3>
-          <div className="bg-white rounded-2xl p-6 overflow-x-auto">
-            <img 
-              src="/src/assets/jango chart.png" 
-              alt="Jango Airplay Package Pricing Chart" 
-              className="w-full h-auto max-w-none"
-              style={{ minWidth: '800px' }}
-            />
+          
+          {/* Responsive Package Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {jangoPackages.map((pkg, index) => (
+              <div key={index} className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="text-center mb-4">
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">{pkg.name}</h4>
+                  <div className="text-3xl font-bold text-red-600 mb-1">{pkg.price}</div>
+                  <div className="text-gray-600 text-sm">{pkg.duration}</div>
+                </div>
+                
+                <div className="text-center mb-4">
+                  <div className="text-lg font-semibold text-gray-900">{pkg.plays}</div>
+                  <div className="text-sm text-gray-600">guaranteed plays</div>
+                </div>
+                
+                <div className="space-y-2">
+                  {pkg.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="flex items-center space-x-2">
+                      <Check className="text-green-500 flex-shrink-0" size={16} />
+                      <span className="text-sm text-gray-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                <PaymentButton
+                  amount={parseInt(pkg.price.replace('$', '')) * 100}
+                  description={`Jango Airplay - ${pkg.name}`}
+                  metadata={{
+                    type: 'jango_airplay',
+                    package: pkg.name
+                  }}
+                  className="w-full mt-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200"
+                >
+                  <span>Select Package</span>
+                </PaymentButton>
+              </div>
+            ))}
           </div>
-          <div className="text-center mt-6">
+          
+          <div className="text-center">
             <p className="text-red-100 text-lg mb-4 leading-relaxed">
               Choose the package that best fits your support level and help us reach more souls through Jango's radio platform.
             </p>
