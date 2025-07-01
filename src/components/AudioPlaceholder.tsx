@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2 } from 'lucide-react';
-import AudioDownloadButton from './AudioDownloadButton';
+import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2, ShoppingCart, Download } from 'lucide-react';
+import PaymentButton from './PaymentButton';
 
 interface AudioPlaceholderProps {
   language: string;
@@ -271,21 +271,13 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
 
           <div className="flex items-center space-x-3">
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              Audio Sample
+              Full Audio Track
             </span>
-            <a
-              href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
-            >
-              Full Collection →
-            </a>
           </div>
         </div>
 
         {/* Volume Control */}
-        <div className="flex items-center space-x-3 mb-4">
+        <div className="flex items-center space-x-3 mb-6">
           <button 
             onClick={toggleMute}
             disabled={isLoading || !!error}
@@ -314,17 +306,35 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
           </span>
         </div>
 
-        {/* Download Button */}
-        <div className="border-t pt-4">
-          <AudioDownloadButton
-            audioUrl={audioUrl}
-            title={sampleTitle}
-            artist={artist}
-            language={nativeName}
-            variant="primary"
-            className="w-full"
-            showProgress={true}
-          />
+        {/* Download Options */}
+        <div className="border-t pt-4 space-y-3">
+          {/* $1 Download Button with Stripe */}
+          <PaymentButton
+            amount={1}
+            description={`Download "${sampleTitle}" by ${artist}`}
+            metadata={{
+              type: 'audio_download',
+              title: sampleTitle,
+              artist: artist,
+              language: nativeName,
+              audioUrl: audioUrl
+            }}
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+          >
+            <Download size={16} />
+            <span>$1 Download</span>
+          </PaymentButton>
+
+          {/* Download on Amazon Button */}
+          <a
+            href="https://amazon.com/music"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+          >
+            <ShoppingCart size={16} />
+            <span>Download on Amazon</span>
+          </a>
         </div>
 
         {/* Loading indicator */}

@@ -18,8 +18,7 @@ const SpokenWordSection: React.FC = () => {
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Eyin rere',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      artist: 'Janet Olaitan'
+      artist: 'Janet Olufunke Olaitan'
     },
     {
       language: 'Igbo',
@@ -29,8 +28,7 @@ const SpokenWordSection: React.FC = () => {
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Igbo.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
-      artist: 'Minister Susan Collins'
+      artist: 'Susan Chinyere Collins'
     },
     {
       language: 'Hausa',
@@ -40,8 +38,7 @@ const SpokenWordSection: React.FC = () => {
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari mai dadi',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      artist: 'Isaac O. Samuel'
+      artist: 'Isaac Olamide Samson'
     },
     {
       language: 'English',
@@ -49,9 +46,8 @@ const SpokenWordSection: React.FC = () => {
       description: 'International language',
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
-      sampleTitle: 'Transformed by Grace',
+      sampleTitle: 'The Good News',
       audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
-      jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
       artist: 'Evangelist Birdie Jones'
     }
   ];
@@ -98,7 +94,7 @@ const SpokenWordSection: React.FC = () => {
               Browse by Language
             </h3>
             <p className="text-gray-600 text-lg">
-              Listen to audio samples in Nigerian languages and English
+              Listen to audio content in Nigerian languages and English
             </p>
           </div>
           
@@ -163,15 +159,15 @@ const SpokenWordSection: React.FC = () => {
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span><strong>Igbo:</strong> Minister Susan Collins</span>
+                    <span><strong>Igbo:</strong> Susan Chinyere Collins</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span><strong>Yoruba:</strong> Janet Olaitan</span>
+                    <span><strong>Yoruba:</strong> Janet Olufunke Olaitan</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span><strong>Hausa:</strong> Isaac O. Samuel</span>
+                    <span><strong>Hausa:</strong> Isaac Olamide Samson</span>
                   </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-blue-200">
@@ -190,19 +186,10 @@ const SpokenWordSection: React.FC = () => {
               </h3>
               <p className="text-gray-600 mb-8 leading-relaxed text-lg">
                 These are full-length audio messages optimized for streaming and download. 
-                For our complete collection and continuous streaming, visit our Jango Radio page 
-                where you can discover more transformative content.
+                Support our ministry by purchasing your favorite tracks for just $1 each, 
+                or find our complete collection on Amazon Music.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                >
-                  <Music size={20} />
-                  <span>Explore Full Collection</span>
-                </a>
                 <a
                   href="/gallery"
                   className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
@@ -238,7 +225,7 @@ const SpokenWordSection: React.FC = () => {
             </p>
             <div className="text-center">
               <a
-                href="https://amazon.com"
+                href="https://amazon.com/music"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-orange-600 font-bold text-lg rounded-full hover:bg-orange-50 transform hover:scale-105 transition-all duration-300 shadow-lg"
@@ -248,29 +235,32 @@ const SpokenWordSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Jango Music Player Section */}
-          <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-3xl shadow-2xl p-8 text-white transform hover:scale-105 transition-all duration-300">
+          {/* Direct Download Section */}
+          <div className="bg-gradient-to-br from-green-600 to-emerald-600 rounded-3xl shadow-2xl p-8 text-white transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center justify-center mb-8">
               <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                 <Music className="w-10 h-10 text-white" />
               </div>
             </div>
             <h3 className="text-2xl font-bold text-center mb-4">
-              Stream on Jango Radio
+              Instant $1 Downloads
             </h3>
-            <p className="text-purple-100 text-center mb-8 leading-relaxed text-lg">
-              Experience continuous streaming of Pure Gold Gospel Singers on Jango's innovative radio platform
+            <p className="text-green-100 text-center mb-8 leading-relaxed text-lg">
+              Get immediate access to your favorite tracks with our secure payment system
             </p>
             <div className="text-center">
-              <a
-                href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-purple-600 font-bold text-lg rounded-full hover:bg-purple-50 transform hover:scale-105 transition-all duration-300 shadow-lg"
+              <button
+                onClick={() => {
+                  const audioSection = document.getElementById('browse-by-language');
+                  if (audioSection) {
+                    audioSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-green-600 font-bold text-lg rounded-full hover:bg-green-50 transform hover:scale-105 transition-all duration-300 shadow-lg"
               >
                 <Music className="w-5 h-5 mr-3" />
-                Listen on Jango
-              </a>
+                Browse Tracks
+              </button>
             </div>
           </div>
         </div>
