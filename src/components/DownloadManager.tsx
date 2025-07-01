@@ -30,65 +30,58 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
   const [isVerifying, setIsVerifying] = useState(true);
 
   useEffect(() => {
-    // Verify the payment and get download token
-    const verifyPayment = async () => {
+    // Get download token from the database
+    const getDownloadToken = async () => {
       setIsVerifying(true);
       try {
-        // In a real implementation, you would verify the payment with Stripe
-        // and generate a secure download token
-        console.log(`Verifying payment for session: ${sessionId}`);
+        console.log(`Checking download token for session: ${sessionId}`);
         
-        // Simulate API call to verify payment
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Check if payment was successful
+        // Query the download_tokens table directly
         const { data, error } = await supabase
-          .from('donations')
+          .from('download_tokens')
           .select('*')
           .eq('stripe_session_id', sessionId)
-          .eq('status', 'completed')
           .single();
         
         if (error) {
-          console.error('Error verifying payment:', error);
-          setError('Payment verification failed. Please contact support.');
+          console.error('Error fetching download token:', error);
+          setError('Unable to verify your purchase. Please contact support.');
           return;
         }
         
-        if (!data) {
-          setError('Payment not found or not completed. Please try again.');
-          return;
+        if (data) {
+          console.log('Download token found:', data);
+          setDownloadToken(data.id);
+          setExpiryDate(new Date(data.expires_at));
+          setDownloadCount(data.download_count);
+          setMaxDownloads(data.max_downloads);
+        } else {
+          console.log('No download token found, creating one...');
+          // In a real implementation, you would create a token here
+          // For this example, we'll just simulate it
+          const token = `dl_${crypto.randomUUID().substring(0, 16)}`;
+          setDownloadToken(token);
+          
+          // Set expiry date (7 days from now)
+          const expiry = new Date();
+          expiry.setDate(expiry.getDate() + 7);
+          setExpiryDate(expiry);
         }
-        
-        // Generate download token
-        const token = `dl_${crypto.randomUUID().substring(0, 16)}`;
-        setDownloadToken(token);
-        
-        // Set expiry date (7 days from now)
-        const expiry = new Date();
-        expiry.setDate(expiry.getDate() + 7);
-        setExpiryDate(expiry);
-        
-        // Set download count
-        setDownloadCount(0);
-        
-        // In a real implementation, you would store this token in your database
-        // and associate it with the user and the purchased audio
-        
       } catch (err) {
-        console.error('Error verifying payment:', err);
-        setError('Failed to verify payment. Please contact support.');
+        console.error('Error getting download token:', err);
+        setError('Failed to verify your purchase. Please try again later.');
       } finally {
         setIsVerifying(false);
       }
     };
     
     if (sessionId) {
-      verifyPayment();
+      getDownloadToken();
     } else {
       setIsVerifying(false);
+      setError('No session ID provided. Unable to verify purchase.');
     }
-  }, [sessionId, email, trackId]);
+  }, [sessionId]);
 
   const handleDownload = async () => {
     if (downloadCount >= maxDownloads) {
@@ -149,9 +142,24 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
   };
 
   const logDownload = async () => {
+    if (!downloadToken) return;
+    
     try {
-      // In a real implementation, you would log the download in your database
-      const { error } = await supabase
+      // Update download count in the database
+      const { error: updateError } = await supabase
+        .from('download_tokens')
+        .update({
+          download_count: downloadCount + 1,
+          last_downloaded_at: new Date().toISOString()
+        })
+        .eq('id', downloadToken);
+      
+      if (updateError) {
+        console.error('Error updating download count:', updateError);
+      }
+      
+      // Log the download
+      const { error: logError } = await supabase
         .from('download_logs')
         .insert({
           token_id: downloadToken,
@@ -161,8 +169,8 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
           user_agent: navigator.userAgent.substring(0, 255)
         });
 
-      if (error) {
-        console.error('Error logging download:', error);
+      if (logError) {
+        console.error('Error logging download:', logError);
       }
     } catch (err) {
       console.error('Error logging download:', err);
