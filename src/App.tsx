@@ -22,7 +22,7 @@ function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
-        <Router>
+        <Router future={{ v7_startTransition: true }}>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
