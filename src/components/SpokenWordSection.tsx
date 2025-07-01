@@ -17,7 +17,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Eyin rere',
-      audioUrl: '/yoruba.mp3',
+      audioUrl: '/Yoruba version of The Gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
       artist: 'Janet Olaitan'
     },
@@ -28,7 +28,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
-      audioUrl: '/igbo.mp3',
+      audioUrl: '/Ibo version of The Gospel-1.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       artist: 'Minister Susan Collins'
     },
@@ -39,7 +39,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari mai dadi',
-      audioUrl: '/hausa.mp3',
+      audioUrl: '/Hausa version of The Gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
       artist: 'Isaac O. Samuel'
     },
