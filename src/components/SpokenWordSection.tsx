@@ -50,7 +50,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
-      audioUrl: '/english.mp3',
+      audioUrl: '/English.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
       artist: 'Evangelist Birdie Jones'
     }
