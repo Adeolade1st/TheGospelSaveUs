@@ -61,6 +61,26 @@ export class AudioValidator {
         return result;
       }
 
+      // For local files, we need special handling
+      if (url.startsWith('/')) {
+        console.log('🏠 Local file detected:', url);
+        
+        // Check if URL appears to be MP3
+        const isMP3Url = url.toLowerCase().endsWith('.mp3');
+        result.fileInfo.isMP3 = isMP3Url;
+        
+        if (!isMP3Url) {
+          result.warnings.push('URL does not appear to be an MP3 file');
+        }
+        
+        // For local files, we'll assume they exist but add a warning
+        result.fileInfo.exists = true;
+        result.warnings.push('Local file: existence assumed but not verified');
+        result.isValid = true;
+        
+        return result;
+      }
+
       // Check if URL appears to be MP3
       const isMP3Url = url.toLowerCase().includes('.mp3') || 
                        url.includes('audio/mpeg') || 
@@ -259,21 +279,29 @@ export class AudioValidator {
     const info = browserInfo || this.getBrowserInfo();
 
     // Network-related errors
-    if (error.includes('network') || error.includes('fetch') || error.includes('404')) {
+    if (error.toLowerCase().includes('network') || 
+        error.toLowerCase().includes('fetch') || 
+        error.toLowerCase().includes('404') ||
+        error.toLowerCase().includes('not found')) {
       steps.push('Check your internet connection');
       steps.push('Try refreshing the page');
-      steps.push('Verify the audio file URL is correct');
+      steps.push('Verify the audio file exists');
     }
 
     // Format/codec errors
-    if (error.includes('format') || error.includes('codec') || error.includes('decode')) {
+    if (error.toLowerCase().includes('format') || 
+        error.toLowerCase().includes('codec') || 
+        error.toLowerCase().includes('decode') ||
+        error.toLowerCase().includes('not supported')) {
       steps.push('Try using a different browser (Chrome, Firefox, Safari)');
       steps.push('Update your browser to the latest version');
       steps.push('Download the MP3 file to play locally');
     }
 
     // Permission/access errors
-    if (error.includes('403') || error.includes('forbidden') || error.includes('access')) {
+    if (error.toLowerCase().includes('403') || 
+        error.toLowerCase().includes('forbidden') || 
+        error.toLowerCase().includes('access')) {
       steps.push('You may not have permission to access this file');
       steps.push('Try logging in again');
       steps.push('Contact support for assistance');

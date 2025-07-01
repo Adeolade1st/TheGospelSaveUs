@@ -58,6 +58,13 @@ export class AudioCacheService {
   static async getCachedAudio(url: string, metadata: any): Promise<string> {
     const cacheKey = this.generateCacheKey(url);
     
+    // For local files, we need to handle them differently
+    if (url.startsWith('/')) {
+      console.log('🏠 Local file detected:', url);
+      // Return the URL as is for local files
+      return url;
+    }
+    
     // Check if audio is already cached and not expired
     const cached = this.cache.get(cacheKey);
     if (cached && !this.isExpired(cached)) {
@@ -68,13 +75,6 @@ export class AudioCacheService {
     console.log('📥 Fetching and caching audio:', metadata.title);
     
     try {
-      // For local files, we need to handle them differently
-      if (url.startsWith('/')) {
-        console.log('🏠 Local file detected:', url);
-        // Return the URL as is for local files
-        return url;
-      }
-      
       // Fetch the audio file
       const response = await fetch(url);
       if (!response.ok) {

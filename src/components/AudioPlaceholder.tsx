@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2, RefreshCw, Info } from 'lucide-react';
+import { AudioValidator } from '../utils/audioValidation';
 
 interface AudioPlaceholderProps {
   language: string;
@@ -156,7 +157,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
       console.log(`🔍 Validating audio file: ${url}`);
       
       // Check if URL is valid MP3
-      const isMP3 = url.toLowerCase().includes('.mp3') || url.includes('audio/mpeg');
+      const isMP3 = url.toLowerCase().endsWith('.mp3') || url.includes('audio/mpeg');
       
       // For local files, we'll assume they exist and are valid
       if (url.startsWith('/')) {
