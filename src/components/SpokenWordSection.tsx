@@ -17,7 +17,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Eyin rere',
-      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
+      audioUrl: '/yoruba.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
       artist: 'Janet Olaitan'
     },
@@ -28,7 +28,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
-      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Igbo.mp3',
+      audioUrl: '/igbo.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       artist: 'Minister Susan Collins'
     },
@@ -39,7 +39,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari mai dadi',
-      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
+      audioUrl: '/hausa.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
       artist: 'Isaac O. Samuel'
     },
@@ -50,7 +50,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
-      audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
+      audioUrl: '/english.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
       artist: 'Evangelist Birdie Jones'
     }

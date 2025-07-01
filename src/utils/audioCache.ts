@@ -68,6 +68,13 @@ export class AudioCacheService {
     console.log('📥 Fetching and caching audio:', metadata.title);
     
     try {
+      // For local files, we need to handle them differently
+      if (url.startsWith('/')) {
+        console.log('🏠 Local file detected:', url);
+        // Return the URL as is for local files
+        return url;
+      }
+      
       // Fetch the audio file
       const response = await fetch(url);
       if (!response.ok) {
@@ -114,6 +121,12 @@ export class AudioCacheService {
     
     const preloadPromises = audioList.map(async ({ url, metadata }) => {
       try {
+        // For local files, we don't need to preload
+        if (url.startsWith('/')) {
+          console.log('✅ Local file, no preload needed:', metadata.title);
+          return;
+        }
+        
         await this.getCachedAudio(url, metadata);
         console.log('✅ Preloaded:', metadata.title);
       } catch (error) {
@@ -174,10 +187,15 @@ export class AudioCacheService {
 
         console.log('🔄 Lazy loading audio:', metadata.title);
         
-        const cachedUrl = await this.getCachedAudio(audioUrl, metadata);
-        audioElement = new Audio(cachedUrl);
+        // For local files, we don't need to cache
+        if (audioUrl.startsWith('/')) {
+          audioElement = new Audio(audioUrl);
+        } else {
+          const cachedUrl = await AudioCacheService.getCachedAudio(audioUrl, metadata);
+          audioElement = new Audio(cachedUrl);
+        }
         
-        this.optimizeAudioElement(audioElement);
+        AudioCacheService.optimizeAudioElement(audioElement);
         isLoaded = true;
         
         return audioElement;

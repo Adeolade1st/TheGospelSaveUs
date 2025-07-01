@@ -112,7 +112,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
     }
 
     // Handle other types of errors
-    if (error?.message.includes('404') || error?.message.includes('Not Found')) {
+    if (error?.message?.includes('404') || error?.message?.includes('Not Found')) {
       return {
         code: 404,
         message: 'Audio file not found',
@@ -125,7 +125,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
       };
     }
 
-    if (error?.message.includes('403') || error?.message.includes('Forbidden')) {
+    if (error?.message?.includes('403') || error?.message?.includes('Forbidden')) {
       return {
         code: 403,
         message: 'Access denied to audio file',
@@ -157,6 +157,17 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
       
       // Check if URL is valid MP3
       const isMP3 = url.toLowerCase().includes('.mp3') || url.includes('audio/mpeg');
+      
+      // For local files, we'll assume they exist and are valid
+      if (url.startsWith('/')) {
+        console.log('📊 Local file detected, assuming valid');
+        setFileValidation({
+          exists: true,
+          isMP3: true,
+          validated: true
+        });
+        return true;
+      }
       
       // Perform HEAD request to check if file exists
       const response = await fetch(url, { 
@@ -288,7 +299,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
 
     // Validate file on mount
     validateAudioFile(audioUrl).catch(error => {
-      const audioError = getAudioError(error, audioUrl);
+      const audioError = getAudioError(error as Error, audioUrl);
       setError(audioError);
     });
 
@@ -325,10 +336,6 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
         if (!fileValidation.validated) {
           setIsLoading(true);
           await validateAudioFile(audioUrl);
-        }
-
-        if (!fileValidation.exists || !fileValidation.isMP3) {
-          throw new Error('Audio file validation failed');
         }
 
         console.log(`▶️ Playing audio: ${sampleTitle}`);
@@ -579,7 +586,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={handlePlayPause}
-            disabled={isLoading || !!error || (!fileValidation.validated || !fileValidation.exists)}
+            disabled={isLoading || !!error}
             className={`w-12 h-12 bg-gradient-to-r ${gradient} text-white rounded-full flex items-center justify-center hover:shadow-lg transition-all duration-200 transform hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
             aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
           >
