@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Download, Lock, ShoppingCart, AlertCircle } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Download, Lock, ShoppingCart, AlertCircle, RefreshCw, Info, Loader2 } from 'lucide-react';
 import PaymentButton from './PaymentButton';
+import { AudioValidator } from '../utils/audioValidation';
 
 interface MusicPlayerProps {
   title: string;
@@ -28,6 +29,9 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [validationResult, setValidationResult] = useState<any>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Preview limit (30 seconds)
   const PREVIEW_LIMIT_SECONDS = 30;
@@ -38,15 +42,21 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     if (!audio) return;
 
     const handleLoadStart = () => {
+      console.log(`🎵 Music player loading: ${title}`);
       setIsLoading(true);
       setError(null);
     };
 
     const handleLoadedMetadata = () => {
+      console.log(`📊 Music metadata loaded: ${title}`, {
+        duration: audio.duration,
+        readyState: audio.readyState
+      });
       setTotalDuration(audio.duration);
     };
 
     const handleCanPlay = () => {
+      console.log(`✅ Music ready to play: ${title}`);
       setIsLoading(false);
     };
 
@@ -62,14 +72,46 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     };
 
     const handleEnded = () => {
+      console.log(`🏁 Music playback ended: ${title}`);
       setIsPlaying(false);
       setCurrentTime(0);
     };
 
     const handleError = () => {
+      console.error(`❌ Music player error for ${title}:`, {
+        error: audio.error,
+        networkState: audio.networkState,
+        readyState: audio.readyState
+      });
+      
       setIsLoading(false);
       setIsPlaying(false);
-      setError('Unable to load audio file');
+      
+      let errorMessage = 'Unable to load audio file';
+      if (audio.error) {
+        switch (audio.error.code) {
+          case MediaError.MEDIA_ERR_NETWORK:
+            errorMessage = 'Network error while loading audio';
+            break;
+          case MediaError.MEDIA_ERR_DECODE:
+            errorMessage = 'Audio file could not be decoded';
+            break;
+          case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            errorMessage = 'Audio format not supported';
+            break;
+          default:
+            errorMessage = 'Unknown audio error occurred';
+        }
+      }
+      setError(errorMessage);
+    };
+
+    const handleWaiting = () => {
+      setIsLoading(true);
+    };
+
+    const handleCanPlayThrough = () => {
+      setIsLoading(false);
     };
 
     // Add event listeners
@@ -79,9 +121,24 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
+    audio.addEventListener('waiting', handleWaiting);
+    audio.addEventListener('canplaythrough', handleCanPlayThrough);
 
     // Prevent direct downloads
     audio.controlsList.add('nodownload');
+
+    // Validate audio file
+    AudioValidator.validateAudioFile(audioUrl)
+      .then(result => {
+        setValidationResult(result);
+        if (!result.isValid) {
+          setError(result.errors[0] || 'Audio validation failed');
+        }
+      })
+      .catch(err => {
+        console.error('Audio validation failed:', err);
+        setError('Failed to validate audio file');
+      });
 
     return () => {
       audio.removeEventListener('loadstart', handleLoadStart);
@@ -90,15 +147,24 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
+      audio.removeEventListener('waiting', handleWaiting);
+      audio.removeEventListener('canplaythrough', handleCanPlayThrough);
     };
-  }, []);
+  }, [audioUrl, title]);
 
   const handlePlayPause = async () => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Mark user interaction
+    if (!hasUserInteracted) {
+      setHasUserInteracted(true);
+      console.log(`👆 User interaction detected for music: ${title}`);
+    }
+
     try {
       if (isPlaying) {
+        console.log(`⏸️ Pausing music: ${title}`);
         audio.pause();
         setIsPlaying(false);
       } else {
@@ -108,15 +174,41 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
           setCurrentTime(0);
         }
         
+        console.log(`▶️ Playing music: ${title}`);
         setIsLoading(true);
         await audio.play();
         setIsPlaying(true);
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error(`💥 Music playback error for ${title}:`, error);
       setError('Playback failed');
       setIsPlaying(false);
       setIsLoading(false);
+    }
+  };
+
+  const handleRetry = async () => {
+    console.log(`🔄 Retrying music load: ${title} (attempt ${retryCount + 1})`);
+    setRetryCount(prev => prev + 1);
+    setError(null);
+    setIsLoading(true);
+
+    const audio = audioRef.current;
+    if (audio) {
+      audio.load();
+      
+      try {
+        const result = await AudioValidator.validateAudioFile(audioUrl);
+        setValidationResult(result);
+        if (!result.isValid) {
+          setError(result.errors[0] || 'Audio validation failed');
+        }
+      } catch (err) {
+        setError('Failed to validate audio file');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -174,6 +266,12 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     ? (PREVIEW_LIMIT_SECONDS / totalDuration) * 100 
     : 0;
 
+  const getTroubleshootingSteps = () => {
+    if (!error) return [];
+    
+    return AudioValidator.getTroubleshootingSteps(error);
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300">
       {/* Hidden audio element */}
@@ -214,11 +312,58 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
 
       {/* Player Controls */}
       <div className="p-6">
+        {/* Validation Status */}
+        {validationResult && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center space-x-2 text-sm">
+              <Info className="text-blue-600" size={16} />
+              <div className="flex-1">
+                <p className="text-blue-800 font-medium">File Status:</p>
+                <div className="flex items-center space-x-4 mt-1 text-xs">
+                  <span className={validationResult.fileInfo.exists ? 'text-green-600' : 'text-red-600'}>
+                    {validationResult.fileInfo.exists ? '✓ File accessible' : '✗ File not found'}
+                  </span>
+                  <span className={validationResult.fileInfo.isMP3 ? 'text-green-600' : 'text-red-600'}>
+                    {validationResult.fileInfo.isMP3 ? '✓ Valid MP3' : '✗ Invalid format'}
+                  </span>
+                  {validationResult.fileInfo.size && (
+                    <span className="text-blue-600">
+                      {(validationResult.fileInfo.size / 1024 / 1024).toFixed(1)}MB
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Error Display */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
-            <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={16} />
-            <p className="text-red-700 text-sm">{error}</p>
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-start space-x-3">
+              <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />
+              <div className="flex-1">
+                <h5 className="font-semibold text-red-800 mb-2">Playback Error</h5>
+                <p className="text-red-700 text-sm mb-3">{error}</p>
+                
+                <div className="mb-3">
+                  <p className="text-red-800 font-medium text-sm mb-2">Try these solutions:</p>
+                  <ul className="list-disc list-inside text-red-700 text-sm space-y-1">
+                    {getTroubleshootingSteps().map((step, index) => (
+                      <li key={index}>{step}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <button
+                  onClick={handleRetry}
+                  className="inline-flex items-center space-x-1 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
+                >
+                  <RefreshCw size={12} />
+                  <span>Try Again</span>
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -264,7 +409,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
             className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {isLoading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              <Loader2 className="animate-spin" size={20} />
             ) : isPlaying ? (
               <Pause size={20} />
             ) : (
@@ -331,6 +476,18 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
             <span>Download on Amazon</span>
           </a>
         </div>
+
+        {/* User interaction prompt */}
+        {!hasUserInteracted && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <Info className="text-blue-600" size={16} />
+              <p className="text-blue-800 text-sm">
+                Click the play button to start audio preview
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
