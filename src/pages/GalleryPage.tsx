@@ -23,28 +23,13 @@ const GalleryPage: React.FC = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Artist data with detailed biographies
+  // Updated artist data with actual photos
   const artists: Artist[] = [
-    {
-      id: 'birdie-jones',
-      stageName: 'Evangelist Birdie Jones',
-      realName: 'Birdie Mae Jones',
-      profileImage: 'https://images.pexels.com/photos/3808904/pexels-photo-3808904.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
-      location: 'Atlanta, Georgia',
-      yearsActive: '1995 - Present',
-      specialties: ['English Spoken Word', 'Gospel Ministry', 'International Outreach'],
-      biography: `Evangelist Birdie Jones is the founding voice and spiritual leader of God Will Provide Outreach Ministry. With over 25 years of dedicated service to spreading God's word, she has touched countless lives through her powerful spoken word ministry. Born and raised in the heart of Georgia, Birdie discovered her calling at a young age when she felt the Holy Spirit move through her during a church service. Her ministry began in small community gatherings, where her passionate delivery and profound spiritual insights quickly drew larger audiences. Today, she leads the Pure Gold Gospel Singers and has expanded the ministry's reach internationally through digital platforms. Her English-language spoken word pieces are known for their deep theological insight, practical life application, and ability to bring comfort to those facing life's greatest challenges. Birdie's vision of reaching souls across cultural and linguistic barriers has made her a pioneer in multilingual gospel ministry.`,
-      featuredTrack: {
-        title: 'Transformed by Grace',
-        audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
-        duration: '4:33'
-      }
-    },
     {
       id: 'janet-olaitan',
       stageName: 'Janet Olaitan',
       realName: 'Janet Adunni Olaitan',
-      profileImage: 'https://images.pexels.com/photos/3808004/pexels-photo-3808004.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
+      profileImage: '/JANET OLAITAN (1).jpg',
       location: 'Lagos, Nigeria / Atlanta, Georgia',
       yearsActive: '2008 - Present',
       specialties: ['Yoruba Spoken Word', 'Cultural Ministry', 'Youth Outreach'],
@@ -59,7 +44,7 @@ const GalleryPage: React.FC = () => {
       id: 'susan-collins',
       stageName: 'Minister Susan Collins',
       realName: 'Susan Chioma Collins',
-      profileImage: 'https://images.pexels.com/photos/3807755/pexels-photo-3807755.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
+      profileImage: '/SUSSAN COLLINS.jpg',
       location: 'Enugu, Nigeria / Birmingham, Alabama',
       yearsActive: '2010 - Present',
       specialties: ['Igbo Spoken Word', 'Family Ministry', 'Community Healing'],
@@ -74,7 +59,7 @@ const GalleryPage: React.FC = () => {
       id: 'isaac-samuel',
       stageName: 'Isaac O. Samuel',
       realName: 'Isaac Olumide Samuel',
-      profileImage: 'https://images.pexels.com/photos/3807834/pexels-photo-3807834.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop',
+      profileImage: '/ISAAC O. SAMSON (1).jpg',
       location: 'Kano, Nigeria / Houston, Texas',
       yearsActive: '2012 - Present',
       specialties: ['Hausa Spoken Word', 'Cross-Cultural Ministry', 'Islamic Outreach'],
@@ -83,6 +68,21 @@ const GalleryPage: React.FC = () => {
         title: 'Labari mai dadi (Sweet Story)',
         audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
         duration: '3:58'
+      }
+    },
+    {
+      id: 'birdie-jones',
+      stageName: 'Evangelist Birdie Jones',
+      realName: 'Birdie Mae Jones',
+      profileImage: '/Evangelist Jones Picture.JPG',
+      location: 'Atlanta, Georgia',
+      yearsActive: '1995 - Present',
+      specialties: ['English Spoken Word', 'Gospel Ministry', 'International Outreach'],
+      biography: `Evangelist Birdie Jones is the founding voice and spiritual leader of God Will Provide Outreach Ministry. With over 25 years of dedicated service to spreading God's word, she has touched countless lives through her powerful spoken word ministry. Born and raised in the heart of Georgia, Birdie discovered her calling at a young age when she felt the Holy Spirit move through her during a church service. Her ministry began in small community gatherings, where her passionate delivery and profound spiritual insights quickly drew larger audiences. Today, she leads the Pure Gold Gospel Singers and has expanded the ministry's reach internationally through digital platforms. Her English-language spoken word pieces are known for their deep theological insight, practical life application, and ability to bring comfort to those facing life's greatest challenges. Birdie's vision of reaching souls across cultural and linguistic barriers has made her a pioneer in multilingual gospel ministry. Her leadership has inspired a new generation of ministers to embrace both traditional gospel values and innovative outreach methods, creating a lasting impact that extends far beyond geographical boundaries.`,
+      featuredTrack: {
+        title: 'Transformed by Grace',
+        audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
+        duration: '4:33'
       }
     }
   ];
