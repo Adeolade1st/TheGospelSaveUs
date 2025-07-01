@@ -17,7 +17,6 @@ import UserProfilePage from './pages/UserProfilePage';
 import AdminPage from './pages/AdminPage';
 import SuccessPage from './pages/SuccessPage';
 import StripeTestPage from './pages/StripeTestPage';
-import MusicPreviewPage from './pages/MusicPreviewPage';
 
 function App() {
   return (
@@ -28,7 +27,6 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/music-preview" element={<MusicPreviewPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
