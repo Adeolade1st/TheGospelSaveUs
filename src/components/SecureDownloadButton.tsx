@@ -45,7 +45,7 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
         .from('donations')
         .select('*')
         .eq('customer_email', user?.email)
-      //  .eq('metadata->title', title)
+        .eq('metadata->>title', title) // Fixed: Changed -> to ->> for JSONB text extraction
         .eq('status', 'completed')
         .limit(1);
 
