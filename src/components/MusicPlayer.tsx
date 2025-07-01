@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Download, Lock, ShoppingCart, AlertCircle, RefreshCw, Info, Loader2 } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Lock, ShoppingCart, AlertCircle, RefreshCw, Info, Loader2 } from 'lucide-react';
 import PaymentButton from './PaymentButton';
 import { AudioValidator } from '../utils/audioValidation';
 
@@ -461,7 +461,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
             }}
             className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
           >
-            <Download size={16} />
             <span>$1 Download</span>
           </PaymentButton>
 

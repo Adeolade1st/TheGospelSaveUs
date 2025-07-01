@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2, RefreshCw, Info } from 'lucide-react';
-import AudioDownloadButton from './AudioDownloadButton';
 
 interface AudioPlaceholderProps {
   language: string;
@@ -636,19 +635,6 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
           <span className="text-xs text-gray-500 w-8 text-right">
             {Math.round((isMuted ? 0 : volume) * 100)}%
           </span>
-        </div>
-
-        {/* Download Button */}
-        <div className="border-t pt-4">
-          <AudioDownloadButton
-            audioUrl={audioUrl}
-            title={sampleTitle}
-            artist={artist}
-            language={nativeName}
-            variant="primary"
-            className="w-full"
-            showProgress={true}
-          />
         </div>
 
         {/* Status indicators */}
