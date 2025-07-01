@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Music, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import AudioPlaceholder from './AudioPlaceholder';
+import { initializeAudioCache, preloadAudio } from '../utils/audioCache';
 
 const SpokenWordSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -54,6 +55,28 @@ const SpokenWordSection: React.FC = () => {
       artist: 'Evangelist Birdie Jones'
     }
   ];
+
+  useEffect(() => {
+    // Initialize audio caching system
+    initializeAudioCache({
+      quality: 'high',
+      enableCaching: true,
+      preloadStrategy: 'metadata',
+      maxCacheSize: 50 // 50MB cache limit
+    });
+
+    // Preload audio files for better performance
+    const audioList = audioSamples.map(sample => ({
+      url: sample.audioUrl,
+      metadata: {
+        title: sample.sampleTitle,
+        artist: sample.artist,
+        duration: sample.duration
+      }
+    }));
+
+    preloadAudio(audioList);
+  }, []);
 
   return (
     <section id="content" className="py-15 bg-gray-50">
@@ -115,7 +138,7 @@ const SpokenWordSection: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                  <span><strong>Format:</strong> High-quality MP3</span>
+                  <span><strong>Format:</strong> High-quality MP3 (128kbps+)</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
@@ -123,7 +146,7 @@ const SpokenWordSection: React.FC = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                  <span><strong>Source:</strong> Secure cloud storage</span>
+                  <span><strong>Source:</strong> Secure cloud storage with caching</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
@@ -166,17 +189,28 @@ const SpokenWordSection: React.FC = () => {
                 Complete Audio Messages Available
               </h3>
               <p className="text-gray-600 mb-8 leading-relaxed text-lg">
-                These are full-length audio messages. For our complete collection and continuous streaming, visit our Jango Radio page where you can discover more transformative content.
+                These are full-length audio messages optimized for streaming and download. 
+                For our complete collection and continuous streaming, visit our Jango Radio page 
+                where you can discover more transformative content.
               </p>
-              <a
-                href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
-              >
-                <Music size={20} />
-                <span>Explore Full Collection</span>
-              </a>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <Music size={20} />
+                  <span>Explore Full Collection</span>
+                </a>
+                <a
+                  href="/gallery"
+                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <Globe size={20} />
+                  <span>Meet Our Artists</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

@@ -23,11 +23,12 @@ const Header: React.FC = () => {
   const t = translations[currentLanguage.code];
 
   const navItems = [
-    { key: 'home', href: '#home' },
-    { key: 'about', href: '#about' },
-    { key: 'content', href: '#content' },
-    { key: 'donate', href: '#donate' },
-    { key: 'contact', href: '#contact' }
+    { key: 'home', href: '#home', path: '/' },
+    { key: 'about', href: '#about', path: '/' },
+    { key: 'content', href: '#content', path: '/' },
+    { key: 'gallery', href: '/gallery', path: '/gallery', label: 'Gallery' },
+    { key: 'donate', href: '#donate', path: '/' },
+    { key: 'contact', href: '#contact', path: '/' }
   ];
 
   const handleAuthClick = (mode: 'login' | 'register') => {
@@ -44,8 +45,13 @@ const Header: React.FC = () => {
     }
   };
 
-  const handleNavClick = (href: string) => {
-    if (href === '#contact') {
+  const handleNavClick = (item: typeof navItems[0]) => {
+    if (item.path === '/gallery') {
+      window.location.href = '/gallery';
+      return;
+    }
+
+    if (item.href === '#contact') {
       // Scroll to footer
       const footer = document.querySelector('footer');
       if (footer) {
@@ -53,7 +59,7 @@ const Header: React.FC = () => {
       }
     } else {
       // Handle other navigation normally
-      const element = document.querySelector(href);
+      const element = document.querySelector(item.href);
       if (element) {
         const headerHeight = 64; // Account for fixed header
         const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - headerHeight;
@@ -72,15 +78,17 @@ const Header: React.FC = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <img 
-                src="/the_gospel_save_us_logo-removebg-preview.png" 
-                alt="God Will Provide Outreach Ministry" 
-                className="w-[70px] h-[70px] object-contain"
-                style={{ 
-                  backgroundColor: 'transparent',
-                  imageRendering: 'crisp-edges'
-                }}
-              />
+              <a href="/" className="flex items-center">
+                <img 
+                  src="/the_gospel_save_us_logo-removebg-preview.png" 
+                  alt="God Will Provide Outreach Ministry" 
+                  className="w-[70px] h-[70px] object-contain"
+                  style={{ 
+                    backgroundColor: 'transparent',
+                    imageRendering: 'crisp-edges'
+                  }}
+                />
+              </a>
             </div>
 
             {/* Desktop Navigation */}
@@ -88,10 +96,10 @@ const Header: React.FC = () => {
               {navItems.map((item) => (
                 <button
                   key={item.key}
-                  onClick={() => handleNavClick(item.href)}
+                  onClick={() => handleNavClick(item)}
                   className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
                 >
-                  {t[item.key as keyof typeof t]}
+                  {item.label || t[item.key as keyof typeof t]}
                 </button>
               ))}
             </nav>
@@ -221,7 +229,7 @@ const Header: React.FC = () => {
 
               {/* Donate Button */}
               <button
-                onClick={() => handleNavClick('#donate')}
+                onClick={() => handleNavClick({ key: 'donate', href: '#donate', path: '/' })}
                 className="hidden sm:inline-flex bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
               >
                 {t.donateNow}
@@ -245,12 +253,12 @@ const Header: React.FC = () => {
                   <button
                     key={item.key}
                     onClick={() => {
-                      handleNavClick(item.href);
+                      handleNavClick(item);
                       setIsMenuOpen(false);
                     }}
                     className="block w-full text-left px-3 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md font-medium transition-colors duration-200"
                   >
-                    {t[item.key as keyof typeof t]}
+                    {item.label || t[item.key as keyof typeof t]}
                   </button>
                 ))}
                 
@@ -306,7 +314,7 @@ const Header: React.FC = () => {
                 
                 <button
                   onClick={() => {
-                    handleNavClick('#donate');
+                    handleNavClick({ key: 'donate', href: '#donate', path: '/' });
                     setIsMenuOpen(false);
                   }}
                   className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-md font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 mt-4"
