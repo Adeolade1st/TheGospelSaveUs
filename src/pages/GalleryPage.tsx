@@ -23,17 +23,17 @@ const GalleryPage: React.FC = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Updated artist data with new biographies and details
+  // Updated artist data with actual photos
   const artists: Artist[] = [
     {
       id: 'janet-olaitan',
-      stageName: 'Janet Olufunke Olaitan',
-      realName: 'Janet Olufunke Olaitan',
+      stageName: 'Janet Olaitan',
+      realName: 'Janet Adunni Olaitan',
       profileImage: '/JANET OLAITAN (1).jpg',
-      location: 'Osun State, Southwestern Nigeria / Atlanta, Georgia',
+      location: 'Lagos, Nigeria / Atlanta, Georgia',
       yearsActive: '2008 - Present',
-      specialties: ['Yoruba Spoken Word', 'Cultural Ministry', 'Youth Outreach', 'Educational Ministry'],
-      biography: `Evangelist & Retired Professional Teacher Janet Olufunke Olaitan brings a unique blend of educational excellence and spiritual passion to her ministry. As a Singer/Songwriter with deep roots in Osun State, Southwestern Nigeria, Janet has dedicated her life to preserving and sharing the rich cultural heritage of the Yoruba people through gospel ministry. Her journey began in the classroom, where she spent decades shaping young minds as a professional educator. This foundation in teaching has profoundly influenced her approach to ministry, making complex spiritual truths accessible through familiar cultural metaphors and traditional Yoruba storytelling. After relocating to Atlanta, Janet recognized the critical need for gospel content that spoke directly to the hearts of Yoruba-speaking communities in both Africa and the diaspora. Her ministry particularly resonates with young people who are seeking to maintain their cultural identity while growing in their Christian faith. Janet's work extends beyond the pulpit as she actively mentors young women in ministry and leads cultural preservation initiatives. Her Yoruba spoken word pieces are celebrated for their poetic beauty, scriptural accuracy, and ability to convey the transformative power of God's love through the rhythmic cadences and proverbs that characterize traditional Yoruba oratory.`,
+      specialties: ['Yoruba Spoken Word', 'Cultural Ministry', 'Youth Outreach'],
+      biography: `Janet Olaitan brings the rich cultural heritage of the Yoruba people to the forefront of gospel ministry. Born in Lagos, Nigeria, and later relocating to Atlanta, Janet bridges two worlds with her powerful bilingual ministry. Her journey began when she recognized the need for gospel content that spoke directly to the hearts of Yoruba-speaking communities in both Africa and the diaspora. With a background in linguistics and cultural studies, Janet ensures that every spoken word piece maintains the authentic rhythm, proverbs, and spiritual depth that characterize traditional Yoruba oratory. Her ministry particularly resonates with young people who are seeking to maintain their cultural identity while growing in their Christian faith. Janet's work extends beyond the pulpit as she actively mentors young women in ministry and leads cultural preservation initiatives. Her Yoruba spoken word pieces are celebrated for their poetic beauty, scriptural accuracy, and ability to convey complex theological concepts through familiar cultural metaphors and storytelling traditions.`,
       featuredTrack: {
         title: 'Eyin rere (Good Fruit)',
         audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Yoruba.mp3',
@@ -42,13 +42,13 @@ const GalleryPage: React.FC = () => {
     },
     {
       id: 'susan-collins',
-      stageName: 'Susan Chinyere Collins',
-      realName: 'Susan Chinyere Collins',
+      stageName: 'Minister Susan Collins',
+      realName: 'Susan Chioma Collins',
       profileImage: '/SUSSAN COLLINS.jpg',
-      location: 'Ideato South, Imo State, Eastern Nigeria / Birmingham, Alabama',
+      location: 'Enugu, Nigeria / Birmingham, Alabama',
       yearsActive: '2010 - Present',
-      specialties: ['Igbo Spoken Word', 'Family Ministry', 'Community Healing', 'Educational Outreach'],
-      biography: `Professional Teacher Susan Chinyere Collins is a powerful voice in Igbo-language gospel ministry, known for her compassionate approach to healing and restoration. Originally from Ideato South, Imo State in Eastern Nigeria, Susan's calling to ministry was born from personal experiences of God's faithfulness during difficult times. Her background as a professional educator has deeply informed her ministry approach, as she addresses real-life issues such as family reconciliation, trauma healing, and community building through the lens of scripture. Susan's spoken word ministry in the Igbo language carries the weight of ancestral wisdom combined with New Testament truth, creating messages that resonate deeply with Igbo communities worldwide. Her gentle yet authoritative delivery style has made her a sought-after speaker at women's conferences and family retreats. Susan is particularly passionate about preserving the Igbo language for future generations while ensuring that the gospel message remains accessible and relevant. Her spoken word pieces often incorporate traditional Igbo proverbs and cultural references, making complex spiritual truths understandable and applicable to daily life. As both an educator and minister, Susan bridges the gap between academic excellence and spiritual growth, demonstrating that faith and learning are complementary forces in personal development.`,
+      specialties: ['Igbo Spoken Word', 'Family Ministry', 'Community Healing'],
+      biography: `Minister Susan Collins is a powerful voice in Igbo-language gospel ministry, known for her compassionate approach to healing and restoration. Originally from Enugu in southeastern Nigeria, Susan's calling to ministry was born from personal experiences of God's faithfulness during difficult times. Her spoken word ministry in the Igbo language carries the weight of ancestral wisdom combined with New Testament truth, creating messages that resonate deeply with Igbo communities worldwide. Susan's background as a counselor and social worker informs her ministry approach, as she addresses real-life issues such as family reconciliation, trauma healing, and community building through the lens of scripture. Her gentle yet authoritative delivery style has made her a sought-after speaker at women's conferences and family retreats. Susan is particularly passionate about preserving the Igbo language for future generations while ensuring that the gospel message remains accessible and relevant. Her spoken word pieces often incorporate traditional Igbo proverbs and cultural references, making complex spiritual truths understandable and applicable to daily life.`,
       featuredTrack: {
         title: 'Ozi oma (Good News)',
         audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Igbo.mp3',
@@ -56,14 +56,14 @@ const GalleryPage: React.FC = () => {
       }
     },
     {
-      id: 'isaac-samson',
-      stageName: 'Isaac Olamide Samson',
-      realName: 'Isaac Olamide Samson',
+      id: 'isaac-samuel',
+      stageName: 'Isaac O. Samuel',
+      realName: 'Isaac Olumide Samuel',
       profileImage: '/ISAAC O. SAMSON (1).jpg',
-      location: 'Ogun State, Southwestern Nigeria / Houston, Texas',
+      location: 'Kano, Nigeria / Houston, Texas',
       yearsActive: '2012 - Present',
-      specialties: ['Hausa Spoken Word', 'Cross-Cultural Ministry', 'Interfaith Dialogue', 'Northern Nigeria Outreach'],
-      biography: `Clergyman Isaac Olamide Samson serves as a bridge-builder in one of the most challenging and rewarding fields of ministry - reaching Hausa-speaking communities with the gospel message. Currently serving as a Full-time Minister with the Celestial Church of Christ, Isaac brings a unique perspective shaped by his origins in Ogun State, Southwestern Nigeria, combined with his Northern Nigeria education and native fluency in Hausa. This distinctive background has equipped him with rare insights into cross-cultural communication and interfaith dialogue. Isaac's conversion to Christianity as a young adult gave him unique understanding of the spiritual journey of those seeking truth across religious boundaries. His Hausa-language spoken word ministry is characterized by its respectful approach to cultural sensitivities while maintaining the uncompromising truth of the gospel. His background in comparative religion enables him to address questions and concerns that are particularly relevant to his target audience. Isaac's ministry extends beyond spoken word to include community development projects and educational initiatives in northern Nigeria. His work has been instrumental in fostering peaceful dialogue and understanding between different religious communities. Isaac's spoken word pieces are known for their scholarly depth, cultural authenticity, and powerful testimonial elements that demonstrate the transformative power of Christ's love in diverse cultural contexts.`,
+      specialties: ['Hausa Spoken Word', 'Cross-Cultural Ministry', 'Islamic Outreach'],
+      biography: `Isaac O. Samuel serves as a bridge-builder in one of the most challenging and rewarding fields of ministry - reaching Hausa-speaking communities with the gospel message. Born in Kano, northern Nigeria, Isaac grew up in a religiously diverse environment that shaped his understanding of cross-cultural communication and interfaith dialogue. His conversion to Christianity as a young adult gave him unique insights into the spiritual journey of those seeking truth across religious boundaries. Isaac's Hausa-language spoken word ministry is characterized by its respectful approach to cultural sensitivities while maintaining the uncompromising truth of the gospel. His background in Islamic studies and comparative religion enables him to address questions and concerns that are particularly relevant to his target audience. Isaac's ministry extends beyond spoken word to include community development projects and educational initiatives in northern Nigeria. His work has been instrumental in fostering peaceful dialogue and understanding between different religious communities. Isaac's spoken word pieces are known for their scholarly depth, cultural authenticity, and powerful testimonial elements that demonstrate the transformative power of Christ's love in diverse cultural contexts.`,
       featuredTrack: {
         title: 'Labari mai dadi (Sweet Story)',
         audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/Hausa.mp3',
@@ -80,7 +80,7 @@ const GalleryPage: React.FC = () => {
       specialties: ['English Spoken Word', 'Gospel Ministry', 'International Outreach'],
       biography: `Evangelist Birdie Jones is the founding voice and spiritual leader of God Will Provide Outreach Ministry. With over 25 years of dedicated service to spreading God's word, she has touched countless lives through her powerful spoken word ministry. Born and raised in the heart of Georgia, Birdie discovered her calling at a young age when she felt the Holy Spirit move through her during a church service. Her ministry began in small community gatherings, where her passionate delivery and profound spiritual insights quickly drew larger audiences. Today, she leads the Pure Gold Gospel Singers and has expanded the ministry's reach internationally through digital platforms. Her English-language spoken word pieces are known for their deep theological insight, practical life application, and ability to bring comfort to those facing life's greatest challenges. Birdie's vision of reaching souls across cultural and linguistic barriers has made her a pioneer in multilingual gospel ministry. Her leadership has inspired a new generation of ministers to embrace both traditional gospel values and innovative outreach methods, creating a lasting impact that extends far beyond geographical boundaries.`,
       featuredTrack: {
-        title: 'The Good News',
+        title: 'Transformed by Grace',
         audioUrl: 'https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/English.mp3',
         duration: '4:33'
       }
