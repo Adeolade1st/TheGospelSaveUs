@@ -1,0 +1,339 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Play, Pause, Volume2, VolumeX, Download, Lock, ShoppingCart, AlertCircle } from 'lucide-react';
+import PaymentButton from './PaymentButton';
+
+interface MusicPlayerProps {
+  title: string;
+  artist: string;
+  audioUrl: string;
+  duration: string;
+  language: string;
+  coverImage?: string;
+}
+
+const MusicPlayer: React.FC<MusicPlayerProps> = ({
+  title,
+  artist,
+  audioUrl,
+  duration,
+  language,
+  coverImage
+}) => {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
+  const [volume, setVolume] = useState(0.7);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+
+  // Preview limit (30 seconds)
+  const PREVIEW_LIMIT_SECONDS = 30;
+  const isPreviewLimitReached = currentTime >= PREVIEW_LIMIT_SECONDS;
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleLoadStart = () => {
+      setIsLoading(true);
+      setError(null);
+    };
+
+    const handleLoadedMetadata = () => {
+      setTotalDuration(audio.duration);
+    };
+
+    const handleCanPlay = () => {
+      setIsLoading(false);
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      
+      // Stop playback when preview limit is reached
+      if (audio.currentTime >= PREVIEW_LIMIT_SECONDS) {
+        audio.pause();
+        setIsPlaying(false);
+        setShowPurchaseModal(true);
+      }
+    };
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    };
+
+    const handleError = () => {
+      setIsLoading(false);
+      setIsPlaying(false);
+      setError('Unable to load audio file');
+    };
+
+    // Add event listeners
+    audio.addEventListener('loadstart', handleLoadStart);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+
+    // Prevent direct downloads
+    audio.controlsList.add('nodownload');
+
+    return () => {
+      audio.removeEventListener('loadstart', handleLoadStart);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('canplay', handleCanPlay);
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+    };
+  }, []);
+
+  const handlePlayPause = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        if (isPreviewLimitReached) {
+          // Reset to beginning if preview limit was reached
+          audio.currentTime = 0;
+          setCurrentTime(0);
+        }
+        
+        setIsLoading(true);
+        await audio.play();
+        setIsPlaying(true);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setError('Playback failed');
+      setIsPlaying(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+    setIsMuted(newVolume === 0);
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.volume = volume;
+        setIsMuted(false);
+      } else {
+        audioRef.current.volume = 0;
+        setIsMuted(true);
+      }
+    }
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const progressBar = e.currentTarget;
+    const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+    const progressWidth = progressBar.offsetWidth;
+    const clickRatio = clickX / progressWidth;
+    
+    // Limit to preview duration
+    const newTime = Math.min(clickRatio * totalDuration, PREVIEW_LIMIT_SECONDS);
+    
+    if (isFinite(newTime)) {
+      audio.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const formatTime = (time: number) => {
+    if (isNaN(time)) return '0:00';
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const progressPercentage = totalDuration > 0 
+    ? (currentTime / totalDuration) * 100 
+    : 0;
+  
+  const previewPercentage = totalDuration > 0 
+    ? (PREVIEW_LIMIT_SECONDS / totalDuration) * 100 
+    : 0;
+
+  return (
+    <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300">
+      {/* Hidden audio element */}
+      <audio 
+        ref={audioRef} 
+        src={audioUrl} 
+        preload="metadata"
+        crossOrigin="anonymous"
+        controlsList="nodownload"
+        onContextMenu={(e) => e.preventDefault()}
+      />
+
+      {/* Header with Track Info */}
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6 text-white">
+        <div className="flex items-center space-x-4">
+          {coverImage ? (
+            <img 
+              src={coverImage} 
+              alt={`${title} by ${artist}`}
+              className="w-16 h-16 rounded-lg object-cover"
+            />
+          ) : (
+            <div className="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center">
+              <Play className="text-white ml-1" size={24} />
+            </div>
+          )}
+          <div>
+            <h3 className="text-xl font-bold mb-1">{title}</h3>
+            <p className="text-white/80">{artist}</p>
+            <div className="flex items-center space-x-2 mt-1 text-sm text-white/60">
+              <span>{language}</span>
+              <span>•</span>
+              <span>{duration}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Player Controls */}
+      <div className="p-6">
+        {/* Error Display */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
+            <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={16} />
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Progress Bar */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+            <span>{formatTime(currentTime)}</span>
+            <div className="flex items-center space-x-1">
+              <Lock size={12} className="text-yellow-500" />
+              <span className="text-yellow-600">Preview: {formatTime(PREVIEW_LIMIT_SECONDS)}</span>
+            </div>
+            <span>{formatTime(totalDuration)}</span>
+          </div>
+          <div 
+            className="w-full h-2 bg-gray-200 rounded-full overflow-hidden cursor-pointer relative"
+            onClick={handleProgressClick}
+          >
+            {/* Preview limit indicator */}
+            <div 
+              className="absolute h-full bg-yellow-300 opacity-30"
+              style={{ width: `${previewPercentage}%` }}
+            />
+            
+            {/* Progress bar */}
+            <div 
+              className="h-full bg-blue-600 transition-all duration-100 relative z-10"
+              style={{ width: `${progressPercentage}%` }}
+            />
+            
+            {/* Preview limit marker */}
+            <div 
+              className="absolute top-0 h-full w-1 bg-yellow-500"
+              style={{ left: `${previewPercentage}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={handlePlayPause}
+            disabled={isLoading || !!error}
+            className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            ) : isPlaying ? (
+              <Pause size={20} />
+            ) : (
+              <Play size={20} className="ml-0.5" />
+            )}
+          </button>
+
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={toggleMute}
+              className="text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              {isMuted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            </button>
+            
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="w-24 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            />
+          </div>
+        </div>
+
+        {/* Preview Notice */}
+        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
+          <div className="flex items-center space-x-2">
+            <Lock className="text-yellow-600" size={16} />
+            <p className="text-yellow-800 text-sm">
+              Preview limited to 30 seconds. Purchase for full access.
+            </p>
+          </div>
+        </div>
+
+        {/* Purchase Options */}
+        <div className="space-y-3">
+          {/* $1 Download Button with Stripe */}
+          <PaymentButton
+            amount={1}
+            description={`Download "${title}" by ${artist}`}
+            metadata={{
+              type: 'audio_download',
+              title,
+              artist,
+              language
+            }}
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+          >
+            <Download size={16} />
+            <span>$1 Download</span>
+          </PaymentButton>
+
+          {/* Download on Amazon Button */}
+          <a
+            href="https://amazon.com/music"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+          >
+            <ShoppingCart size={16} />
+            <span>Download on Amazon</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MusicPlayer;

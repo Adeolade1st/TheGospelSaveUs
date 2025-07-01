@@ -7,16 +7,6 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 }
 
-interface DownloadToken {
-  id: string;
-  track_id: string;
-  email: string;
-  expires_at: string;
-  download_count: number;
-  max_downloads: number;
-  is_active: boolean;
-}
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -100,10 +90,13 @@ serve(async (req) => {
       )
     }
 
+    // Get the audio file path from the URL
+    const audioFileName = track.audio_url.split('/').pop()
+
     // Fetch the audio file from storage
     const { data: audioData, error: audioError } = await supabase.storage
       .from('audio-files')
-      .download(track.audio_url.split('/').pop())
+      .download(audioFileName)
 
     if (audioError || !audioData) {
       return new Response(
@@ -146,10 +139,7 @@ serve(async (req) => {
         'Content-Disposition': `attachment; filename="${filename}"`,
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
-        'Expires': '0',
-        'X-Download-Token': tokenId,
-        'X-Download-Count': (token.download_count + 1).toString(),
-        'X-Downloads-Remaining': (token.max_downloads - token.download_count - 1).toString()
+        'Expires': '0'
       },
     })
 
