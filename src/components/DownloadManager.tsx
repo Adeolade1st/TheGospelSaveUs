@@ -30,42 +30,55 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
   const [isVerifying, setIsVerifying] = useState(true);
 
   useEffect(() => {
-    // Get download token from the database
+    // Get download token from the Edge Function
     const getDownloadToken = async () => {
       setIsVerifying(true);
       try {
         console.log(`Checking download token for session: ${sessionId}`);
         
-        // Query the download_tokens table directly
-        const { data, error } = await supabase
-          .from('download_tokens')
-          .select('*')
-          .eq('stripe_session_id', sessionId)
-          .single();
+        // Call the Edge Function to get the download token
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
         
-        if (error) {
-          console.error('Error fetching download token:', error);
-          setError('Unable to verify your purchase. Please contact support.');
-          return;
+        if (!supabaseUrl || !supabaseKey) {
+          throw new Error('Supabase configuration missing');
         }
         
-        if (data) {
+        const functionUrl = `${supabaseUrl}/functions/v1/get-download-token`;
+        
+        const response = await fetch(functionUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ sessionId })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+          
+          if (response.status === 404) {
+            console.log('No download token found, creating one...');
+            // In a real implementation, you would create a token here
+            // For this example, we'll just simulate it
+            const token = `dl_${crypto.randomUUID().substring(0, 16)}`;
+            setDownloadToken(token);
+            
+            // Set expiry date (7 days from now)
+            const expiry = new Date();
+            expiry.setDate(expiry.getDate() + 7);
+            setExpiryDate(expiry);
+          } else {
+            throw new Error(errorData.error || `HTTP error ${response.status}`);
+          }
+        } else {
+          const data = await response.json();
           console.log('Download token found:', data);
           setDownloadToken(data.id);
-          setExpiryDate(new Date(data.expires_at));
-          setDownloadCount(data.download_count);
-          setMaxDownloads(data.max_downloads);
-        } else {
-          console.log('No download token found, creating one...');
-          // In a real implementation, you would create a token here
-          // For this example, we'll just simulate it
-          const token = `dl_${crypto.randomUUID().substring(0, 16)}`;
-          setDownloadToken(token);
-          
-          // Set expiry date (7 days from now)
-          const expiry = new Date();
-          expiry.setDate(expiry.getDate() + 7);
-          setExpiryDate(expiry);
+          setExpiryDate(new Date(data.expiresAt));
+          setDownloadCount(data.downloadCount);
+          setMaxDownloads(data.maxDownloads);
         }
       } catch (err) {
         console.error('Error getting download token:', err);
