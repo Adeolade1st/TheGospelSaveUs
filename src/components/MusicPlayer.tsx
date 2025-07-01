@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Lock, ShoppingCart, AlertCircle, RefreshCw, Info, Loader2 } from 'lucide-react';
-import PaymentButton from './PaymentButton';
+import { Play, Pause, Volume2, VolumeX, Lock, ShoppingCart, AlertCircle, RefreshCw, Info, Loader2, Download } from 'lucide-react';
 import { AudioValidator } from '../utils/audioValidation';
+import SecureDownloadButton from './SecureDownloadButton';
 
 interface MusicPlayerProps {
   title: string;
@@ -28,7 +28,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [validationResult, setValidationResult] = useState<any>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -67,7 +66,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       if (audio.currentTime >= PREVIEW_LIMIT_SECONDS) {
         audio.pause();
         setIsPlaying(false);
-        setShowPurchaseModal(true);
+        setCurrentTime(PREVIEW_LIMIT_SECONDS);
       }
     };
 
@@ -312,31 +311,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
 
       {/* Player Controls */}
       <div className="p-6">
-        {/* Validation Status */}
-        {validationResult && (
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="flex items-center space-x-2 text-sm">
-              <Info className="text-blue-600" size={16} />
-              <div className="flex-1">
-                <p className="text-blue-800 font-medium">File Status:</p>
-                <div className="flex items-center space-x-4 mt-1 text-xs">
-                  <span className={validationResult.fileInfo.exists ? 'text-green-600' : 'text-red-600'}>
-                    {validationResult.fileInfo.exists ? '✓ File accessible' : '✗ File not found'}
-                  </span>
-                  <span className={validationResult.fileInfo.isMP3 ? 'text-green-600' : 'text-red-600'}>
-                    {validationResult.fileInfo.isMP3 ? '✓ Valid MP3' : '✗ Invalid format'}
-                  </span>
-                  {validationResult.fileInfo.size && (
-                    <span className="text-blue-600">
-                      {(validationResult.fileInfo.size / 1024 / 1024).toFixed(1)}MB
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Error Display */}
         {error && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -450,19 +424,14 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
         {/* Purchase Options */}
         <div className="space-y-3">
           {/* $1 Download Button with Stripe */}
-          <PaymentButton
-            amount={1}
-            description={`Download "${title}" by ${artist}`}
-            metadata={{
-              type: 'audio_download',
-              title,
-              artist,
-              language
-            }}
-            className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
-          >
-            <span>$1 Download</span>
-          </PaymentButton>
+          <SecureDownloadButton
+            audioUrl={audioUrl}
+            title={title}
+            artist={artist}
+            price={1}
+            language={language}
+            className="w-full"
+          />
 
           {/* Download on Amazon Button */}
           <a

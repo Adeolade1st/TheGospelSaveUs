@@ -8,6 +8,7 @@ interface PaymentButtonProps {
   children: React.ReactNode;
   metadata?: Record<string, string>;
   onClick?: () => void;
+  onSuccess?: (sessionId: string) => void;
   disabled?: boolean;
 }
 
@@ -18,6 +19,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   children,
   metadata = {},
   onClick,
+  onSuccess,
   disabled = false
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +27,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   const [phase, setPhase] = useState<'idle' | 'validating' | 'creating' | 'redirecting' | 'success' | 'error'>('idle');
   const abortControllerRef = useRef<AbortController | null>(null);
   const requestIdRef = useRef<string>('');
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -34,6 +37,20 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       }
     };
   }, []);
+
+  // Check for returning from Stripe
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const session_id = urlParams.get('session_id');
+    
+    if (session_id) {
+      setSessionId(session_id);
+      // Call onSuccess if provided
+      if (onSuccess) {
+        onSuccess(session_id);
+      }
+    }
+  }, [onSuccess]);
 
   const handlePayment = useCallback(async () => {
     if (isLoading || disabled) {
@@ -209,6 +226,9 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       setPhase('success');
       console.log(`✅ [${requestId}] Redirect initiated successfully`);
       
+      // Store session ID for later verification
+      setSessionId(session.id);
+      
       onClick?.();
 
     } catch (error: any) {
@@ -241,7 +261,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       setIsLoading(false);
       console.log(`🏁 [${requestId}] Payment process completed`);
     }
-  }, [amount, description, metadata, onClick, isLoading, disabled]);
+  }, [amount, description, metadata, onClick, isLoading, disabled, onSuccess]);
 
   const handleRetry = () => {
     console.log('🔄 Retrying payment...');
@@ -275,12 +295,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       );
     }
 
-    return (
-      <>
-        <CreditCard size={20} />
-        {children}
-      </>
-    );
+    return children;
   };
 
   const getPhaseIndicator = () => {

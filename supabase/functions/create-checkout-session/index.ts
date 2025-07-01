@@ -12,6 +12,10 @@ interface RequestMetadata {
   userAgent?: string;
   retryCount?: string;
   requestId?: string;
+  type?: string;
+  title?: string;
+  artist?: string;
+  language?: string;
   [key: string]: any;
 }
 
@@ -114,21 +118,7 @@ serve(async (req) => {
       console.warn(`[${requestId}] Amount below minimum: ${amount} cents`);
       return new Response(
         JSON.stringify({ 
-          error: 'Minimum donation amount is $1.00',
-          requestId 
-        }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 400,
-        },
-      )
-    }
-
-    if (amount > 99999999) { // Maximum $999,999.99
-      console.warn(`[${requestId}] Amount above maximum: ${amount} cents`);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Maximum donation amount is $999,999.99',
+          error: 'Minimum amount is $1.00',
           requestId 
         }),
         {
@@ -157,13 +147,15 @@ serve(async (req) => {
       amount,
       currency: currency || 'usd',
       description: description.substring(0, 100),
+      type: metadata.type || 'donation',
       retryCount: metadata.retryCount || '0',
       userAgent: metadata.userAgent?.substring(0, 100) || 'unknown',
       clientTimestamp: metadata.clientTimestamp
     });
 
     // Determine if this is a subscription or one-time payment
-    const isSubscription = metadata?.type === 'monthly_subscription' || amount >= 10000 // $100 or more
+    const isSubscription = metadata?.type === 'monthly_subscription';
+    const isAudioDownload = metadata?.type === 'audio_download';
 
     // Get origin for redirect URLs with fallback
     const origin = req.headers.get('origin') || 
@@ -179,7 +171,9 @@ serve(async (req) => {
           price_data: {
             currency: currency || 'usd',
             product_data: {
-              name: 'Ministry Donation - God Will Provide Outreach Ministry',
+              name: isAudioDownload 
+                ? `Download: ${metadata.title || 'Audio Track'}`
+                : 'Ministry Donation - God Will Provide Outreach Ministry',
               description: description,
               metadata: {
                 ministry: 'God Will Provide Outreach Ministry',
@@ -215,7 +209,8 @@ serve(async (req) => {
       payment_intent_data: isSubscription ? undefined : {
         metadata: {
           requestId,
-          ministry: 'God Will Provide Outreach Ministry'
+          ministry: 'God Will Provide Outreach Ministry',
+          type: metadata.type || 'donation'
         }
       }
     }

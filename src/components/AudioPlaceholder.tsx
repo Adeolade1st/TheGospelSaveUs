@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
-import AudioDownloadButton from './AudioDownloadButton';
+import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2, RefreshCw, Download } from 'lucide-react';
+import SecureDownloadButton from './SecureDownloadButton';
 
 interface AudioPlaceholderProps {
   language: string;
@@ -37,6 +37,10 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
+  // Preview limit (30 seconds)
+  const PREVIEW_LIMIT_SECONDS = 30;
+  const isPreviewLimitReached = currentTime >= PREVIEW_LIMIT_SECONDS;
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -58,6 +62,13 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
 
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
+      
+      // Stop playback when preview limit is reached
+      if (audio.currentTime >= PREVIEW_LIMIT_SECONDS) {
+        audio.pause();
+        setIsPlaying(false);
+        setCurrentTime(PREVIEW_LIMIT_SECONDS);
+      }
     };
 
     const handleEnded = () => {
@@ -115,6 +126,12 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
         audio.pause();
         setIsPlaying(false);
       } else {
+        if (isPreviewLimitReached) {
+          // Reset to beginning if preview limit was reached
+          audio.currentTime = 0;
+          setCurrentTime(0);
+        }
+        
         setIsLoading(true);
         await audio.play();
         setIsPlaying(true);
@@ -167,7 +184,9 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
     const clickX = e.clientX - progressBar.getBoundingClientRect().left;
     const progressWidth = progressBar.offsetWidth;
     const clickRatio = clickX / progressWidth;
-    const newTime = clickRatio * audio.duration;
+    
+    // Limit to preview duration
+    const newTime = Math.min(clickRatio * totalDuration, PREVIEW_LIMIT_SECONDS);
     
     if (isFinite(newTime)) {
       audio.currentTime = newTime;
@@ -183,6 +202,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   };
 
   const progressPercentage = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
+  const previewPercentage = totalDuration > 0 ? (PREVIEW_LIMIT_SECONDS / totalDuration) * 100 : 0;
 
   return (
     <div className={`bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 audio-placeholder ${className}`}>
@@ -217,7 +237,10 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
         <div className="mb-4">
           <h4 className="font-semibold text-gray-900 mb-1">{sampleTitle}</h4>
           <p className="text-sm text-gray-600 mb-1">by {artist}</p>
-          <p className="text-xs text-gray-500">Audio content in {nativeName}</p>
+          <p className="text-xs text-gray-500 mb-1">Audio content in {nativeName}</p>
+          <div className="flex items-center space-x-1 text-xs text-yellow-600">
+            <span className="bg-yellow-100 px-2 py-0.5 rounded-full">30-second preview</span>
+          </div>
         </div>
 
         {/* Error Display */}
@@ -244,7 +267,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
             <span>{totalDuration > 0 ? formatTime(totalDuration) : duration}</span>
           </div>
           <div 
-            className="w-full h-2 bg-gray-200 rounded-full overflow-hidden cursor-pointer"
+            className="w-full h-2 bg-gray-200 rounded-full overflow-hidden cursor-pointer relative"
             onClick={handleProgressClick}
             role="progressbar"
             aria-valuemin={0}
@@ -259,9 +282,22 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
               }
             }}
           >
+            {/* Preview limit indicator */}
+            <div 
+              className="absolute h-full bg-yellow-300 opacity-30"
+              style={{ width: `${previewPercentage}%` }}
+            />
+            
+            {/* Progress bar */}
             <div 
               className={`h-full bg-gradient-to-r ${gradient} transition-all duration-100 ease-out`}
               style={{ width: `${progressPercentage}%` }}
+            />
+            
+            {/* Preview limit marker */}
+            <div 
+              className="absolute top-0 h-full w-1 bg-yellow-500"
+              style={{ left: `${previewPercentage}%` }}
             />
           </div>
         </div>
@@ -285,7 +321,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
 
           <div className="flex items-center space-x-3">
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              Audio Sample
+              Preview
             </span>
             <a
               href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
@@ -328,16 +364,15 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
           </span>
         </div>
 
-        {/* Download Button */}
+        {/* Secure Download Button */}
         <div className="border-t pt-4">
-          <AudioDownloadButton
+          <SecureDownloadButton
             audioUrl={audioUrl}
             title={sampleTitle}
             artist={artist}
+            price={1}
             language={nativeName}
-            variant="primary"
             className="w-full"
-            showProgress={true}
           />
         </div>
 

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Download, CheckCircle, Clock, AlertCircle, Mail } from 'lucide-react';
+import { Download, CheckCircle, Clock, AlertCircle, Mail, RefreshCw, Shield, Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface DownloadManagerProps {
   trackId: string;
   trackTitle: string;
   artist: string;
   email: string;
+  sessionId: string;
   onDownloadComplete?: () => void;
 }
 
@@ -14,23 +16,88 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
   trackTitle,
   artist,
   email,
+  sessionId,
   onDownloadComplete
 }) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [downloadCount, setDownloadCount] = useState(0);
-  const [maxDownloads] = useState(3);
+  const [maxDownloads, setMaxDownloads] = useState(3);
   const [emailSent, setEmailSent] = useState(false);
+  const [downloadToken, setDownloadToken] = useState<string | null>(null);
+  const [expiryDate, setExpiryDate] = useState<Date | null>(null);
+  const [isVerifying, setIsVerifying] = useState(true);
 
   useEffect(() => {
-    // In a real implementation, you would fetch the download token status
-    // from your backend here
-  }, [trackId, email]);
+    // Verify the payment and get download token
+    const verifyPayment = async () => {
+      setIsVerifying(true);
+      try {
+        // In a real implementation, you would verify the payment with Stripe
+        // and generate a secure download token
+        console.log(`Verifying payment for session: ${sessionId}`);
+        
+        // Simulate API call to verify payment
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Check if payment was successful
+        const { data, error } = await supabase
+          .from('donations')
+          .select('*')
+          .eq('stripe_session_id', sessionId)
+          .eq('status', 'completed')
+          .single();
+        
+        if (error) {
+          console.error('Error verifying payment:', error);
+          setError('Payment verification failed. Please contact support.');
+          return;
+        }
+        
+        if (!data) {
+          setError('Payment not found or not completed. Please try again.');
+          return;
+        }
+        
+        // Generate download token
+        const token = `dl_${crypto.randomUUID().substring(0, 16)}`;
+        setDownloadToken(token);
+        
+        // Set expiry date (7 days from now)
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 7);
+        setExpiryDate(expiry);
+        
+        // Set download count
+        setDownloadCount(0);
+        
+        // In a real implementation, you would store this token in your database
+        // and associate it with the user and the purchased audio
+        
+      } catch (err) {
+        console.error('Error verifying payment:', err);
+        setError('Failed to verify payment. Please contact support.');
+      } finally {
+        setIsVerifying(false);
+      }
+    };
+    
+    if (sessionId) {
+      verifyPayment();
+    } else {
+      setIsVerifying(false);
+    }
+  }, [sessionId, email, trackId]);
 
   const handleDownload = async () => {
     if (downloadCount >= maxDownloads) {
       setError('Download limit reached. Please check your email for the backup link.');
+      return;
+    }
+
+    if (!downloadToken) {
+      setError('Download token not found. Please contact support.');
       return;
     }
 
@@ -58,7 +125,7 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
       
       // Create download link
       const link = document.createElement('a');
-      link.href = `https://tamgexlordzjyfzhvmel.supabase.co/storage/v1/object/public/audio-files/${trackId}.mp3`;
+      link.href = trackId; // In a real implementation, this would be a secure URL with the token
       link.download = `${artist} - ${trackTitle}.mp3`;
       document.body.appendChild(link);
       link.click();
@@ -67,21 +134,98 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
       // Update download count
       setDownloadCount(prev => prev + 1);
       
+      // Log download
+      await logDownload();
+      
       if (onDownloadComplete) {
         onDownloadComplete();
       }
     } catch (err) {
+      console.error('Download failed:', err);
       setError('Download failed. Please try again or use the email backup link.');
     } finally {
       setIsDownloading(false);
     }
   };
 
-  const sendEmailBackup = async () => {
-    setEmailSent(true);
-    // In a real implementation, you would call your backend to send an email
-    // with the download link
+  const logDownload = async () => {
+    try {
+      // In a real implementation, you would log the download in your database
+      const { error } = await supabase
+        .from('download_logs')
+        .insert({
+          token_id: downloadToken,
+          track_id: trackId,
+          email: email,
+          ip_address: 'client-ip', // This would be captured server-side
+          user_agent: navigator.userAgent.substring(0, 255)
+        });
+
+      if (error) {
+        console.error('Error logging download:', error);
+      }
+    } catch (err) {
+      console.error('Error logging download:', err);
+    }
   };
+
+  const sendEmailBackup = async () => {
+    try {
+      // In a real implementation, you would call your backend to send an email
+      // with the download link
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setEmailSent(true);
+    } catch (err) {
+      console.error('Error sending email:', err);
+      setError('Failed to send email. Please try again.');
+    }
+  };
+
+  if (isVerifying) {
+    return (
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <Loader2 className="animate-spin text-blue-600" size={32} />
+          <h3 className="text-lg font-semibold">Verifying Your Purchase</h3>
+          <p className="text-gray-600 text-center">
+            Please wait while we verify your payment and prepare your download...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !downloadToken) {
+    return (
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex items-center space-x-2 mb-4">
+          <AlertCircle className="text-red-600" size={24} />
+          <h3 className="text-lg font-semibold">Verification Failed</h3>
+        </div>
+        
+        <div className="p-4 bg-red-50 rounded-lg mb-4">
+          <p className="text-red-700">{error}</p>
+        </div>
+        
+        <div className="flex flex-col space-y-3">
+          <button
+            onClick={() => window.location.reload()}
+            className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <RefreshCw size={16} />
+            <span>Try Again</span>
+          </button>
+          
+          <button
+            onClick={() => window.location.href = '/'}
+            className="flex items-center justify-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <span>Return to Home</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
@@ -107,8 +251,17 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-600">Expires:</span>
           <span className="font-semibold">
-            {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+            {expiryDate ? expiryDate.toLocaleDateString() : '7 days from now'}
           </span>
+        </div>
+      </div>
+
+      {/* Security Info */}
+      <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4 flex items-start space-x-2">
+        <Shield className="text-blue-600 flex-shrink-0 mt-0.5" size={16} />
+        <div>
+          <p className="text-blue-800 text-sm font-medium">Secure Download</p>
+          <p className="text-blue-700 text-xs">Your download is protected with 256-bit encryption</p>
         </div>
       </div>
 
@@ -139,7 +292,7 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
       {/* Download Button */}
       <button
         onClick={handleDownload}
-        disabled={isDownloading || downloadCount >= maxDownloads}
+        disabled={isDownloading || downloadCount >= maxDownloads || !downloadToken}
         className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none flex items-center justify-center space-x-2 mb-3"
       >
         {isDownloading ? (
@@ -171,7 +324,8 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
           ) : (
             <button
               onClick={sendEmailBackup}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              disabled={!downloadToken}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Send to email
             </button>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckCircle, Heart, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { CheckCircle, Heart, ArrowLeft, Loader2, AlertCircle, Download } from 'lucide-react';
+import DownloadManager from '../components/DownloadManager';
 
 interface SessionData {
   id: string;
@@ -25,6 +26,7 @@ const SuccessPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showDownloadManager, setShowDownloadManager] = useState(false);
 
   useEffect(() => {
     if (sessionId) {
@@ -61,6 +63,11 @@ const SuccessPage: React.FC = () => {
 
       const data = await response.json();
       setSessionData(data);
+      
+      // Check if this is an audio download purchase
+      if (data.metadata?.type === 'audio_download') {
+        setShowDownloadManager(true);
+      }
     } catch (err) {
       console.error('Error verifying session:', err);
       setError(err instanceof Error ? err.message : 'Failed to verify payment session');
@@ -138,17 +145,18 @@ const SuccessPage: React.FC = () => {
           </div>
           
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Thank You for Your Donation!
+            Thank You for Your Purchase!
           </h1>
           
           <p className="text-gray-600 mb-6 leading-relaxed">
-            Your generous contribution helps us reach more souls with God's transforming word. 
-            You will receive a confirmation email shortly.
+            {showDownloadManager 
+              ? 'Your purchase was successful. You can now download your audio file.'
+              : 'Your generous contribution helps us reach more souls with God\'s transforming word. You will receive a confirmation email shortly.'}
           </p>
 
-          {sessionData && (
+          {sessionData && !showDownloadManager && (
             <div className="bg-gray-50 rounded-lg p-6 mb-6 text-left">
-              <h3 className="font-semibold text-gray-900 mb-4 text-center">Donation Details</h3>
+              <h3 className="font-semibold text-gray-900 mb-4 text-center">Payment Details</h3>
               
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -203,14 +211,33 @@ const SuccessPage: React.FC = () => {
             </div>
           )}
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-center space-x-2 text-red-600">
-              <Heart size={20} />
-              <span className="font-medium">God bless you!</span>
+          {showDownloadManager && sessionData ? (
+            <div className="mb-6">
+              <DownloadManager
+                trackId={sessionData.metadata?.audioUrl || ''}
+                trackTitle={sessionData.metadata?.title || 'Audio Track'}
+                artist={sessionData.metadata?.artist || 'Artist'}
+                email={sessionData.customer_email || ''}
+                sessionId={sessionData.id}
+                onDownloadComplete={() => {
+                  console.log('Download completed');
+                }}
+              />
             </div>
+          ) : null}
+
+          <div className="space-y-4">
+            {!showDownloadManager && (
+              <div className="flex items-center justify-center space-x-2 text-red-600">
+                <Heart size={20} />
+                <span className="font-medium">God bless you!</span>
+              </div>
+            )}
             
             <p className="text-sm text-gray-600 mb-4">
-              Your donation supports our multilingual ministry reaching souls across Nigeria and beyond.
+              {showDownloadManager 
+                ? 'Thank you for supporting our ministry. Enjoy your audio content.'
+                : 'Your donation supports our multilingual ministry reaching souls across Nigeria and beyond.'}
             </p>
             
             <Link
