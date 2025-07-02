@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import { RBACService } from '../../utils/rbac';
+import { usePermissions } from '../../hooks/usePermissions';
 import { Loader2, Shield, AlertTriangle } from 'lucide-react';
 
 interface AdminRouteProps {
@@ -15,7 +14,13 @@ const AdminRoute: React.FC<AdminRouteProps> = ({
   requiredPermission,
   fallbackPath = '/admin/login' 
 }) => {
-  const { user, loading } = useAuth();
+  const { 
+    user, 
+    loading, 
+    canAccessAdminDashboard, 
+    hasPermission, 
+    role 
+  } = usePermissions();
 
   if (loading) {
     return (
@@ -33,7 +38,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({
   }
 
   // Check if user can access admin dashboard
-  if (!RBACService.canAccessAdminDashboard(user)) {
+  if (!canAccessAdminDashboard()) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-rose-50">
         <div className="max-w-md w-full">
@@ -59,7 +64,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-red-600 mt-1">
-                  Current role: {RBACService.getUserRole(user)}
+                  Current role: {role}
                 </p>
               </div>
               
@@ -77,7 +82,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({
   }
 
   // Check specific permission if provided
-  if (requiredPermission && !RBACService.hasPermission(user, requiredPermission)) {
+  if (requiredPermission && !hasPermission(requiredPermission)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 to-orange-50">
         <div className="max-w-md w-full">

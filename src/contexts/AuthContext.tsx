@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
+import { AdminApiService } from '../utils/adminApi';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  userRole: string | null;
+  userPermissions: string[] | null;
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: AuthError | null }>;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<{ error: AuthError | null }>;
@@ -32,6 +35,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userPermissions, setUserPermissions] = useState<string[] | null>(null);
 
   useEffect(() => {
     // Get initial session
@@ -39,6 +44,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setUser(session?.user ?? null);
+      
+      // Fetch user role and permissions if user exists
+      if (session?.user) {
+        try {
+          const { role, permissions, error } = await AdminApiService.checkAdminStatus(session.user.id);
+          if (!error) {
+            setUserRole(role);
+            setUserPermissions(permissions);
+          } else {
+            console.error('Error fetching user role:', error);
+            setUserRole('user'); // Default to user role if there's an error
+            setUserPermissions([]);
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setUserRole('user');
+          setUserPermissions([]);
+        }
+      }
+      
       setLoading(false);
     };
 
@@ -49,6 +74,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        // Reset role and permissions when signing out
+        if (event === 'SIGNED_OUT') {
+          setUserRole(null);
+          setUserPermissions(null);
+        }
+        
+        // Fetch user role and permissions when signing in
+        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+          try {
+            const { role, permissions, error } = await AdminApiService.checkAdminStatus(session.user.id);
+            if (!error) {
+              setUserRole(role);
+              setUserPermissions(permissions);
+            } else {
+              console.error('Error fetching user role:', error);
+              setUserRole('user');
+              setUserPermissions([]);
+            }
+          } catch (error) {
+            console.error('Error checking admin status:', error);
+            setUserRole('user');
+            setUserPermissions([]);
+          }
+        }
+        
         setLoading(false);
 
         // Create user profile on sign up
@@ -162,6 +213,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     session,
     loading,
+    userRole,
+    userPermissions,
     signUp,
     signIn,
     signOut,

@@ -1,21 +1,60 @@
 import { useAuth } from '../contexts/AuthContext';
-import { RBACService } from '../utils/rbac';
+import { PERMISSIONS } from '../utils/rbac';
 
 export const usePermissions = () => {
-  const { user } = useAuth();
+  const { user, userRole, userPermissions, loading } = useAuth();
+
+  const hasPermission = (permission: string): boolean => {
+    if (!userPermissions) return false;
+    return userPermissions.includes(permission);
+  };
+
+  const hasRole = (role: string): boolean => {
+    if (!userRole) return false;
+    return userRole === role;
+  };
+
+  const isAdmin = (): boolean => {
+    return hasRole('admin');
+  };
+
+  const isModerator = (): boolean => {
+    return hasRole('moderator');
+  };
+
+  const canAccessAdminDashboard = (): boolean => {
+    return hasPermission(PERMISSIONS.ADMIN_DASHBOARD_ACCESS);
+  };
+
+  const canManageUsers = (): boolean => {
+    return hasPermission(PERMISSIONS.USER_MANAGEMENT);
+  };
+
+  const canManageContent = (): boolean => {
+    return hasPermission(PERMISSIONS.CONTENT_MANAGEMENT);
+  };
+
+  const canAccessAnalytics = (): boolean => {
+    return hasPermission(PERMISSIONS.ANALYTICS_ACCESS);
+  };
+
+  const canManageSystem = (): boolean => {
+    return hasPermission(PERMISSIONS.SYSTEM_SETTINGS);
+  };
 
   return {
     user,
-    role: RBACService.getUserRole(user),
-    permissions: RBACService.getUserPermissions(user),
-    hasPermission: (permission: string) => RBACService.hasPermission(user, permission),
-    hasRole: (role: string) => RBACService.hasRole(user, role),
-    isAdmin: () => RBACService.isAdmin(user),
-    isModerator: () => RBACService.isModerator(user),
-    canAccessAdminDashboard: () => RBACService.canAccessAdminDashboard(user),
-    canManageUsers: () => RBACService.canManageUsers(user),
-    canManageContent: () => RBACService.canManageContent(user),
-    canAccessAnalytics: () => RBACService.canAccessAnalytics(user),
-    canManageSystem: () => RBACService.canManageSystem(user)
+    role: userRole || 'user',
+    permissions: userPermissions || [],
+    hasPermission,
+    hasRole,
+    isAdmin,
+    isModerator,
+    canAccessAdminDashboard,
+    canManageUsers,
+    canManageContent,
+    canAccessAnalytics,
+    canManageSystem,
+    loading
   };
 };
