@@ -13,7 +13,7 @@ interface AdminRouteProps {
 const AdminRoute: React.FC<AdminRouteProps> = ({ 
   children, 
   requiredPermission,
-  fallbackPath = '/' 
+  fallbackPath = '/admin/login' 
 }) => {
   const { user, loading } = useAuth();
 
@@ -29,7 +29,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={fallbackPath} replace />;
   }
 
   // Check if user can access admin dashboard
@@ -64,7 +64,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({
               </div>
               
               <button
-                onClick={() => window.location.href = fallbackPath}
+                onClick={() => window.location.href = '/'}
                 className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg font-semibold hover:from-red-700 hover:to-red-800 transition-all duration-200"
               >
                 Return to Home

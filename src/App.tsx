@@ -15,6 +15,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage';
 import UserProfilePage from './pages/UserProfilePage';
 import AdminPage from './pages/AdminPage';
+import AdminLoginPage from './pages/AdminLoginPage';
 import SuccessPage from './pages/SuccessPage';
 import StripeTestPage from './pages/StripeTestPage';
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -55,7 +57,11 @@ function App() {
             {/* Admin Routes - Protected with RBAC */}
             <Route 
               path="/admin" 
-              element={<AdminPage />}
+              element={
+                <AdminRoute>
+                  <AdminPage />
+                </AdminRoute>
+              }
             />
           </Routes>
         </Router>
