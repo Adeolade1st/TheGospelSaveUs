@@ -28,13 +28,10 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [validationResult, setValidationResult] = useState<any>(null);
   const [retryCount, setRetryCount] = useState(0);
-
-  // Preview limit (30 seconds)
-  const PREVIEW_LIMIT_SECONDS = 30;
-  const isPreviewLimitReached = currentTime >= PREVIEW_LIMIT_SECONDS;
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -57,17 +54,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     const handleCanPlay = () => {
       console.log(`✅ Music ready to play: ${title}`);
       setIsLoading(false);
+      setIsReady(true);
     };
 
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      
-      // Stop playback when preview limit is reached
-      if (audio.currentTime >= PREVIEW_LIMIT_SECONDS) {
-        audio.pause();
-        setIsPlaying(false);
-        setCurrentTime(PREVIEW_LIMIT_SECONDS);
-      }
     };
 
     const handleEnded = () => {
@@ -153,7 +144,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
 
   const handlePlayPause = async () => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !isReady) return;
 
     // Mark user interaction
     if (!hasUserInteracted) {
@@ -167,12 +158,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
         audio.pause();
         setIsPlaying(false);
       } else {
-        if (isPreviewLimitReached) {
-          // Reset to beginning if preview limit was reached
-          audio.currentTime = 0;
-          setCurrentTime(0);
-        }
-        
         console.log(`▶️ Playing music: ${title}`);
         setIsLoading(true);
         await audio.play();
@@ -234,15 +219,14 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !isReady) return;
 
     const progressBar = e.currentTarget;
     const clickX = e.clientX - progressBar.getBoundingClientRect().left;
     const progressWidth = progressBar.offsetWidth;
     const clickRatio = clickX / progressWidth;
     
-    // Limit to preview duration
-    const newTime = Math.min(clickRatio * totalDuration, PREVIEW_LIMIT_SECONDS);
+    const newTime = clickRatio * totalDuration;
     
     if (isFinite(newTime)) {
       audio.currentTime = newTime;
@@ -257,13 +241,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const progressPercentage = totalDuration > 0 
-    ? (currentTime / totalDuration) * 100 
-    : 0;
-  
-  const previewPercentage = totalDuration > 0 
-    ? (PREVIEW_LIMIT_SECONDS / totalDuration) * 100 
-    : 0;
+  const progressPercentage = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
 
   const getTroubleshootingSteps = () => {
     if (!error) return [];
@@ -345,32 +323,28 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
         <div className="mb-4">
           <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
             <span>{formatTime(currentTime)}</span>
-            <div className="flex items-center space-x-1">
-              <Lock size={12} className="text-yellow-500" />
-              <span className="text-yellow-600">Preview: {formatTime(PREVIEW_LIMIT_SECONDS)}</span>
-            </div>
-            <span>{formatTime(totalDuration)}</span>
+            <span>{totalDuration > 0 ? formatTime(totalDuration) : duration}</span>
           </div>
           <div 
             className="w-full h-2 bg-gray-200 rounded-full overflow-hidden cursor-pointer relative"
             onClick={handleProgressClick}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={totalDuration}
+            aria-valuenow={currentTime}
+            aria-label="Audio progress"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handlePlayPause();
+              }
+            }}
           >
-            {/* Preview limit indicator */}
-            <div 
-              className="absolute h-full bg-yellow-300 opacity-30"
-              style={{ width: `${previewPercentage}%` }}
-            />
-            
             {/* Progress bar */}
             <div 
-              className="h-full bg-blue-600 transition-all duration-100 relative z-10"
+              className="h-full bg-blue-600 transition-all duration-100 ease-out"
               style={{ width: `${progressPercentage}%` }}
-            />
-            
-            {/* Preview limit marker */}
-            <div 
-              className="absolute top-0 h-full w-1 bg-yellow-500"
-              style={{ left: `${previewPercentage}%` }}
             />
           </div>
         </div>
@@ -411,12 +385,12 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
           </div>
         </div>
 
-        {/* Preview Notice */}
-        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
+        {/* Full Audio Notice */}
+        <div className="p-3 bg-green-50 border border-green-200 rounded-lg mb-6">
           <div className="flex items-center space-x-2">
-            <Lock className="text-yellow-600" size={16} />
-            <p className="text-yellow-800 text-sm">
-              Preview limited to 30 seconds. Purchase for full access.
+            <Download className="text-green-600" size={16} />
+            <p className="text-green-800 text-sm">
+              Full audio available for streaming and download.
             </p>
           </div>
         </div>
@@ -451,7 +425,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
             <div className="flex items-center space-x-2">
               <Info className="text-blue-600" size={16} />
               <p className="text-blue-800 text-sm">
-                Click the play button to start audio preview
+                Click the play button to start audio playback
               </p>
             </div>
           </div>
