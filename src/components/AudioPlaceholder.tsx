@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, AlertCircle, Loader2, RefreshCw, Download } from 'lucide-react';
 import SecureDownloadButton from './SecureDownloadButton';
+import { StorageService } from '../utils/storageService';
 
 interface AudioPlaceholderProps {
   language: string;
@@ -9,9 +10,10 @@ interface AudioPlaceholderProps {
   description: string;
   gradient: string;
   sampleTitle: string;
-  audioUrl: string;
+  audioUrl: string; // This is now the storage path, not the direct URL
   artist: string;
   className?: string;
+  contentId?: string; // Added contentId prop
 }
 
 const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
@@ -23,7 +25,8 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   sampleTitle,
   audioUrl,
   artist,
-  className = ''
+  className = '',
+  contentId = '' // Default to empty string
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -36,10 +39,34 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [publicUrl, setPublicUrl] = useState<string>('');
+
+  useEffect(() => {
+    // Get the public URL for streaming
+    const getAudioUrl = async () => {
+      // If it's already a full URL, use it directly
+      if (audioUrl.startsWith('http')) {
+        setPublicUrl(audioUrl);
+        return;
+      }
+      
+      // If it's a local path (starts with /), use it directly
+      if (audioUrl.startsWith('/')) {
+        setPublicUrl(audioUrl);
+        return;
+      }
+      
+      // Otherwise, get the public URL from Supabase Storage
+      const url = StorageService.getPublicUrl(audioUrl);
+      setPublicUrl(url);
+    };
+    
+    getAudioUrl();
+  }, [audioUrl]);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !publicUrl) return;
 
     const handleLoadStart = () => {
       setIsLoading(true);
@@ -89,6 +116,12 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
     audio.addEventListener('waiting', handleWaiting);
     audio.addEventListener('canplaythrough', handleCanPlayThrough);
 
+    // Set audio source if we have a public URL
+    if (publicUrl) {
+      audio.src = publicUrl;
+      audio.load();
+    }
+
     return () => {
       audio.removeEventListener('loadstart', handleLoadStart);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
@@ -99,7 +132,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
       audio.removeEventListener('waiting', handleWaiting);
       audio.removeEventListener('canplaythrough', handleCanPlayThrough);
     };
-  }, [audioUrl]);
+  }, [publicUrl]);
 
   const handlePlayPause = async () => {
     const audio = audioRef.current;
@@ -190,7 +223,6 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
       {/* Hidden audio element */}
       <audio 
         ref={audioRef} 
-        src={audioUrl} 
         preload="metadata"
         crossOrigin="anonymous"
         aria-label={`Audio player for ${sampleTitle} in ${nativeName} by ${artist}`}
@@ -336,7 +368,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
         {/* Secure Download Button */}
         <div className="border-t pt-4">
           <SecureDownloadButton
-            audioUrl={audioUrl}
+            contentId={contentId || audioUrl} // Use contentId if available, fallback to audioUrl
             title={sampleTitle}
             artist={artist}
             price={1}

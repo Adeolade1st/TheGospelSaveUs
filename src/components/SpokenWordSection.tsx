@@ -17,9 +17,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Eyin rere',
-      audioUrl: '/Yoruba version of The Gospel.mp3',
+      audioUrl: 'yoruba.mp3', // Updated to use storage path
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      artist: 'Janet Olaitan'
+      artist: 'Janet Olaitan',
+      contentId: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p' // Example UUID
     },
     {
       language: 'Igbo',
@@ -28,9 +29,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
-      audioUrl: '/Ibo version of The Gospel-1.mp3',
+      audioUrl: 'igbo.mp3', // Updated to use storage path
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
-      artist: 'Minister Susan Collins'
+      artist: 'Minister Susan Collins',
+      contentId: '2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q' // Example UUID
     },
     {
       language: 'Hausa',
@@ -39,9 +41,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari mai dadi',
-      audioUrl: '/Hausa version of The Gospel.mp3',
+      audioUrl: 'hausa.mp3', // Updated to use storage path
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      artist: 'Isaac O. Samuel'
+      artist: 'Isaac O. Samuel',
+      contentId: '3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r' // Example UUID
     },
     {
       language: 'English',
@@ -50,9 +53,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
-      audioUrl: '/English.mp3',
+      audioUrl: 'english.mp3', // Updated to use storage path
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
-      artist: 'Evangelist Birdie Jones'
+      artist: 'Evangelist Birdie Jones',
+      contentId: '4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s' // Example UUID
     }
   ];
 
@@ -118,6 +122,7 @@ const SpokenWordSection: React.FC = () => {
                   sampleTitle={sample.sampleTitle}
                   audioUrl={sample.audioUrl}
                   artist={sample.artist}
+                  contentId={sample.contentId}
                   className="w-full h-full flex flex-col"
                 />
               </div>

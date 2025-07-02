@@ -214,7 +214,7 @@ const SuccessPage: React.FC = () => {
           {showDownloadManager && sessionData ? (
             <div className="mb-6">
               <DownloadManager
-                trackId={sessionData.metadata?.audioUrl || ''}
+                trackId={sessionData.metadata?.contentId || ''} // Changed from audioUrl to contentId
                 trackTitle={sessionData.metadata?.title || 'Audio Track'}
                 artist={sessionData.metadata?.artist || 'Artist'}
                 email={sessionData.customer_email || ''}

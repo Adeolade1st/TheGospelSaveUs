@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import PaymentButton from './PaymentButton';
 
 interface SecureDownloadButtonProps {
-  audioUrl: string;
+  contentId: string; // Changed from audioUrl to contentId
   title: string;
   artist: string;
   price: number;
@@ -14,7 +14,7 @@ interface SecureDownloadButtonProps {
 }
 
 const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
-  audioUrl,
+  contentId,
   title,
   artist,
   price,
@@ -35,18 +35,17 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
     if (user) {
       checkPurchaseStatus();
     }
-  }, [user, audioUrl]);
+  }, [user, contentId]);
 
   const checkPurchaseStatus = async () => {
     try {
-      // In a real implementation, you would check against your database
-      // to see if the user has already purchased this audio
+      // Check for existing download tokens
       const { data, error } = await supabase
-        .from('donations')
+        .from('download_tokens')
         .select('*')
-        .eq('customer_email', user?.email)
-        .eq('metadata->>title', title) // Fixed: Changed -> to ->> for JSONB text extraction
-        .eq('status', 'completed')
+        .eq('email', user?.email)
+        .eq('track_id', contentId) // Now using contentId
+        .eq('is_active', true)
         .limit(1);
 
       if (error) {
@@ -57,22 +56,78 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
       if (data && data.length > 0) {
         console.log('User has already purchased this audio');
         setHasPurchased(true);
-        // In a real implementation, you would also retrieve the download token
-        setDownloadToken('sample-token-' + crypto.randomUUID().substring(0, 8));
+        setDownloadToken(data[0].id);
+      } else {
+        // If no token found, check donations as fallback
+        const { data: donationData, error: donationError } = await supabase
+          .from('donations')
+          .select('*')
+          .eq('customer_email', user?.email)
+          .eq('metadata->>contentId', contentId) // Using contentId in metadata
+          .eq('status', 'completed')
+          .limit(1);
+
+        if (donationError) {
+          console.error('Error checking donation status:', donationError);
+          return;
+        }
+
+        if (donationData && donationData.length > 0) {
+          console.log('User has purchased this audio via donation');
+          setHasPurchased(true);
+          // Create a download token if none exists
+          await createDownloadToken(donationData[0].stripe_session_id);
+        }
       }
     } catch (err) {
       console.error('Error checking purchase status:', err);
     }
   };
 
+  const createDownloadToken = async (sessionId: string) => {
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration missing');
+      }
+      
+      const functionUrl = `${supabaseUrl}/functions/v1/create-download-token`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId,
+          trackId: contentId,
+          email: user?.email
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create download token');
+      }
+      
+      const data = await response.json();
+      if (data.success && data.tokenId) {
+        setDownloadToken(data.tokenId);
+      }
+    } catch (err) {
+      console.error('Error creating download token:', err);
+    }
+  };
+
   const handlePaymentSuccess = async (sessionId: string) => {
     console.log(`🎉 Payment successful for ${title}. Session ID: ${sessionId}`);
     
-    // In a real implementation, you would verify the payment server-side
-    // and generate a secure download token
-    
     setHasPurchased(true);
-    setDownloadToken('purchase-token-' + crypto.randomUUID().substring(0, 8));
+    
+    // Create a download token
+    await createDownloadToken(sessionId);
   };
 
   const handleSecureDownload = async () => {
@@ -87,70 +142,108 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
     setError(null);
 
     try {
-      // In a real implementation, you would validate the download token
-      // and track the download against the user's quota
+      // Call the download-audio function to get a signed URL
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
-      // Simulate download progress
-      const progressInterval = setInterval(() => {
-        setDownloadProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(progressInterval);
-            return 100;
-          }
-          return prev + 5;
-        });
-      }, 100);
-
-      // Simulate download completion after 2 seconds
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration missing');
+      }
+      
+      // Progress to 20%
+      setDownloadProgress(20);
+      
+      const functionUrl = `${supabaseUrl}/functions/v1/download-audio?token=${downloadToken}`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Progress to 40%
+      setDownloadProgress(40);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Failed to get download URL (${response.status})`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.success || !data.downloadUrl) {
+        throw new Error(data.message || 'Failed to get download URL');
+      }
+      
+      // Progress to 60%
+      setDownloadProgress(60);
+      
+      // Create download link with the signed URL
+      const link = document.createElement('a');
+      link.href = data.downloadUrl;
+      link.download = `${artist} - ${title}.mp3`;
+      document.body.appendChild(link);
+      
+      // Progress to 80%
+      setDownloadProgress(80);
+      
+      // Trigger download
+      link.click();
+      document.body.removeChild(link);
+      
+      // Log download
+      await logDownload();
+      
+      // Complete progress
+      setDownloadProgress(100);
+      setDownloadStatus('success');
+      
+      // Reset after 3 seconds
       setTimeout(() => {
-        clearInterval(progressInterval);
-        setDownloadProgress(100);
-        
-        // Create download link
-        const link = document.createElement('a');
-        link.href = audioUrl;
-        link.download = `${artist} - ${title}.mp3`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // Log download
-        logDownload();
-        
-        setDownloadStatus('success');
-        
-        // Reset after 3 seconds
-        setTimeout(() => {
-          setDownloadStatus('idle');
-          setDownloadProgress(0);
-          setIsDownloading(false);
-        }, 3000);
-      }, 2000);
+        setDownloadStatus('idle');
+        setDownloadProgress(0);
+        setIsDownloading(false);
+      }, 3000);
     } catch (err) {
       console.error('Download failed:', err);
-      setError('Download failed. Please try again.');
+      setError(err instanceof Error ? err.message : 'Download failed. Please try again.');
       setDownloadStatus('error');
       setIsDownloading(false);
     }
   };
 
   const logDownload = async () => {
-    if (!user) return;
+    if (!downloadToken) return;
     
     try {
-      // In a real implementation, you would log the download to your database
-      const { error } = await supabase
+      // Update download count in the database
+      const { error: updateError } = await supabase
+        .from('download_tokens')
+        .update({
+          download_count: supabase.rpc('increment_download_count', { token_uuid: downloadToken }),
+          last_downloaded_at: new Date().toISOString()
+        })
+        .eq('id', downloadToken);
+      
+      if (updateError) {
+        console.error('Error updating download count:', updateError);
+      }
+      
+      // Log the download
+      const { error: logError } = await supabase
         .from('download_logs')
         .insert({
           token_id: downloadToken,
-          track_id: audioUrl, // This would be the actual track ID in a real implementation
-          email: user.email,
+          track_id: contentId, // Now using contentId
+          email: user?.email || '',
           ip_address: 'client-ip', // This would be captured server-side
           user_agent: navigator.userAgent.substring(0, 255)
         });
 
-      if (error) {
-        console.error('Error logging download:', error);
+      if (logError) {
+        console.error('Error logging download:', logError);
       }
     } catch (err) {
       console.error('Error logging download:', err);
@@ -223,6 +316,7 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
             description={`Download "${title}" by ${artist}`}
             metadata={{
               type: 'audio_download',
+              contentId, // Changed from audioUrl to contentId
               title,
               artist,
               language,

@@ -65,6 +65,39 @@ serve(async (req) => {
       )
     }
 
+    // Get the audio file path from spoken_word_content
+    const { data: contentData, error: contentError } = await supabase
+      .from('spoken_word_content')
+      .select('audio_url, title, artist')
+      .eq('id', tokenData.track_id)
+      .single()
+    
+    if (contentError || !contentData) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to retrieve audio content' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        },
+      )
+    }
+
+    // Generate a signed URL for the audio file
+    const { data: signedUrlData, error: signedUrlError } = await supabase
+      .storage
+      .from('spoken-word-audio')
+      .createSignedUrl(contentData.audio_url, 3600) // 1 hour expiry
+    
+    if (signedUrlError || !signedUrlData) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to generate download URL' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        },
+      )
+    }
+
     // Increment download count
     const { data: incrementResult, error: incrementError } = await supabase
       .rpc('increment_download_count', { token_uuid: token })
@@ -93,17 +126,11 @@ serve(async (req) => {
         user_agent: userAgent
       })
 
-    // Generate a signed URL for the audio file
-    // In a real implementation, you would get the file from storage
-    // Here we're just returning the track_id which is the file path
-    
-    // For security, we would normally generate a short-lived signed URL
-    // But for this example, we'll just return the track info
     return new Response(
       JSON.stringify({
         success: true,
         message: 'Download authorized',
-        track_id: tokenData.track_id,
+        downloadUrl: signedUrlData.signedUrl,
         downloads_remaining: validationData.downloads_remaining - 1,
         expires_at: tokenData.expires_at
       }),

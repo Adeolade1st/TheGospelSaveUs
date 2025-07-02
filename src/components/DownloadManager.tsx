@@ -3,7 +3,7 @@ import { Download, CheckCircle, Clock, AlertCircle, Mail, RefreshCw, Shield, Loa
 import { supabase } from '../lib/supabase';
 
 interface DownloadManagerProps {
-  trackId: string;
+  trackId: string; // This is now the content ID (UUID)
   trackTitle: string;
   artist: string;
   email: string;
@@ -60,15 +60,38 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
           
           if (response.status === 404) {
             console.log('No download token found, creating one...');
-            // In a real implementation, you would create a token here
-            // For this example, we'll just simulate it
-            const token = `dl_${crypto.randomUUID().substring(0, 16)}`;
-            setDownloadToken(token);
+            // Create a token using the create-download-token function
+            const createTokenUrl = `${supabaseUrl}/functions/v1/create-download-token`;
+            const createResponse = await fetch(createTokenUrl, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${supabaseKey}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                sessionId,
+                trackId,
+                email
+              })
+            });
             
-            // Set expiry date (7 days from now)
-            const expiry = new Date();
-            expiry.setDate(expiry.getDate() + 7);
-            setExpiryDate(expiry);
+            if (!createResponse.ok) {
+              throw new Error('Failed to create download token');
+            }
+            
+            const tokenData = await createResponse.json();
+            if (tokenData.success && tokenData.tokenId) {
+              setDownloadToken(tokenData.tokenId);
+              
+              // Set expiry date (7 days from now)
+              const expiry = new Date();
+              expiry.setDate(expiry.getDate() + 7);
+              setExpiryDate(expiry);
+              setDownloadCount(0);
+              setMaxDownloads(3);
+            } else {
+              throw new Error(tokenData.error || 'Failed to create download token');
+            }
           } else {
             throw new Error(errorData.error || `HTTP error ${response.status}`);
           }
@@ -94,7 +117,7 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
       setIsVerifying(false);
       setError('No session ID provided. Unable to verify purchase.');
     }
-  }, [sessionId]);
+  }, [sessionId, trackId, email]);
 
   const handleDownload = async () => {
     if (downloadCount >= maxDownloads) {
@@ -112,36 +135,62 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
     setError(null);
 
     try {
-      // Simulate download progress
-      const interval = setInterval(() => {
-        setDownloadProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return prev + 5;
-        });
-      }, 200);
-
-      // Simulate download completion after 4 seconds
-      await new Promise(resolve => setTimeout(resolve, 4000));
+      // Call the download-audio function to get a signed URL
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
-      clearInterval(interval);
-      setDownloadProgress(100);
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration missing');
+      }
       
-      // Create download link
+      // Progress to 20%
+      setDownloadProgress(20);
+      
+      const functionUrl = `${supabaseUrl}/functions/v1/download-audio?token=${downloadToken}`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Progress to 40%
+      setDownloadProgress(40);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Failed to get download URL (${response.status})`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.success || !data.downloadUrl) {
+        throw new Error(data.message || 'Failed to get download URL');
+      }
+      
+      // Progress to 60%
+      setDownloadProgress(60);
+      
+      // Create download link with the signed URL
       const link = document.createElement('a');
-      link.href = trackId; // In a real implementation, this would be a secure URL with the token
+      link.href = data.downloadUrl;
       link.download = `${artist} - ${trackTitle}.mp3`;
       document.body.appendChild(link);
+      
+      // Progress to 80%
+      setDownloadProgress(80);
+      
+      // Trigger download
       link.click();
       document.body.removeChild(link);
       
-      // Update download count
+      // Update download count locally
       setDownloadCount(prev => prev + 1);
       
-      // Log download
-      await logDownload();
+      // Complete progress
+      setDownloadProgress(100);
       
       if (onDownloadComplete) {
         onDownloadComplete();
@@ -154,47 +203,35 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
     }
   };
 
-  const logDownload = async () => {
-    if (!downloadToken) return;
-    
-    try {
-      // Update download count in the database
-      const { error: updateError } = await supabase
-        .from('download_tokens')
-        .update({
-          download_count: downloadCount + 1,
-          last_downloaded_at: new Date().toISOString()
-        })
-        .eq('id', downloadToken);
-      
-      if (updateError) {
-        console.error('Error updating download count:', updateError);
-      }
-      
-      // Log the download
-      const { error: logError } = await supabase
-        .from('download_logs')
-        .insert({
-          token_id: downloadToken,
-          track_id: trackId,
-          email: email,
-          ip_address: 'client-ip', // This would be captured server-side
-          user_agent: navigator.userAgent.substring(0, 255)
-        });
-
-      if (logError) {
-        console.error('Error logging download:', logError);
-      }
-    } catch (err) {
-      console.error('Error logging download:', err);
-    }
-  };
-
   const sendEmailBackup = async () => {
     try {
-      // In a real implementation, you would call your backend to send an email
-      // with the download link
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || !downloadToken) {
+        throw new Error('Missing required configuration');
+      }
+      
+      const functionUrl = `${supabaseUrl}/functions/v1/send-download-email`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          tokenId: downloadToken,
+          trackTitle,
+          artist
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+      
       setEmailSent(true);
     } catch (err) {
       console.error('Error sending email:', err);

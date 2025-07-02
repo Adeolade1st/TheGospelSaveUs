@@ -2,14 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Lock, ShoppingCart, AlertCircle, RefreshCw, Info, Loader2, Download } from 'lucide-react';
 import { AudioValidator } from '../utils/audioValidation';
 import SecureDownloadButton from './SecureDownloadButton';
+import { StorageService } from '../utils/storageService';
 
 interface MusicPlayerProps {
   title: string;
   artist: string;
-  audioUrl: string;
+  audioUrl: string; // This is now the storage path, not the direct URL
   duration: string;
   language: string;
   coverImage?: string;
+  contentId?: string; // Added contentId prop
 }
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({
@@ -18,7 +20,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   audioUrl,
   duration,
   language,
-  coverImage
+  coverImage,
+  contentId = '' // Default to empty string
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -32,10 +35,34 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [validationResult, setValidationResult] = useState<any>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [publicUrl, setPublicUrl] = useState<string>('');
+
+  useEffect(() => {
+    // Get the public URL for streaming
+    const getAudioUrl = async () => {
+      // If it's already a full URL, use it directly
+      if (audioUrl.startsWith('http')) {
+        setPublicUrl(audioUrl);
+        return;
+      }
+      
+      // If it's a local path (starts with /), use it directly
+      if (audioUrl.startsWith('/')) {
+        setPublicUrl(audioUrl);
+        return;
+      }
+      
+      // Otherwise, get the public URL from Supabase Storage
+      const url = StorageService.getPublicUrl(audioUrl);
+      setPublicUrl(url);
+    };
+    
+    getAudioUrl();
+  }, [audioUrl]);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !publicUrl) return;
 
     const handleLoadStart = () => {
       console.log(`🎵 Music player loading: ${title}`);
@@ -117,18 +144,26 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
     // Prevent direct downloads
     audio.controlsList.add('nodownload');
 
+    // Set audio source if we have a public URL
+    if (publicUrl) {
+      audio.src = publicUrl;
+      audio.load();
+    }
+
     // Validate audio file
-    AudioValidator.validateAudioFile(audioUrl)
-      .then(result => {
-        setValidationResult(result);
-        if (!result.isValid) {
-          setError(result.errors[0] || 'Audio validation failed');
-        }
-      })
-      .catch(err => {
-        console.error('Audio validation failed:', err);
-        setError('Failed to validate audio file');
-      });
+    if (publicUrl) {
+      AudioValidator.validateAudioFile(publicUrl)
+        .then(result => {
+          setValidationResult(result);
+          if (!result.isValid) {
+            setError(result.errors[0] || 'Audio validation failed');
+          }
+        })
+        .catch(err => {
+          console.error('Audio validation failed:', err);
+          setError('Failed to validate audio file');
+        });
+    }
 
     return () => {
       audio.removeEventListener('loadstart', handleLoadStart);
@@ -140,7 +175,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       audio.removeEventListener('waiting', handleWaiting);
       audio.removeEventListener('canplaythrough', handleCanPlayThrough);
     };
-  }, [audioUrl, title]);
+  }, [publicUrl, title]);
 
   const handlePlayPause = async () => {
     const audio = audioRef.current;
@@ -183,7 +218,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       audio.load();
       
       try {
-        const result = await AudioValidator.validateAudioFile(audioUrl);
+        const result = await AudioValidator.validateAudioFile(publicUrl);
         setValidationResult(result);
         if (!result.isValid) {
           setError(result.errors[0] || 'Audio validation failed');
@@ -254,7 +289,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       {/* Hidden audio element */}
       <audio 
         ref={audioRef} 
-        src={audioUrl} 
         preload="metadata"
         crossOrigin="anonymous"
         controlsList="nodownload"
@@ -399,7 +433,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
         <div className="space-y-3">
           {/* $1 Download Button with Stripe */}
           <SecureDownloadButton
-            audioUrl={audioUrl}
+            contentId={contentId || audioUrl} // Use contentId if available, fallback to audioUrl
             title={title}
             artist={artist}
             price={1}
