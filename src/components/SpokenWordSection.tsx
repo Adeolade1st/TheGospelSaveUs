@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Music, Globe } from 'lucide-react';
+import { Music, Globe, ShoppingCart, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import AudioPlaceholder from './AudioPlaceholder';
@@ -181,35 +181,92 @@ const SpokenWordSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Call to Action - Enhanced */}
-          <div className="mt-12 text-center">
-            <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto">
+          {/* Call to Action - Enhanced with Amazon Card */}
+          <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Complete Audio Messages Card */}
+            <div className="bg-white rounded-2xl shadow-xl p-8">
               <Globe className="w-16 h-16 text-red-600 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
                 Complete Audio Messages Available
               </h3>
-              <p className="text-gray-600 mb-8 leading-relaxed text-lg">
+              <p className="text-gray-600 mb-8 leading-relaxed text-lg text-center">
                 These are full-length audio messages optimized for streaming and download. 
                 For our complete collection and continuous streaming, visit our Jango Radio page 
                 where you can discover more transformative content.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col gap-4">
                 <a
                   href="https://www.jango.com/music/Pure+Gold+Gospel+Singers"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  className="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
                 >
                   <Music size={20} />
                   <span>Explore Full Collection</span>
                 </a>
                 <a
                   href="/gallery"
-                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  className="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
                 >
                   <Globe size={20} />
                   <span>Meet Our Artists</span>
                 </a>
+              </div>
+            </div>
+
+            {/* Amazon Purchase Card */}
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              <ShoppingCart className="w-16 h-16 text-orange-600 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+                Purchase on Amazon
+              </h3>
+              <p className="text-gray-600 mb-8 leading-relaxed text-lg text-center">
+                Own the complete collection of our transformative spoken word ministry. 
+                Available for purchase and download on Amazon Music with high-quality audio 
+                and instant access to all languages.
+              </p>
+              <div className="flex flex-col gap-4">
+                <a
+                  href="https://music.amazon.com/search/Pure%20Gold%20Gospel%20Singers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  <ShoppingCart size={20} />
+                  <span>Shop on Amazon Music</span>
+                </a>
+                <a
+                  href="https://www.amazon.com/s?k=Pure+Gold+Gospel+Singers&i=digital-music"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center space-x-3 border-2 border-orange-500 text-orange-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-orange-50 transition-all duration-200 transform hover:scale-105"
+                >
+                  <ExternalLink size={20} />
+                  <span>Browse Digital Downloads</span>
+                </a>
+              </div>
+              
+              {/* Amazon Features */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-3 text-center">Amazon Benefits</h4>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>Instant digital download</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>High-quality MP3 format</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>Cloud storage & offline access</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>Compatible with all devices</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
