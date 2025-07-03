@@ -71,8 +71,7 @@ serve(async (req) => {
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16',
-      timeout: 10000, // 10 second timeout for Stripe API calls
-      maxNetworkRetries: 1, // Reduced retries for faster failure
+      
     })
 
     // Parse and validate request body
