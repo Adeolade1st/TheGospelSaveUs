@@ -18,6 +18,16 @@ export class StorageService {
    * @returns Public URL for streaming
    */
   static getPublicUrl(path: string): string {
+    // If it's already a full URL, return it
+    if (path.startsWith('http')) {
+      return path;
+    }
+    
+    // If it's a local path (starts with /), return it
+    if (path.startsWith('/')) {
+      return path;
+    }
+    
     const { data } = supabase.storage.from(this.AUDIO_BUCKET).getPublicUrl(path);
     return data.publicUrl;
   }

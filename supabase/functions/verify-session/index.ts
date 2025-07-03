@@ -63,7 +63,7 @@ serve(async (req) => {
           .from('download_tokens')
           .insert({
             stripe_session_id: sessionId,
-            track_id: session.metadata?.contentId || '', // Changed from audioUrl to contentId
+            track_id: session.metadata?.contentId || '',
             email: session.customer_details?.email || '',
             expires_at: expiryDate.toISOString(),
             max_downloads: 3,

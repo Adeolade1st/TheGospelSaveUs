@@ -17,11 +17,10 @@ serve(async (req) => {
 
   try {
     event = await stripe.webhooks.constructEvent(
-  body,
-  signature!,
-  Deno.env.get('STRIPE_WEBHOOK_SECRET')!
-)
-
+      body,
+      signature!,
+      Deno.env.get('STRIPE_WEBHOOK_SECRET')!
+    )
   } catch (err) {
     console.error('Webhook signature verification failed:', err)
     return new Response('Webhook signature verification failed', { status: 400 })
@@ -53,6 +52,40 @@ serve(async (req) => {
           // Don't return error to Stripe, log it for manual review
         } else {
           console.log('Successfully stored donation for session:', session.id)
+        }
+        
+        // If this is an audio download purchase, create a download token
+        if (session.metadata?.type === 'audio_download' && session.metadata?.contentId) {
+          // Check if token already exists
+          const { data: existingToken } = await supabase
+            .from('download_tokens')
+            .select('id')
+            .eq('stripe_session_id', session.id)
+            .limit(1)
+          
+          if (!existingToken || existingToken.length === 0) {
+            // Create expiry date (7 days from now)
+            const expiryDate = new Date()
+            expiryDate.setDate(expiryDate.getDate() + 7)
+            
+            // Create download token
+            const { error: tokenError } = await supabase
+              .from('download_tokens')
+              .insert({
+                stripe_session_id: session.id,
+                track_id: session.metadata.contentId,
+                email: session.customer_details?.email,
+                expires_at: expiryDate.toISOString(),
+                max_downloads: 3,
+                is_active: true
+              })
+            
+            if (tokenError) {
+              console.error('Error creating download token:', tokenError)
+            } else {
+              console.log('Created download token for session:', session.id)
+            }
+          }
         }
         break
 
