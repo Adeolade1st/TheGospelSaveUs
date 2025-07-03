@@ -39,7 +39,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
 
   useEffect(() => {
     // Get the public URL for streaming
-    const getAudioUrl = async () => {
+    const getAudioUrl = async (console.log) => {
       // If it's already a full URL, use it directly
       if (audioUrl.startsWith('http')) {
         setPublicUrl(audioUrl);
