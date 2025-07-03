@@ -127,46 +127,33 @@ serve(async (req) => {
     }
 
     // Fetch the audio file content
-    try {
-      const audioResponse = await fetch(signedUrlData.signedUrl);
-      
-      if (!audioResponse.ok) {
-        throw new Error(`Failed to fetch audio file: ${audioResponse.status}`);
-      }
-      
-      const audioBlob = await audioResponse.blob();
-      
-      // Create a filename
-      const filename = `${contentData.artist || 'Artist'} - ${contentData.title || 'Track'}.mp3`;
-      
-      // Return the audio file with Content-Disposition: attachment header
-      return new Response(audioBlob, {
-        headers: {
-          'Content-Type': 'audio/mpeg',
-          'Content-Disposition': `attachment; filename="${filename}"`,
-          'Content-Length': audioBlob.size.toString(),
-          ...corsHeaders
-        },
-        status: 200
-      });
-    } catch (fetchError) {
-      console.error('Error fetching audio file:', fetchError);
-      
-      // Fallback: return the signed URL if we can't fetch the file directly
+    const audioResponse = await fetch(signedUrlData.signedUrl);
+    
+    if (!audioResponse.ok) {
       return new Response(
-        JSON.stringify({
-          success: true,
-          message: 'Download authorized',
-          downloadUrl: signedUrlData.signedUrl,
-          downloads_remaining: validationData.downloads_remaining - 1,
-          expires_at: tokenData.expires_at
-        }),
+        JSON.stringify({ error: `Failed to fetch audio file: ${audioResponse.status}` }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 200,
+          status: 500,
         },
       )
     }
+    
+    const audioBlob = await audioResponse.blob();
+    
+    // Create a filename
+    const filename = `${contentData.artist || 'Artist'} - ${contentData.title || 'Track'}.mp3`;
+    
+    // Return the audio file with Content-Disposition: attachment header
+    return new Response(audioBlob, {
+      headers: {
+        'Content-Type': 'audio/mpeg',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': audioBlob.size.toString(),
+        ...corsHeaders
+      },
+      status: 200
+    });
   } catch (error) {
     console.error('Error processing download request:', error)
     
