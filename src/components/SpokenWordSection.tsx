@@ -19,8 +19,8 @@ const SpokenWordSection: React.FC = () => {
       sampleTitle: 'Eyin rere',
       audioUrl: '/Yoruba version of The Gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      artist: 'Janet Olaitan',
-      contentId: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p'
+      artist: 'Deaconess Janet Olaitan',
+      contentId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef'
     },
     {
       language: 'Igbo',
@@ -32,7 +32,7 @@ const SpokenWordSection: React.FC = () => {
       audioUrl: '/Ibo version of The Gospel-1.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       artist: 'Minister Susan Collins',
-      contentId: '2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q'
+      contentId: 'b2c3d4e5-f6a7-8901-2345-67890abcdef0'
     },
     {
       language: 'Hausa',
@@ -43,8 +43,8 @@ const SpokenWordSection: React.FC = () => {
       sampleTitle: 'Labari mai dadi',
       audioUrl: '/Hausa version of The Gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      artist: 'Isaac O. Samuel',
-      contentId: '3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r'
+      artist: 'Pastor Isaac O. Samuel',
+      contentId: 'c3d4e5f6-a7b8-9012-3456-7890abcdef01'
     },
     {
       language: 'English',
@@ -56,7 +56,7 @@ const SpokenWordSection: React.FC = () => {
       audioUrl: '/English.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
       artist: 'Evangelist Jones',
-      contentId: '4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s'
+      contentId: 'd4e5f6a7-b8c9-0123-4567-890abcdef012'
     }
   ];
 
