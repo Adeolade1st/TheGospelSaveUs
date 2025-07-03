@@ -69,9 +69,9 @@ serve(async (req) => {
       )
     }
 
+    // Fixed: Remove invalid configuration options
     const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2023-10-16',
-      
+      apiVersion: '2023-10-16'
     })
 
     // Parse and validate request body
