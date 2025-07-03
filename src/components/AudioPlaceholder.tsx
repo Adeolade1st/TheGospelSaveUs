@@ -43,7 +43,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
 
   useEffect(() => {
     // Get the public URL for streaming
-    const getAudioUrl = async (console.log) => {
+    const getAudioUrl = async () => {
       // If it's already a full URL, use it directly
       if (audioUrl.startsWith('http')) {
         setPublicUrl(audioUrl);
