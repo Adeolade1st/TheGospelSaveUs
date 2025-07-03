@@ -68,6 +68,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       console.log(`🎵 Music player loading: ${title}`);
       setIsLoading(true);
       setError(null);
+      setIsReady(false);
     };
 
     const handleLoadedMetadata = () => {
