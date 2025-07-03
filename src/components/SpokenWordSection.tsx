@@ -17,10 +17,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Eyin rere',
-      audioUrl: 'yoruba.mp3', // Updated to use storage path
+      audioUrl: '/Yoruba version of The Gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
       artist: 'Janet Olaitan',
-      contentId: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p' // Example UUID
+      contentId: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p'
     },
     {
       language: 'Igbo',
@@ -29,10 +29,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
-      audioUrl: 'igbo.mp3', // Updated to use storage path
+      audioUrl: '/Ibo version of The Gospel-1.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       artist: 'Minister Susan Collins',
-      contentId: '2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q' // Example UUID
+      contentId: '2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q'
     },
     {
       language: 'Hausa',
@@ -41,10 +41,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari mai dadi',
-      audioUrl: 'hausa.mp3', // Updated to use storage path
+      audioUrl: '/Hausa version of The Gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
       artist: 'Isaac O. Samuel',
-      contentId: '3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r' // Example UUID
+      contentId: '3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r'
     },
     {
       language: 'English',
@@ -53,10 +53,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
-      audioUrl: 'english.mp3', // Updated to use storage path
+      audioUrl: '/English.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
-      artist: 'Evangelist Birdie Jones',
-      contentId: '4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s' // Example UUID
+      artist: 'Evangelist Jones',
+      contentId: '4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s'
     }
   ];
 
@@ -88,7 +88,7 @@ const SpokenWordSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            The Spoken Word
+            The Gospel in Spoken Word
           </h2>
           <p className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Experience transformative spoken word content in your native language
@@ -164,7 +164,7 @@ const SpokenWordSection: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span><strong>English:</strong> Evangelist Birdie Jones</span>
+                    <span><strong>English:</strong> Evangelist Jones</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -223,7 +223,7 @@ const SpokenWordSection: React.FC = () => {
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <ShoppingCart className="w-16 h-16 text-orange-600 mx-auto mb-6" />
               <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-                Purchase on Amazon
+                Amazon Purchase <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full ml-2">Coming Soon</span>
               </h3>
               <p className="text-gray-600 mb-8 leading-relaxed text-lg text-center">
                 Own the complete collection of our transformative spoken word ministry. 
@@ -232,22 +232,18 @@ const SpokenWordSection: React.FC = () => {
               </p>
               <div className="flex flex-col gap-4">
                 <a
-                  href="https://music.amazon.com/search/Pure%20Gold%20Gospel%20Singers"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  href="#"
+                  className="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg opacity-70 cursor-not-allowed"
                 >
                   <ShoppingCart size={20} />
-                  <span>Shop on Amazon Music</span>
+                  <span>Coming Soon</span>
                 </a>
                 <a
-                  href="https://www.amazon.com/s?k=Pure+Gold+Gospel+Singers&i=digital-music"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center space-x-3 border-2 border-orange-500 text-orange-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-orange-50 transition-all duration-200 transform hover:scale-105"
+                  href="#"
+                  className="inline-flex items-center justify-center space-x-3 border-2 border-orange-500 text-orange-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-orange-50 transition-all duration-200 transform hover:scale-105 opacity-70 cursor-not-allowed"
                 >
                   <ExternalLink size={20} />
-                  <span>Browse Digital Downloads</span>
+                  <span>Coming Soon</span>
                 </a>
               </div>
               

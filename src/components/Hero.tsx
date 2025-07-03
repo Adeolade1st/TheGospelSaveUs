@@ -9,10 +9,10 @@ const Hero: React.FC = () => {
 
   const handleLearnMoreClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const ministrySection = document.getElementById('ministry-section');
-    if (ministrySection) {
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
       const headerHeight = 64; // Account for fixed header
-      const targetPosition = ministrySection.offsetTop - headerHeight;
+      const targetPosition = aboutSection.offsetTop - headerHeight;
       window.scrollTo({
         top: targetPosition,
         behavior: 'smooth'
@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
             </a>
             
             <a
-              href="#ministry-section"
+              href="#about"
               onClick={handleLearnMoreClick}
               className="flex items-center space-x-3 border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-red-900 transition-all duration-300 transform hover:scale-105"
             >

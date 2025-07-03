@@ -96,7 +96,7 @@ Isaac's spoken word pieces in Hausa reflect his understanding of northern Nigeri
     },
     {
       id: 'birdie-jones',
-      stageName: 'Evangelist Birdie Jones',
+      stageName: 'Evangelist Jones',
       realName: 'Birdie Mae Jones',
       profileImage: '/Evangelist Jones Picture.JPG',
       role: 'Founder & Lead Speaker',
@@ -105,7 +105,7 @@ Isaac's spoken word pieces in Hausa reflect his understanding of northern Nigeri
       location: 'Atlanta, Georgia',
       yearsActive: '1995 - Present',
       specialties: ['English Spoken Word', 'Gospel Ministry', 'International Outreach'],
-      biography: `Evangelist Birdie Jones is the founding voice and spiritual leader of God Will Provide Outreach Ministry. With over 25 years of dedicated service to spreading God's word, she has touched countless lives through her powerful spoken word ministry. Born and raised in the heart of Georgia, Birdie discovered her calling at a young age when she felt the Holy Spirit move through her during a church service.
+      biography: `Evangelist Jones is the founding voice and spiritual leader of God Will Provide Outreach Ministry. With over 25 years of dedicated service to spreading God's word, she has touched countless lives through her powerful spoken word ministry. Born and raised in the heart of Georgia, Birdie discovered her calling at a young age when she felt the Holy Spirit move through her during a church service.
 
 Her ministry began in small community gatherings, where her passionate delivery and profound spiritual insights quickly drew larger audiences. Today, she leads the Pure Gold Gospel Singers and has expanded the ministry's reach internationally through digital platforms. Her English-language spoken word pieces are known for their deep theological insight, practical life application, and ability to bring comfort to those facing life's greatest challenges.
 
