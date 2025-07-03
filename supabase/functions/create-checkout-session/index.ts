@@ -16,7 +16,6 @@ interface RequestMetadata {
   title?: string;
   artist?: string;
   language?: string;
-  contentId?: string;
   [key: string]: any;
 }
 
@@ -70,6 +69,7 @@ serve(async (req) => {
       )
     }
 
+    // Fixed: Remove invalid configuration options
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16'
     })
