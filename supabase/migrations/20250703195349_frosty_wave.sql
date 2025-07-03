@@ -48,6 +48,10 @@ CREATE TABLE IF NOT EXISTS spoken_word_content (
 -- Enable RLS
 ALTER TABLE spoken_word_content ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist to avoid conflicts
+DROP POLICY IF EXISTS "Public can read active spoken word content" ON spoken_word_content;
+DROP POLICY IF EXISTS "Authenticated users can manage spoken word content" ON spoken_word_content;
+
 -- RLS Policies
 CREATE POLICY "Public can read active spoken word content"
   ON spoken_word_content
