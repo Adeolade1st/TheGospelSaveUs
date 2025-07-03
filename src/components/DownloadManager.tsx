@@ -135,7 +135,7 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
     setError(null);
 
     try {
-      // Call the download-audio function to get a signed URL
+      // Call the download-audio function with the token
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
@@ -148,43 +148,45 @@ const DownloadManager: React.FC<DownloadManagerProps> = ({
       
       const functionUrl = `${supabaseUrl}/functions/v1/download-audio?token=${downloadToken}`;
       
+      // Use fetch with blob response type to get the file directly
       const response = await fetch(functionUrl, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${supabaseKey}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${supabaseKey}`
         }
       });
       
-      // Progress to 40%
-      setDownloadProgress(40);
+      // Progress to 50%
+      setDownloadProgress(50);
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-        throw new Error(errorData.error || `Failed to get download URL (${response.status})`);
+        // Try to parse error message if possible
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP error ${response.status}`);
+        } else {
+          throw new Error(`HTTP error ${response.status}`);
+        }
       }
       
-      const data = await response.json();
-      
-      if (!data.success || !data.downloadUrl) {
-        throw new Error(data.message || 'Failed to get download URL');
-      }
-      
-      // Progress to 60%
-      setDownloadProgress(60);
-      
-      // Create download link with the signed URL
-      const link = document.createElement('a');
-      link.href = data.downloadUrl;
-      link.download = `${artist} - ${trackTitle}.mp3`;
-      document.body.appendChild(link);
+      // Get the blob from the response
+      const blob = await response.blob();
       
       // Progress to 80%
       setDownloadProgress(80);
       
-      // Trigger download
+      // Create a download link
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${artist} - ${trackTitle}.mp3`;
+      document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // Clean up the URL object
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 100);
       
       // Update download count locally
       setDownloadCount(prev => prev + 1);

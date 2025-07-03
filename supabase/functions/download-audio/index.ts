@@ -82,22 +82,6 @@ serve(async (req) => {
       )
     }
 
-    // Generate a signed URL for the audio file
-    const { data: signedUrlData, error: signedUrlError } = await supabase
-      .storage
-      .from('spoken-word-audio')
-      .createSignedUrl(contentData.audio_url, 3600) // 1 hour expiry
-    
-    if (signedUrlError || !signedUrlData) {
-      return new Response(
-        JSON.stringify({ error: 'Failed to generate download URL' }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 500,
-        },
-      )
-    }
-
     // Increment download count
     const { data: incrementResult, error: incrementError } = await supabase
       .rpc('increment_download_count', { token_uuid: token })
@@ -126,19 +110,63 @@ serve(async (req) => {
         user_agent: userAgent
       })
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Download authorized',
-        downloadUrl: signedUrlData.signedUrl,
-        downloads_remaining: validationData.downloads_remaining - 1,
-        expires_at: tokenData.expires_at
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      },
-    )
+    // Generate a signed URL for the audio file
+    const { data: signedUrlData, error: signedUrlError } = await supabase
+      .storage
+      .from('spoken-word-audio')
+      .createSignedUrl(contentData.audio_url, 3600) // 1 hour expiry
+    
+    if (signedUrlError || !signedUrlData) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to generate download URL' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500,
+        },
+      )
+    }
+
+    // Fetch the audio file content
+    try {
+      const audioResponse = await fetch(signedUrlData.signedUrl);
+      
+      if (!audioResponse.ok) {
+        throw new Error(`Failed to fetch audio file: ${audioResponse.status}`);
+      }
+      
+      const audioBlob = await audioResponse.blob();
+      
+      // Create a filename
+      const filename = `${contentData.artist || 'Artist'} - ${contentData.title || 'Track'}.mp3`;
+      
+      // Return the audio file with Content-Disposition: attachment header
+      return new Response(audioBlob, {
+        headers: {
+          'Content-Type': 'audio/mpeg',
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'Content-Length': audioBlob.size.toString(),
+          ...corsHeaders
+        },
+        status: 200
+      });
+    } catch (fetchError) {
+      console.error('Error fetching audio file:', fetchError);
+      
+      // Fallback: return the signed URL if we can't fetch the file directly
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Download authorized',
+          downloadUrl: signedUrlData.signedUrl,
+          downloads_remaining: validationData.downloads_remaining - 1,
+          expires_at: tokenData.expires_at
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        },
+      )
+    }
   } catch (error) {
     console.error('Error processing download request:', error)
     

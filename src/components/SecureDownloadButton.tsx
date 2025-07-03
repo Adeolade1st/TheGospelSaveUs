@@ -142,7 +142,7 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
     setError(null);
 
     try {
-      // Call the download-audio function to get a signed URL
+      // Call the download-audio function with the token
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
@@ -155,46 +155,45 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
       
       const functionUrl = `${supabaseUrl}/functions/v1/download-audio?token=${downloadToken}`;
       
+      // Use fetch with blob response type to get the file directly
       const response = await fetch(functionUrl, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${supabaseKey}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${supabaseKey}`
         }
       });
       
-      // Progress to 40%
-      setDownloadProgress(40);
+      // Progress to 50%
+      setDownloadProgress(50);
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-        throw new Error(errorData.error || `Failed to get download URL (${response.status})`);
+        // Try to parse error message if possible
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP error ${response.status}`);
+        } else {
+          throw new Error(`HTTP error ${response.status}`);
+        }
       }
       
-      const data = await response.json();
-      
-      if (!data.success || !data.downloadUrl) {
-        throw new Error(data.message || 'Failed to get download URL');
-      }
-      
-      // Progress to 60%
-      setDownloadProgress(60);
-      
-      // Create download link with the signed URL
-      const link = document.createElement('a');
-      link.href = data.downloadUrl;
-      link.download = `${artist} - ${title}.mp3`;
-      document.body.appendChild(link);
+      // Get the blob from the response
+      const blob = await response.blob();
       
       // Progress to 80%
       setDownloadProgress(80);
       
-      // Trigger download
+      // Create download link with the blob
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${artist} - ${title}.mp3`;
+      document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       
-      // Log download
-      await logDownload();
+      // Clean up the URL object
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 100);
       
       // Complete progress
       setDownloadProgress(100);
@@ -211,42 +210,6 @@ const SecureDownloadButton: React.FC<SecureDownloadButtonProps> = ({
       setError(err instanceof Error ? err.message : 'Download failed. Please try again.');
       setDownloadStatus('error');
       setIsDownloading(false);
-    }
-  };
-
-  const logDownload = async () => {
-    if (!downloadToken) return;
-    
-    try {
-      // Update download count in the database
-      const { error: updateError } = await supabase
-        .from('download_tokens')
-        .update({
-          download_count: supabase.rpc('increment_download_count', { token_uuid: downloadToken }),
-          last_downloaded_at: new Date().toISOString()
-        })
-        .eq('id', downloadToken);
-      
-      if (updateError) {
-        console.error('Error updating download count:', updateError);
-      }
-      
-      // Log the download
-      const { error: logError } = await supabase
-        .from('download_logs')
-        .insert({
-          token_id: downloadToken,
-          track_id: contentId, // Now using contentId
-          email: user?.email || '',
-          ip_address: 'client-ip', // This would be captured server-side
-          user_agent: navigator.userAgent.substring(0, 255)
-        });
-
-      if (logError) {
-        console.error('Error logging download:', logError);
-      }
-    } catch (err) {
-      console.error('Error logging download:', err);
     }
   };
 
