@@ -72,7 +72,7 @@ VALUES
   ('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Eyin rere', 'Deaconess Janet Olaitan', 'Good Fruit in Yoruba', 'Yoruba version of The Gospel.mp3', 'yoruba', '3:45', 'John 15:5', 'faith'),
   ('b2c3d4e5-f6a7-8901-2345-67890abcdef0', 'Ozi oma', 'Minister Susan Collins', 'Good News in Igbo', 'Ibo version of The Gospel-1.mp3', 'igbo', '4:12', 'Romans 10:15', 'hope'),
   ('c3d4e5f6-a7b8-9012-3456-7890abcdef01', 'Labari mai dadi', 'Pastor Isaac O. Samuel', 'Sweet Story in Hausa', 'Hausa version of The Gospel.mp3', 'hausa', '3:58', 'Psalm 119:103', 'joy'),
-  ('d4e5f6a7-b8c9-0123-4567-890abcdef012', 'Transformed by Grace', 'Evangelist Jones', 'The transforming power of God's grace', 'English.mp3', 'english', '4:33', '2 Corinthians 5:17', 'transformation')
+  ('d4e5f6a7-b8c9-0123-4567-890abcdef012', 'Transformed by Grace', 'Evangelist Jones', 'The Good News', 'English.mp3', 'english', '4:33', '2 Corinthians 5:17', 'transformation')
 ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title,
   artist = EXCLUDED.artist,
