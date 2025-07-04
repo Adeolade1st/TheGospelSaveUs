@@ -14,7 +14,7 @@ const DonationSection: React.FC = () => {
     {
       amount: 12,
       title: 'Intro',
-      description: 'Help us create one new spoken word piece monthly',
+      description: 'Help us expand our reach',
       impact: 'Reaches approximately 200 souls monthly'
     },
     {
