@@ -19,6 +19,8 @@ export class StorageService {
    */
   static getPublicUrl(path: string): string {
     const { data } = supabase.storage.from(this.AUDIO_BUCKET).getPublicUrl(path);
+    console.log('Storage service generating URL for path:', path);
+    console.log('Generated public URL:', data.publicUrl);
     return data.publicUrl;
   }
 

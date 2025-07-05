@@ -234,7 +234,7 @@ const DonationSection: React.FC = () => {
             <div className="min-w-[800px] flex items-center justify-center">
               <div className="w-full max-w-5xl">
                 <img 
-                  src="/src/assets/jango chart copy.png" 
+                  src="/jango chart.png" 
                   alt="Jango Airplay Package Pricing Chart showing Free, Intro ($10), Gold ($30), Platinum ($100), and Multi-Platinum ($250) packages with detailed features and monthly plays"
                   className="w-full h-auto rounded-lg shadow-lg"
                   style={{ 

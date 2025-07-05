@@ -44,20 +44,25 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   useEffect(() => {
     // Get the public URL for streaming
     const getAudioUrl = async () => {
+      console.log('Getting audio URL for:', audioUrl);
+      
       // If it's already a full URL, use it directly
       if (audioUrl.startsWith('http')) {
+        console.log('Using direct URL:', audioUrl);
         setPublicUrl(audioUrl);
         return;
       }
       
       // If it's a local path (starts with /), use it directly
       if (audioUrl.startsWith('/')) {
+        console.log('Using local path:', audioUrl);
         setPublicUrl(audioUrl);
         return;
       }
       
       // Otherwise, get the public URL from Supabase Storage
       const url = StorageService.getPublicUrl(audioUrl);
+      console.log('Generated Supabase URL:', url);
       setPublicUrl(url);
     };
     
