@@ -1,4 +1,4 @@
-import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 
@@ -7,27 +7,7 @@ if (!stripePublishableKey) {
   console.log('💡 Add VITE_STRIPE_PUBLISHABLE_KEY to your .env file');
 }
 
-// Initialize Stripe with proper error handling
-let stripePromise: Promise<Stripe | null> | null = null;
-
-export const getStripe = (): Promise<Stripe | null> => {
-  if (!stripePromise) {
-    if (!stripePublishableKey) {
-      console.error('❌ Cannot initialize Stripe: Missing publishable key');
-      return Promise.resolve(null);
-    }
-    
-    stripePromise = loadStripe(stripePublishableKey).catch((error) => {
-      console.error('❌ Failed to load Stripe.js:', error);
-      return null;
-    });
-  }
-  
-  return stripePromise;
-};
-
-// Legacy export for backward compatibility
-export const stripePromise = getStripe();
+export const stripePromise = loadStripe(stripePublishableKey || '');
 
 // Enhanced validation function
 export const validateStripeConfiguration = (): { isValid: boolean; errors: string[] } => {
@@ -72,19 +52,6 @@ export const testPaymentSetup = async () => {
   
   if (!config.isValid) {
     console.error('❌ Configuration invalid:', config.errors);
-    return false;
-  }
-  
-  // Test Stripe loading
-  try {
-    const stripe = await getStripe();
-    if (!stripe) {
-      console.error('❌ Failed to load Stripe');
-      return false;
-    }
-    console.log('✅ Stripe loaded successfully');
-  } catch (error) {
-    console.error('❌ Stripe loading failed:', error);
     return false;
   }
   
