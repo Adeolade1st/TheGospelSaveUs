@@ -17,7 +17,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Eyin rere',
-      audioUrl: 'Yoruba version of The Gospel.mp3',
+      audioUrl: 'yoruba-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
       artist: 'Deaconess Janet Olaitan',
       contentId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef'
@@ -29,7 +29,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:12',
       gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
-      audioUrl: 'Ibo version of The Gospel-1.mp3',
+      audioUrl: 'igbo-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       artist: 'Minister Susan Collins',
       contentId: 'b2c3d4e5-f6a7-8901-2345-67890abcdef0'
@@ -41,7 +41,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari mai dadi',
-      audioUrl: 'Hausa version of The Gospel.mp3',
+      audioUrl: 'hausa-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
       artist: 'Pastor Isaac O. Samuel',
       contentId: 'c3d4e5f6-a7b8-9012-3456-7890abcdef01'
@@ -53,7 +53,7 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
-      audioUrl: 'English.mp3',
+      audioUrl: 'english-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
       artist: 'Evangelist Jones',
       contentId: 'd4e5f6a7-b8c9-0123-4567-890abcdef012'
