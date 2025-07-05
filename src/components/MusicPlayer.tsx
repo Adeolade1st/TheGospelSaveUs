@@ -40,20 +40,24 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   useEffect(() => {
     // Get the public URL for streaming
     const getAudioUrl = async () => {
+      console.log('MusicPlayer: Getting audio URL for:', audioUrl);
       // If it's already a full URL, use it directly
       if (audioUrl.startsWith('http')) {
+        console.log('MusicPlayer: Using direct URL:', audioUrl);
         setPublicUrl(audioUrl);
         return;
       }
       
       // If it's a local path (starts with /), use it directly
       if (audioUrl.startsWith('/')) {
+        console.log('MusicPlayer: Using local path:', audioUrl);
         setPublicUrl(audioUrl);
         return;
       }
       
       // Otherwise, get the public URL from Supabase Storage
       const url = StorageService.getPublicUrl(audioUrl);
+      console.log('MusicPlayer: Generated Supabase URL:', url);
       setPublicUrl(url);
     };
     

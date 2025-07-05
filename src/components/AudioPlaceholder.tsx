@@ -74,16 +74,19 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
     if (!audio || !publicUrl) return;
 
     const handleLoadStart = () => {
+      console.log(`AudioPlaceholder: Loading started for ${title} - URL: ${publicUrl}`);
       setIsLoading(true);
       setError(null);
       setIsReady(false);
     };
 
     const handleLoadedMetadata = () => {
+      console.log(`AudioPlaceholder: Metadata loaded for ${title} - Duration: ${audio.duration}`);
       setTotalDuration(audio.duration);
     };
 
     const handleCanPlay = () => {
+      console.log(`AudioPlaceholder: Can play ${title}`);
       setIsLoading(false);
       setIsReady(true);
     };
@@ -93,21 +96,30 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
     };
 
     const handleEnded = () => {
+      console.log(`AudioPlaceholder: Playback ended for ${title}`);
       setIsPlaying(false);
       setCurrentTime(0);
     };
 
     const handleError = () => {
+      console.error(`AudioPlaceholder: Error loading ${title} - URL: ${publicUrl}`, audio.error);
       setIsLoading(false);
       setIsPlaying(false);
       setError('Unable to load audio file');
     };
+      // Try fallback to public directory if the file exists there
+      if (!publicUrl.startsWith('/') && !publicUrl.startsWith('http')) {
+        console.log(`AudioPlaceholder: Trying fallback to public directory for ${title}`);
+        audio.src = `/${publicUrl}`;
+        audio.load();
+      }
 
     const handleWaiting = () => {
       setIsLoading(true);
     };
 
     const handleCanPlayThrough = () => {
+      console.log(`AudioPlaceholder: Can play through ${title} completely`);
       setIsLoading(false);
     };
 

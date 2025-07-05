@@ -131,6 +131,18 @@ export class AudioCacheService {
         console.log('✅ Preloaded:', metadata.title);
       } catch (error) {
         console.warn('⚠️ Failed to preload:', metadata.title, error);
+        
+        // Try fallback URL if available
+        if (fallbackUrl && fallbackUrl !== url) {
+          try {
+            console.log('🔄 Trying fallback URL:', fallbackUrl);
+            await this.getCachedAudio(fallbackUrl, metadata);
+            console.log('✅ Preloaded with fallback URL:', metadata.title);
+          } catch (fallbackError) {
+            console.error('❌ Fallback preload also failed:', metadata.title, fallbackError);
+          }
+        }
+        console.warn('⚠️ Failed to preload:', metadata.title, error);
       }
     });
 

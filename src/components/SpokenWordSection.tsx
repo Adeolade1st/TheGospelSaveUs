@@ -72,6 +72,8 @@ const SpokenWordSection: React.FC = () => {
     // Preload audio files for better performance
     const audioList = audioSamples.map(sample => ({
       url: sample.audioUrl,
+      // Add a fallback URL for local files
+      fallbackUrl: sample.audioUrl.startsWith('/') ? sample.audioUrl : `/${sample.audioUrl}`,
       metadata: {
         title: sample.sampleTitle,
         artist: sample.artist,
