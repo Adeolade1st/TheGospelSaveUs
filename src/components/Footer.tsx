@@ -86,10 +86,6 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center">
                 <MapPin className="mr-3 text-red-300" size={18} />
-                <span className="text-white">75 Washington Street</span>
-              </div>
-              <div className="flex items-center">
-                <MapPin className="mr-3 text-red-300" size={18} />
                 <div>
                   <p className="text-white text-sm font-medium">Mailing Address:</p>
                   <p className="text-white">P.O. Box 213, Fairburn, GA 30213</p>
