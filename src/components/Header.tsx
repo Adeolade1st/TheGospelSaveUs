@@ -212,28 +212,28 @@ const Header: React.FC = () => {
                 </div>
               ) : (
                 <div className="hidden sm:flex items-center space-x-3">
-                  <button
+                  {/* <button
                     onClick={() => handleAuthClick('login')}
                     className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
                   >
                     Sign In
-                  </button>
-                  <button
+                  </button> */}
+                  {/* <button
                     onClick={() => handleAuthClick('register')}
                     className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
                   >
                     Sign Up
-                  </button>
+                  </button> */}
                 </div>
               )}
 
               {/* Donate Button */}
-              <button
+              {/* <button
                 onClick={() => handleNavClick({ key: 'donate', href: '#donate', path: '/' })}
                 className="hidden sm:inline-flex bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-full font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105"
               >
                 {t.donateNow}
-              </button>
+              </button> */}
 
               {/* Mobile Menu Button */}
               <button
@@ -312,7 +312,7 @@ const Header: React.FC = () => {
                   </div>
                 )}
                 
-                <button
+                {/* <button
                   onClick={() => {
                     handleNavClick({ key: 'donate', href: '#donate', path: '/' });
                     setIsMenuOpen(false);
@@ -320,7 +320,7 @@ const Header: React.FC = () => {
                   className="block w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-md font-medium hover:from-red-700 hover:to-red-800 transition-all duration-200 mt-4"
                 >
                   {t.donateNow}
-                </button>
+                </button> */}
               </div>
             </div>
           )}

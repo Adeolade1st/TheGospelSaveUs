@@ -5,7 +5,7 @@ Her spoken word pieces in Yoruba carry the rich oral tradition of her people, ut
 
 Janet's work bridges generational and geographical divides, connecting Yoruba speakers in Nigeria with those in the diaspora through the universal language of faith. Her contributions to the ministry include not only spoken word recordings but also cultural consultation to ensure that all Yoruba-language content maintains linguistic authenticity and cultural relevance.`,
       featuredTrack: {
-        title: 'Eyin rere (Good Fruit)',
+        title: 'Ihin rere (Good Fruit)',
 -        audioUrl: '/Yoruba version of The Gospel.mp3',
 +        audioUrl: '/yoruba.mp3',
         duration: '3:45'
@@ -17,7 +17,7 @@ Susan's spoken word pieces in Igbo are characterized by their poetic beauty and 
 
 Her ministry particularly focuses on family strengthening and community healing, addressing real-life challenges through the lens of faith and cultural wisdom. Susan's gentle yet authoritative delivery style has made her a respected voice among Igbo communities worldwide, helping to preserve the language while making the gospel message accessible to new generations of speakers.`,
       featuredTrack: {
-        title: 'Ozi oma (Good News)',
+      role: 'Clergyman, Full-time Minister at Celestial Church of Christ',
 -        audioUrl: '/Ibo version of The Gospel-1.mp3',
 +        audioUrl: '/igbo.mp3',
         duration: '4:12'
@@ -29,7 +29,7 @@ As a full-time pastor at Celestial Church of Christ, Isaac brings theological de
 
 Isaac's spoken word pieces in Hausa reflect his understanding of northern Nigerian cultural contexts and linguistic nuances. His ministry is particularly valuable in reaching across religious boundaries, as he understands the cultural and religious background of many Hausa speakers. Through his work, Isaac demonstrates how the gospel message can be communicated respectfully and effectively in culturally diverse settings.`,
       featuredTrack: {
-        title: 'Labari mai dadi (Sweet Story)',
+        title: 'Labari korai (Sweet Story)',
 -        audioUrl: '/Hausa version of The Gospel.mp3',
 +        audioUrl: '/hausa.mp3',
         duration: '3:58'

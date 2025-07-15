@@ -16,10 +16,10 @@ const SpokenWordSection: React.FC = () => {
       description: 'Language of the Southwest',
       duration: '3:45',
       gradient: 'from-blue-600 to-indigo-700',
-      sampleTitle: 'Eyin rere',
+      sampleTitle: 'Ihin rere',
       audioUrl: 'yoruba-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      artist: 'Deaconess Janet Olaitan',
+      artist: 'Evangelist Janet Olaitan',
       contentId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef'
     },
     {
@@ -40,10 +40,10 @@ const SpokenWordSection: React.FC = () => {
       description: 'Northern Nigeria\'s lingua franca',
       duration: '3:58',
       gradient: 'from-green-600 to-emerald-700',
-      sampleTitle: 'Labari mai dadi',
+      sampleTitle: 'Labari korai',
       audioUrl: 'hausa-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      artist: 'Pastor Isaac O. Samuel',
+      artist: 'Minister Isaac O. Samuel',
       contentId: 'c3d4e5f6-a7b8-9012-3456-7890abcdef01'
     },
     {
