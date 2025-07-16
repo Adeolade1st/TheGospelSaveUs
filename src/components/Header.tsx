@@ -81,8 +81,8 @@ const Header: React.FC = () => {
               <a href="/" className="flex items-center">
                 <img 
                   src="/the_gospel_save_us_logo-removebg-preview.png" 
-                  alt="God Will Provide Outreach Ministry" 
-                  className="w-[70px] h-[70px] object-contain"
+               alt="God Will Provide Outreach Ministry" 
+                  className="w-[7px] h-[7px] object-contain"
                   style={{ 
                     backgroundColor: 'transparent',
                     imageRendering: 'crisp-edges'
