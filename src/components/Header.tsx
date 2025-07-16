@@ -82,7 +82,7 @@ const Header: React.FC = () => {
                 <img 
                   src="/thegospelsaveuslogo-removebg-preview.png" 
                //alt="God Will Provide Outreach Ministry" 
-                  className="w-[70px] h-[70px] object-contain"
+                  className="w-[7px] h-[7px] object-contain"
                   style={{ 
                     backgroundColor: 'transparent',
                     imageRendering: 'crisp-edges'
