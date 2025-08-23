@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Music, Globe, ShoppingCart, ExternalLink } from 'lucide-react';
+import { Music, Globe, ShoppingCart, ExternalLink, Download } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../data/translations';
 import AudioPlaceholder from './AudioPlaceholder';
@@ -348,3 +348,15 @@ const SpokenWordSection: React.FC = () => {
                     </div>
                     <h5 className="font-medium text-gray-900 mb-2">All Devices</h5>
                     <p className="text-sm text-gray-600">Compatible everywhere</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default SpokenWordSection;
