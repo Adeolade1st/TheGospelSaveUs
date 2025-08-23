@@ -81,7 +81,7 @@ const Header: React.FC = () => {
               <a href="/" className="flex items-center">
                 <img 
                   src="/thegospelsaveuslogo-removebg-preview.png" 
-               //alt="God Will Provide Outreach Ministry" 
+               alt="God Will Provide Outreach Ministry" 
                   className="w-[7px] h-[7px] object-contain"
                   style={{ 
                     backgroundColor: 'transparent',
@@ -203,7 +203,7 @@ const Header: React.FC = () => {
                           onClick={handleSignOut}
                           className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2"
                         >
-                          <LogOut size={16} />
+                          <LogOut size={18} />
                           <span>Sign Out</span>
                         </button>
                       </div>
