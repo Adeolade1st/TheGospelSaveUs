@@ -83,11 +83,11 @@ Her ministry particularly focuses on family strengthening and community healing,
       location: 'Northern Nigeria / Atlanta, Georgia',
       yearsActive: '2012 - Present',
       specialties: ['Hausa Spoken Word', 'Cross-Cultural Ministry', 'Islamic Outreach'],
-      biography: `Isaac Olamide Samson serves as the Hausa representative for God Will Provide Outreach Ministry. Though originally from Ogun State in Southwestern Nigeria, Isaac was born and raised in Northern Nigeria, where he developed fluency in the Hausa language. This unique background has positioned him as an effective bridge-builder across Nigeria's diverse cultural landscape.
+      biography: `Dcn Isaac O. Samuel serves as the Hausa representative for God Will Provide Outreach Ministry. Though originally from Ogun State in Southwestern Nigeria, Isaac was born and raised in Northern Nigeria, where he developed fluency in the Hausa language. This unique background has positioned him as an effective bridge-builder across Nigeria's diverse cultural landscape.
 
-As a full-time pastor at Celestial Church of Christ, Isaac brings theological depth and pastoral experience to his spoken word ministry. His fluency in Hausa—acquired during his early childhood in Northern Nigeria—enables him to communicate with authenticity and cultural sensitivity to Hausa-speaking communities.
+As a full-time pastor at Celestial Church of Christ, Dcn Isaac O. Samuel brings theological depth and pastoral experience to his spoken word ministry. His fluency in Hausa—acquired during his early childhood in Northern Nigeria—enables him to communicate with authenticity and cultural sensitivity to Hausa-speaking communities.
 
-Isaac's spoken word pieces in Hausa reflect his understanding of northern Nigerian cultural contexts and linguistic nuances. His ministry is particularly valuable in reaching across religious boundaries, as he understands the cultural and religious background of many Hausa speakers. Through his work, Isaac demonstrates how the gospel message can be communicated respectfully and effectively in culturally diverse settings.`,
+Dcn Isaac O. Samuel's spoken word pieces in Hausa reflect his understanding of northern Nigerian cultural contexts and linguistic nuances. His ministry is particularly valuable in reaching across religious boundaries, as he understands the cultural and religious background of many Hausa speakers. Through his work, Dcn Isaac O. Samuel demonstrates how the gospel message can be communicated respectfully and effectively in culturally diverse settings.`,
       featuredTrack: {
         title: 'Labari mai dadi (Sweet Story)',
         audioUrl: '/Hausa version of The Gospel.mp3',

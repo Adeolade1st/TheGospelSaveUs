@@ -168,19 +168,19 @@ export const teamMembers: TeamMember[] = [
     image: 'https://images.pexels.com/photos/3808904/pexels-photo-3808904.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop'
   },
   {
-    name: 'Sister Blessing Okafor',
+    name: 'Dcn Isaac O. Samuel',
     role: {
-      en: 'Content Coordinator',
-      yo: 'Adaribọ Akoonu',
-      ig: 'Onye Nhazi Ọdịnaya',
-      ha: 'Mai Gudanar da Abun Ciki'
+      en: 'Clergyman, Full-time Pastor at Celestial Church of Christ',
+      yo: 'Alakoso Ijo, Pastor Kikun ni Ijo Celestial Church of Christ',
+      ig: 'Onye Uka, Onye Nchụaja Oge Niile na Celestial Church of Christ',
+      ha: 'Limamin Coci, Fasto Na Cikakke A Celestial Church of Christ'
     },
     bio: {
-      en: 'Passionate about preserving African languages in ministry, Sister Blessing ensures our content reaches hearts in their native tongue.',
-      yo: 'Ni itara fun itọju awọn ede Afirika ni iṣẹ-ọrọ, Sister Blessing rii daju pe akoonu wa de ọdọ awọn ọkan ni ede abinibi wọn.',
-      ig: 'Na-anụ ọkụ n\'obi maka ichekwa asụsụ Africa n\'ozi, Sister Blessing na-ahụ na ọdịnaya anyị na-eru obi n\'asụsụ obodo ha.',
-      ha: 'Mai kishin kiyaye harsunan Afirka a aikin wa\'azi, Sister Blessing tana tabbatar cewa abubuwan cikin mu suna kaiwa zukata da harshensu na asali.'
+      en: 'Dcn Isaac O. Samuel serves as the Hausa representative for God Will Provide Outreach Ministry. Though originally from Ogun State in Southwestern Nigeria, Isaac was born and raised in Northern Nigeria, where he developed fluency in the Hausa language.',
+      yo: 'Dcn Isaac O. Samuel ṣiṣẹ bi aṣoju Hausa fun God Will Provide Outreach Ministry. Botilẹjẹpe o wa lati Ipinlẹ Ogun ni Guusu-iwọ-oorun Naijiria, Isaac ni a bi ati dagba ni Ariwa Naijiria.',
+      ig: 'Dcn Isaac O. Samuel na-arụ ọrụ dị ka onye nnọchi anya Hausa maka God Will Provide Outreach Ministry. Ọ bụ ezie na ọ si na Ogun State na Ndịda Ọdịda Anyanwụ Naịjirịa, a mụrụ Isaac ma zụlite ya na Northern Nigeria.',
+      ha: 'Dcn Isaac O. Samuel yana aiki a matsayin wakilin Hausa na God Will Provide Outreach Ministry. Ko da yake asalinsa daga Jihar Ogun a Kudu maso Yammacin Najeriya, an haifi Isaac kuma ya girma a Arewacin Najeriya.'
     },
-    image: 'https://images.pexels.com/photos/3808004/pexels-photo-3808004.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop'
+    image: 'https://images.pexels.com/photos/3808904/pexels-photo-3808904.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop'
   }
 ];
