@@ -30,8 +30,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center space-x-4 mb-6">
               <img 
                 src="/the_gospel_save_us_logo-removebg-preview.png" 
-               //  alt="God Will Provide Outreach Ministry" 
-                className="w-[1px] h-[1px] object-contain"
+                className="w-[70px] h-[70px] object-contain"
                 style={{ 
                   backgroundColor: 'transparent',
                   imageRendering: 'crisp-edges'

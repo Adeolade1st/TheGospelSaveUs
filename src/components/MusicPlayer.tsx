@@ -12,6 +12,7 @@ interface MusicPlayerProps {
   language: string;
   coverImage?: string;
   contentId?: string; // Added contentId prop
+  amazonUrl?: string;
 }
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({
@@ -21,7 +22,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
   duration,
   language,
   coverImage,
-  contentId = '' // Default to empty string
+  contentId = '', // Default to empty string
+  amazonUrl
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -442,16 +444,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
             className="w-full"
           />
 
-          {/* Download on Amazon Button */}
-          <a
-            href="https://amazon.com/music"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
-          >
-            <ShoppingCart size={16} />
-            <span>Download on Amazon</span>
-          </a>
+          {/* Amazon Purchase Button */}
+          {amazonUrl && (
+            <a
+              href={amazonUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+            >
+              <ShoppingCart size={16} />
+              <span>Purchase on Amazon</span>
+            </a>
+          )}
+
         </div>
 
         {/* User interaction prompt */}
