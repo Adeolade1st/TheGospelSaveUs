@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
               <img 
-                src="/the_gospel_save_us_logo-removebg-preview.png" 
+                src="/logo tgs.png" 
                alt="God Will Provide Outreach Ministry" 
                 className="w-auto h-12 object-contain"
                 style={{ 
