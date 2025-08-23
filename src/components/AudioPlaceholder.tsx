@@ -14,7 +14,6 @@ interface AudioPlaceholderProps {
   artist: string;
   className?: string;
   contentId?: string; // Added contentId prop
-  amazonUrl?: string;
 }
 
 const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
@@ -27,8 +26,7 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
   audioUrl,
   artist,
   className = '',
-  contentId = '', // Default to empty string
-  amazonUrl
+  contentId = '' // Default to empty string
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -383,20 +381,6 @@ const AudioPlaceholder: React.FC<AudioPlaceholderProps> = ({
             className="w-full"
           />
         </div>
-          {/* Amazon Purchase Button */}
-          {amazonUrl && (
-            <a
-              href={amazonUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
-            >
-              <ShoppingCart size={16} />
-              <span>Purchase on Amazon</span>
-            </a>
-          )}
-
-
 
         {/* Loading indicator */}
         {isLoading && !error && (

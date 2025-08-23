@@ -36,7 +36,6 @@ export const translations = {
     soulsReached: 'Souls Reached',
     contentCreated: 'Content Pieces',
     languagesServed: 'Languages Served',
-    monthlyListeners: 'Monthly Listeners',
     monthlyDonors: 'Monthly Donors',
     
     // Donation Tiers
@@ -118,7 +117,6 @@ export const translations = {
     donationTitle: 'Ṣe Atilẹyin Iṣẹ Wa',
     donationSubtitle: 'Inurere rẹ n ran wa lọwọ lati de ọdọ ọpọlọpọ ọkan pẹlu ọrọ Ọlọrun ti o le yipada',
     monthlyDonors: 'Awọn Oluranlọwọ Oṣooṣu',
-    monthlyListeners: 'Awọn Olugbọ Oṣooṣu',
     
     // About Section
     aboutTitle: 'Nipa Wa',
@@ -155,7 +153,6 @@ export const translations = {
     donationTitle: 'Kwado Ozi Anyị',
     donationSubtitle: 'Mmesapụ aka gị na-enyere anyị aka iru ọtụtụ mkpụrụ obi aka site n\'okwu na-agbanwe nke Chineke',
     monthlyDonors: 'Ndị Na-enye Onyinye Kwa Ọnwa',
-    monthlyListeners: 'Ndị Na-ege Ntị Kwa Ọnwa',
     
     // About Section
     aboutTitle: 'Maka Anyị',
@@ -192,7 +189,6 @@ export const translations = {
     donationTitle: 'Tallafa Aikinmu',
     donationSubtitle: 'Karimcinku yana taimaka mana mu kai ga ƙarin rayuka tare da kalmar Allah mai canzawa',
     monthlyDonors: 'Masu Ba da Gudummawa Kowane Wata',
-    monthlyListeners: 'Masu Sauraro Na Wata-Wata',
     
     // About Section
     aboutTitle: 'Game da Mu',

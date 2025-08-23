@@ -15,39 +15,36 @@ const SpokenWordSection: React.FC = () => {
       nativeName: 'Yorùbá',
       description: 'Language of the Southwest',
       duration: '3:45',
-      gradient: 'from-red-600 to-red-800',
+      gradient: 'from-blue-600 to-indigo-700',
       sampleTitle: 'Ihin rere',
-      audioUrl: 'yoruba.mp3',
+      audioUrl: 'yoruba-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=yoruba',
-      artist: 'Deaconess Janet Olaitan',
-      contentId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
-      amazonUrl: 'https://www.amazon.com/dp/B0FGKSSD4N/ref=sr_1_1?crid=351FXWSR093Q2&dib=eyJ2IjoiMSJ9.Fo2CqP9xRJl9EGSDGj9X-1G4pZxqEgScwzpsGajqmk8.n2CgCnV9RujVFb6WrCz4T8646QHU4uZW2SDMBj-I6qE&dib_tag=se&keywords=the+gospel+v3+by+the+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461561&sprefix=the+gospel+v3+by+the+pure+gold+gospel+singers%2Caps%2C106&sr=8-1&trackAsin=B0FGKSSD4N'
+      artist: 'Evangelist Janet Olaitan',
+      contentId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef'
     },
     {
       language: 'Igbo',
       nativeName: 'Igbo',
       description: 'Language of the Southeast',
       duration: '4:12',
-      gradient: 'from-red-600 to-red-800',
+      gradient: 'from-amber-600 to-orange-700',
       sampleTitle: 'Ozi oma',
-      audioUrl: 'igbo.mp3',
+      audioUrl: 'igbo-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=igbo',
       artist: 'Minister Susan Collins',
-      contentId: 'b2c3d4e5-f6a7-8901-2345-67890abcdef0',
-      amazonUrl: 'https://www.amazon.com/dp/B0FM6941TH/ref=sr_1_1?crid=3CLKGO2G208VM&dib=eyJ2IjoiMSJ9.ilZSkMkge9yGXoEZl-UD1mFvDnN3uXaGdEQdgL9aQcg.VeL_99_HZ1mDo37nd1IKYcXFfxFxHdOAKsLcgdhQ0o0&dib_tag=se&keywords=the+gospel+V4+by+pure+gold+gospel+Singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461871&sprefix=the+gospel+v4+by+pure+gold+gospel+singers%2Caps%2C105&sr=8-1&trackAsin=B0FM6941TH'
+      contentId: 'b2c3d4e5-f6a7-8901-2345-67890abcdef0'
     },
     {
       language: 'Hausa',
       nativeName: 'Hausa',
       description: 'Northern Nigeria\'s lingua franca',
       duration: '3:58',
-      gradient: 'from-red-600 to-red-800',
+      gradient: 'from-green-600 to-emerald-700',
       sampleTitle: 'Labari korai',
-      audioUrl: 'hausa.mp3',
+      audioUrl: 'hausa-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers?l=hausa',
-      artist: 'Dcn Isaac O. Samuel',
-      contentId: 'c3d4e5f6-a7b8-9012-3456-7890abcdef01',
-      amazonUrl: 'https://www.amazon.com/dp/B0FM6KQ57L/ref=sr_1_1?crid=2YVZFEKML7VXK&dib=eyJ2IjoiMSJ9.a5PiAdoUZFDdmE8Of_ejt1-OlibZc1GSrqNL9sOlqH0.iQZ4EBqQMkU0yLi_OSnYCNeHJL-zGJPK6_8jEQkd_LU&dib_tag=se&keywords=the+gospel+V5+by+pure+gold+gospel+Singers&qid=1755462010&sprefix=the+gospel+v5+by+pure+gold+gospel+singers%2Caps%2C126&sr=8-1'
+      artist: 'Minister Isaac O. Samuel',
+      contentId: 'c3d4e5f6-a7b8-9012-3456-7890abcdef01'
     },
     {
       language: 'English',
@@ -56,11 +53,10 @@ const SpokenWordSection: React.FC = () => {
       duration: '4:33',
       gradient: 'from-red-600 to-red-800',
       sampleTitle: 'Transformed by Grace',
-      audioUrl: 'english.mp3',
+      audioUrl: 'english-gospel.mp3',
       jangoUrl: 'https://www.jango.com/music/Pure+Gold+Gospel+Singers',
       artist: 'Evangelist Jones',
-      contentId: 'd4e5f6a7-b8c9-0123-4567-890abcdef012',
-      amazonUrl: 'https://www.amazon.com/dp/B01CQOTB48/ref=sr_1_16?crid=1A1M3AA78P0EB&dib=eyJ2IjoiMSJ9.GVsGAMZE9g_0nihHCqMIjJlM_LdBEBN5sO6A3VI4Okk7e7572nmUCFUcqpbkWQnOLR-KvbNFohhzr48y2zU6G9FSxE1G1hN1ERr4FURiSHHn8xZebnGVboe2KC3dgJM4sjXeIcFCZm6-vXaGyQB6qg3lnzYrcmmkCtDUQ5sJQRL2V4myuZ2Bfc_Y26aEfiebNMgochCLHe8LC_Wt3VVBlVAskCWwaavE_NyFeYvtZGk.Pv_bVxNnOZAi2MHHYxE7lVqlpNTKRy_2-rf-J0s7rLg&dib_tag=se&keywords=The+gospel+by+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755462296&sprefix=the+gospel+by+pure+gold+gospel+singers%2Caps%2C97&sr=8-16&trackAsin=B01CQOTB48'
+      contentId: 'd4e5f6a7-b8c9-0123-4567-890abcdef012'
     }
   ];
 
@@ -223,6 +219,57 @@ const SpokenWordSection: React.FC = () => {
               </div>
             </div>
 
+            {/* Amazon Purchase Card */}
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              <ShoppingCart className="w-16 h-16 text-orange-600 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+                Amazon Purchase <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full ml-2">Coming Soon</span>
+              </h3>
+              <p className="text-gray-600 mb-8 leading-relaxed text-lg text-center">
+                Own the complete collection of our transformative spoken word ministry. 
+                Available for purchase and download on Amazon Music with high-quality audio 
+                and instant access to all languages.
+              </p>
+              <div className="flex flex-col gap-4">
+                <a
+                  href="#"
+                  className="inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg opacity-70 cursor-not-allowed"
+                >
+                  <ShoppingCart size={20} />
+                  <span>Coming Soon</span>
+                </a>
+                <a
+                  href="#"
+                  className="inline-flex items-center justify-center space-x-3 border-2 border-orange-500 text-orange-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-orange-50 transition-all duration-200 transform hover:scale-105 opacity-70 cursor-not-allowed"
+                >
+                  <ExternalLink size={20} />
+                  <span>Coming Soon</span>
+                </a>
+              </div>
+              
+              {/* Amazon Features */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-3 text-center">Amazon Benefits</h4>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>Instant digital download</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>High-quality MP3 format</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>Cloud storage & offline access</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                    <span>Compatible with all devices</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

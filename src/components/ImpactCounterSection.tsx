@@ -11,7 +11,7 @@ const ImpactCounterSection: React.FC = () => {
   const impactStats = [
     { icon: Users, value: 1, label: t.soulsReached, suffix: ' m+' },
     { icon: Globe, value: 4, label: t.languagesServed },
-    { icon: Heart, value: 500, label: t.monthlyListeners, suffix: '+' }
+    { icon: Heart, value: 2500, label: t.monthlyDonors, suffix: '+' }
   ];
 
   return (
