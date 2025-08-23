@@ -80,7 +80,7 @@ const Header: React.FC = () => {
             <div className="flex items-center">
               <a href="/" className="flex items-center">
                 <img 
-                  src="/thegospelsaveuslogo-removebg-preview.png" 
+                  src="/logo tgs.png" 
                alt="God Will Provide Outreach Ministry" 
                   className="w-auto h-12 object-contain"
                   style={{ 
