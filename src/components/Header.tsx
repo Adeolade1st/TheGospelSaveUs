@@ -203,7 +203,8 @@ const Header: React.FC = () => {
                           onClick={handleSignOut}
                           className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2"
                         >
-                          <LogOut size={18} />
+                          <LogOut size={500
+                    } />
                           <span>Sign Out</span>
                         </button>
                       </div>
