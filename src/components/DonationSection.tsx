@@ -238,14 +238,13 @@ const DonationSection: React.FC = () => {
           </p>
           
           {/* Amazon Product Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {/* Yoruba Album */}
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-105">
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel V3</h4>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
                 <p className="text-blue-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
                 <p className="text-gray-600 text-sm mb-6">Yoruba Language Edition</p>
@@ -267,7 +266,6 @@ const DonationSection: React.FC = () => {
                 <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel V4</h4>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
                 <p className="text-amber-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
                 <p className="text-gray-600 text-sm mb-6">Igbo Language Edition</p>
@@ -289,7 +287,6 @@ const DonationSection: React.FC = () => {
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel V5</h4>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
                 <p className="text-green-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
                 <p className="text-gray-600 text-sm mb-6">Hausa Language Edition</p>
