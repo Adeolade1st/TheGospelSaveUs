@@ -246,6 +246,7 @@ const DonationSection: React.FC = () => {
                   <Music className="text-white" size={24} />
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel V3</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
                 <p className="text-blue-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
                 <p className="text-gray-600 text-sm mb-6">Yoruba Language Edition</p>
                 <a
@@ -267,6 +268,7 @@ const DonationSection: React.FC = () => {
                   <Music className="text-white" size={24} />
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel V4</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
                 <p className="text-amber-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
                 <p className="text-gray-600 text-sm mb-6">Igbo Language Edition</p>
                 <a
@@ -288,6 +290,7 @@ const DonationSection: React.FC = () => {
                   <Music className="text-white" size={24} />
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel V5</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
                 <p className="text-green-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
                 <p className="text-gray-600 text-sm mb-6">Hausa Language Edition</p>
                 <a
