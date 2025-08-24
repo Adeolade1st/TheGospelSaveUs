@@ -185,87 +185,108 @@ const SpokenWordSection: React.FC = () => {
               </div>
             </div>
           </div>
-            {/* Yoruba Album */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-105">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Music className="text-white" size={24} />
-                </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-blue-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">Yoruba Language Edition</p>
-                <a
-                  href="https://www.amazon.com/dp/B0FGKSSD4N/ref=sr_1_1?crid=351FXWSR093Q2&dib=eyJ2IjoiMSJ9.Fo2CqP9xRJl9EGSDGj9X-1G4pZxqEgScwzpsGajqmk8.n2CgCnV9RujVFb6WrCz4T8646QHU4uZW2SDMBj-I6qE&dib_tag=se&keywords=the+gospel+v3+by+the+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461561&sprefix=the+gospel+v3+by+the+pure+gold+gospel+singers%2Caps%2C106&sr=8-1&trackAsin=B0FGKSSD4N"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
-                >
-                  <ShoppingCart size={18} />
-                  <span>Buy on Amazon</span>
-                </a>
-              </div>
+
+          {/* Album Purchase Section */}
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Purchase Full Albums
+              </h3>
+              <p className="text-gray-600 text-lg">
+                Get the complete collection on Amazon Music
+              </p>
             </div>
 
-            {/* Igbo Album */}
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 transition-all duration-300 transform hover:scale-105">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Music className="text-white" size={24} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Yoruba Album */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-105">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Music className="text-white" size={24} />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
+                  <p className="text-blue-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                  <p className="text-gray-600 text-sm mb-6">Yoruba Language Edition</p>
+                  <a
+                    href="https://www.amazon.com/dp/B0FGKSSD4N/ref=sr_1_1?crid=351FXWSR093Q2&dib=eyJ2IjoiMSJ9.Fo2CqP9xRJl9EGSDGj9X-1G4pZxqEgScwzpsGajqmk8.n2CgCnV9RujVFb6WrCz4T8646QHU4uZW2SDMBj-I6qE&dib_tag=se&keywords=the+gospel+v3+by+the+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461561&sprefix=the+gospel+v3+by+the+pure+gold+gospel+singers%2Caps%2C106&sr=8-1&trackAsin=B0FGKSSD4N"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
+                  >
+                    <ShoppingCart size={18} />
+                    <span>Buy on Amazon</span>
+                  </a>
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-amber-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">Igbo Language Edition</p>
-                <a
-                  href="https://www.amazon.com/dp/B0FM6941TH/ref=sr_1_1?crid=3CLKGO2G208VM&dib=eyJ2IjoiMSJ9.ilZSkMkge9yGXoEZl-UD1mFvDnN3uXaGdEQdgL9aQcg.VeL_99_HZ1mDo37nd1IKYcXFfxFxHdOAKsLcgdhQ0o0&dib_tag=se&keywords=the+gospel+V4+by+pure+gold+gospel+Singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461871&sprefix=the+gospel+v4+by+pure+gold+gospel+singers%2Caps%2C105&sr=8-1&trackAsin=B0FM6941TH"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white px-6 py-3 rounded-full font-bold hover:from-amber-700 hover:to-amber-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
-                >
-                  <ShoppingCart size={18} />
-                  <span>Buy on Amazon</span>
-                </a>
               </div>
-            </div>
 
-            {/* Hausa Album */}
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200 hover:border-green-300 transition-all duration-300 transform hover:scale-105">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Music className="text-white" size={24} />
+              {/* Igbo Album */}
+              <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 transition-all duration-300 transform hover:scale-105">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Music className="text-white" size={24} />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
+                  <p className="text-amber-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                  <p className="text-gray-600 text-sm mb-6">Igbo Language Edition</p>
+                  <a
+                    href="https://www.amazon.com/dp/B0FM6941TH/ref=sr_1_1?crid=3CLKGO2G208VM&dib=eyJ2IjoiMSJ9.ilZSkMkge9yGXoEZl-UD1mFvDnN3uXaGdEQdgL9aQcg.VeL_99_HZ1mDo37nd1IKYcXFfxFxHdOAKsLcgdhQ0o0&dib_tag=se&keywords=the+gospel+V4+by+pure+gold+gospel+Singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461871&sprefix=the+gospel+v4+by+pure+gold+gospel+singers%2Caps%2C105&sr=8-1&trackAsin=B0FM6941TH"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white px-6 py-3 rounded-full font-bold hover:from-amber-700 hover:to-amber-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
+                  >
+                    <ShoppingCart size={18} />
+                    <span>Buy on Amazon</span>
+                  </a>
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-green-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">Hausa Language Edition</p>
-                <a
-                  href="https://www.amazon.com/dp/B0FM6KQ57L/ref=sr_1_1?crid=2YVZFEKML7VXK&dib=eyJ2IjoiMSJ9.a5PiAdoUZFDdmE8Of_ejt1-OlibZc1GSrqNL9sOlqH0.iQZ4EBqQMkU0yLi_OSnYCNeHJL-zGJPK6_8jEQkd_LU&dib_tag=se&keywords=the+gospel+V5+by+pure+gold+gospel+Singers&qid=1755462010&sprefix=the+gospel+v5+by+pure+gold+gospel+singers%2Caps%2C126&sr=8-1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full font-bold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
-                >
-                  <ShoppingCart size={18} />
-                  <span>Buy on Amazon</span>
-                </a>
               </div>
-            </div>
 
-            {/* English Album */}
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border-2 border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Music className="text-white" size={24} />
+              {/* Hausa Album */}
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200 hover:border-green-300 transition-all duration-300 transform hover:scale-105">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Music className="text-white" size={24} />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
+                  <p className="text-green-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                  <p className="text-gray-600 text-sm mb-6">Hausa Language Edition</p>
+                  <a
+                    href="https://www.amazon.com/dp/B0FM6KQ57L/ref=sr_1_1?crid=2YVZFEKML7VXK&dib=eyJ2IjoiMSJ9.a5PiAdoUZFDdmE8Of_ejt1-OlibZc1GSrqNL9sOlqH0.iQZ4EBqQMkU0yLi_OSnYCNeHJL-zGJPK6_8jEQkd_LU&dib_tag=se&keywords=the+gospel+V5+by+pure+gold+gospel+Singers&qid=1755462010&sprefix=the+gospel+v5+by+pure+gold+gospel+singers%2Caps%2C126&sr=8-1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full font-bold hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
+                  >
+                    <ShoppingCart size={18} />
+                    <span>Buy on Amazon</span>
+                  </a>
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-red-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">English Language Edition</p>
-                <a
-                  href="https://www.amazon.com/dp/B01CQOTB48/ref=sr_1_16?crid=1A1M3AA78P0EB&dib=eyJ2IjoiMSJ9.GVsGAMZE9g_0nihHCqMIjJlM_LdBEBN5sO6A3VI4Okk7e7572nmUCFUcqpbkWQnOLR-KvbNFohhzr48y2zU6G9FSxE1G1hN1ERr4FURiSHHn8xZebnGVboe2KC3dgJM4sjXeIcFCZm6-vXaGyQB6qg3lnzYrcmmkCtDUQ5sJQRL2V4myuZ2Bfc_Y26aEfiebNMgochCLHe8LC_Wt3VVBlVAskCWwaavE_NyFeYvtZGk.Pv_bVxNnOZAi2MHHYxE7lVqlpNTKRy_2-rf-J0s7rLg&dib_tag=se&keywords=The+gospel+by+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755462296&sprefix=the+gospel+by+pure+gold+gospel+singers%2Caps%2C97&sr=8-16&trackAsin=B01CQOTB48"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-full font-bold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
-                >
-                  <ShoppingCart size={18} />
-                  <span>Buy on Amazon</span>
-                </a>
+              </div>
+
+              {/* English Album */}
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border-2 border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Music className="text-white" size={24} />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
+                  <p className="text-red-700 font-semibold mb-2">Pure Gold Gold Gospel Singers</p>
+                  <p className="text-gray-600 text-sm mb-6">English Language Edition</p>
+                  <a
+                    href="https://www.amazon.com/dp/B01CQOTB48/ref=sr_1_16?crid=1A1M3AA78P0EB&dib=eyJ2IjoiMSJ9.GVsGAMZE9g_0nihHCqMIjJlM_LdBEBN5sO6A3VI4Okk7e7572nmUCFUcqpbkWQnOLR-KvbNFohhzr48y2zU6G9FSxE1G1hN1ERr4FURiSHHn8xZebnGVboe2KC3dgJM4sjXeIcFCZm6-vXaGyQB6qg3lnzYrcmmkCtDUQ5sJQRL2V4myuZ2Bfc_Y26aEfiebNMgochCLHe8LC_Wt3VVBlVAskCWwaavE_NyFeYvtZGk.Pv_bVxNnOZAi2MHHYxE7lVqlpNTKRy_2-rf-J0s7rLg&dib_tag=se&keywords=The+gospel+by+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755462296&sprefix=the+gospel+by+pure+gold+gospel+singers%2Caps%2C97&sr=8-16&trackAsin=B01CQOTB48"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-full font-bold hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 shadow-lg w-full"
+                  >
+                    <ShoppingCart size={18} />
+                    <span>Buy on Amazon</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default SpokenWordSection;
