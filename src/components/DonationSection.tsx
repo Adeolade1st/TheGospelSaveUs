@@ -225,7 +225,7 @@ const DonationSection: React.FC = () => {
           </div>
         )}
 
-        {/* Amazon Music Section */}
+        {/* Amazon Music Section - Updated with consolidated cards */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 mb-16">
           <ShoppingCart className="w-16 h-16 text-orange-600 mx-auto mb-6" />
           <h3 className="text-3xl font-bold text-white mb-4 text-center">
@@ -237,17 +237,17 @@ const DonationSection: React.FC = () => {
             and instant access to all languages.
           </p>
           
-          {/* Amazon Product Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {/* Consolidated Amazon Product Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {/* Yoruba Album */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/20 hover:border-white/30 transition-all duration-300 transform hover:scale-105">
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-blue-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">Yoruba Language Edition</p>
+                <h4 className="text-xl font-bold text-white mb-3">The Gospel</h4>
+                <p className="text-red-100 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                <p className="text-red-200 text-sm mb-6">Yoruba Language Edition</p>
                 <a
                   href="https://www.amazon.com/dp/B0FGKSSD4N/ref=sr_1_1?crid=351FXWSR093Q2&dib=eyJ2IjoiMSJ9.Fo2CqP9xRJl9EGSDGj9X-1G4pZxqEgScwzpsGajqmk8.n2CgCnV9RujVFb6WrCz4T8646QHU4uZW2SDMBj-I6qE&dib_tag=se&keywords=the+gospel+v3+by+the+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461561&sprefix=the+gospel+v3+by+the+pure+gold+gospel+singers%2Caps%2C106&sr=8-1&trackAsin=B0FGKSSD4N"
                   target="_blank"
@@ -261,14 +261,14 @@ const DonationSection: React.FC = () => {
             </div>
 
             {/* Igbo Album */}
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/20 hover:border-white/30 transition-all duration-300 transform hover:scale-105">
               <div className="text-center">
                 <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-amber-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">Igbo Language Edition</p>
+                <h4 className="text-xl font-bold text-white mb-3">The Gospel</h4>
+                <p className="text-red-100 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                <p className="text-red-200 text-sm mb-6">Igbo Language Edition</p>
                 <a
                   href="https://www.amazon.com/dp/B0FM6941TH/ref=sr_1_1?crid=3CLKGO2G208VM&dib=eyJ2IjoiMSJ9.ilZSkMkge9yGXoEZl-UD1mFvDnN3uXaGdEQdgL9aQcg.VeL_99_HZ1mDo37nd1IKYcXFfxFxHdOAKsLcgdhQ0o0&dib_tag=se&keywords=the+gospel+V4+by+pure+gold+gospel+Singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755461871&sprefix=the+gospel+v4+by+pure+gold+gospel+singers%2Caps%2C105&sr=8-1&trackAsin=B0FM6941TH"
                   target="_blank"
@@ -282,14 +282,14 @@ const DonationSection: React.FC = () => {
             </div>
 
             {/* Hausa Album */}
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200 hover:border-green-300 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/20 hover:border-white/30 transition-all duration-300 transform hover:scale-105">
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-green-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">Hausa Language Edition</p>
+                <h4 className="text-xl font-bold text-white mb-3">The Gospel</h4>
+                <p className="text-red-100 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                <p className="text-red-200 text-sm mb-6">Hausa Language Edition</p>
                 <a
                   href="https://www.amazon.com/dp/B0FM6KQ57L/ref=sr_1_1?crid=2YVZFEKML7VXK&dib=eyJ2IjoiMSJ9.a5PiAdoUZFDdmE8Of_ejt1-OlibZc1GSrqNL9sOlqH0.iQZ4EBqQMkU0yLi_OSnYCNeHJL-zGJPK6_8jEQkd_LU&dib_tag=se&keywords=the+gospel+V5+by+pure+gold+gospel+Singers&qid=1755462010&sprefix=the+gospel+v5+by+pure+gold+gospel+singers%2Caps%2C126&sr=8-1"
                   target="_blank"
@@ -303,14 +303,14 @@ const DonationSection: React.FC = () => {
             </div>
 
             {/* English Album */}
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border-2 border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/20 hover:border-white/30 transition-all duration-300 transform hover:scale-105">
               <div className="text-center">
                 <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Music className="text-white" size={24} />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">The Gospel</h4>
-                <p className="text-red-700 font-semibold mb-2">Pure Gold Gospel Singers</p>
-                <p className="text-gray-600 text-sm mb-6">English Language Edition</p>
+                <h4 className="text-xl font-bold text-white mb-3">The Gospel</h4>
+                <p className="text-red-100 font-semibold mb-2">Pure Gold Gospel Singers</p>
+                <p className="text-red-200 text-sm mb-6">English Language Edition</p>
                 <a
                   href="https://www.amazon.com/dp/B01CQOTB48/ref=sr_1_16?crid=1A1M3AA78P0EB&dib=eyJ2IjoiMSJ9.GVsGAMZE9g_0nihHCqMIjJlM_LdBEBN5sO6A3VI4Okk7e7572nmUCFUcqpbkWQnOLR-KvbNFohhzr48y2zU6G9FSxE1G1hN1ERr4FURiSHHn8xZebnGVboe2KC3dgJM4sjXeIcFCZm6-vXaGyQB6qg3lnzYrcmmkCtDUQ5sJQRL2V4myuZ2Bfc_Y26aEfiebNMgochCLHe8LC_Wt3VVBlVAskCWwaavE_NyFeYvtZGk.Pv_bVxNnOZAi2MHHYxE7lVqlpNTKRy_2-rf-J0s7rLg&dib_tag=se&keywords=The+gospel+by+pure+gold+gospel+singers&marketplaceId=ATVPDKIKX0DER&musicTerritory=US&qid=1755462296&sprefix=the+gospel+by+pure+gold+gospel+singers%2Caps%2C97&sr=8-16&trackAsin=B01CQOTB48"
                   target="_blank"
