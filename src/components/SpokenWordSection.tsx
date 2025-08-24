@@ -187,6 +187,7 @@ const SpokenWordSection: React.FC = () => {
           </div>
 
           {/* Album Purchase Section */}
+        </div>
       </div>
     </section>
   );
