@@ -10,7 +10,7 @@ export const translations = {
     // Hero Section
     heroTitle: 'The Gospel Save Us',
     heroSubtitle: 'Transforming Hearts Through Powerful Spoken Word',
-    heroDescription: 'Experience life-changing spoken word content in Yoruba, Igbo, and Hausa languages. Join thousands who have found hope, healing, and purpose through God\'s word.',
+    heroDescription: 'Experience life-changing spoken word content in Yoruba, Igbo, Hausa and English languages. Join thousands who have found hope, healing, and purpose through God\'s word.',
     listenNow: 'Listen Now',
     
     // Content Sections
