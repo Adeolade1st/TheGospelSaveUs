@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
               />
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
-              Reaching souls across Nigeria with God's transforming word through powerful spoken word ministering in Yoruba, Igbo, and Hausa languages.
+              Reaching souls across Nigeria with God's transforming word through powerful spoken word ministering in Yoruba, Igbo, Hausa & English languages.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
