@@ -101,6 +101,9 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 text-sm">
               © 2024 God Will Provide Outreach Ministry. {t.allRightsReserved}
             </p>
+            <p className="text-gray-400 text-sm mt-2 md:mt-0">
+              Developed by Adeola Ilavbare
+            </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">
                 Privacy Policy
